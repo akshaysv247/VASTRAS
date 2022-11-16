@@ -1,0 +1,51 @@
+
+<%- include('partials/adminheader.ejs') %>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">All Users</h4>
+
+     
+
+   <!-- Basic Bootstrap Table -->
+   <div class="card mt-2">
+     <h5 class="card-header"></h5>
+     <div class="table-responsive text-nowrap">
+       <table class="table">
+         <thead>
+           <tr>
+             <th>Name</th>
+             <th>Email</th>
+            
+             <th>Action</th>
+             <th>Action</th>
+           </tr>
+         </thead>
+
+         
+         <tbody class="table-border-bottom-0">
+           <% for(var i=0; i < data.length; i++) { %>
+
+           <tr>
+             
+             <td><%= data[i].Name %></td>
+            
+             <td><%= data[i].Email %></td>
+            
+             
+          <td><button type="button" class="btn btn-danger">Block</button></td>
+          <td><button type="button" class="btn btn-info">UnBlock</button></td>
+           </tr>
+
+           <% } %>
+          
+          
+          
+         </tbody>
+       </table>
+     </div>
+   </div>
+   <!--/ Basic Bootstrap Table -->
+
+</div>
+
+<%- include('partials/adminfooter.ejs') %>

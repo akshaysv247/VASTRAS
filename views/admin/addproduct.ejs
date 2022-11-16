@@ -1,0 +1,161 @@
+<%- include('partials/adminheader.ejs') %>
+
+
+<!-- Content wrapper -->
+ <div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Add Products</h4>
+
+       <div >
+         
+        
+        <div class="col-xl-12">
+          <!-- HTML5 Inputs -->
+          <div class="card mb-4">
+            <h5 class="card-header">Products Details</h5>
+          <div class="card-body">
+            <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label">Title</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text"  id="html5-text-input" name="title" />
+                </div>
+              </div>
+
+              <div class=" mb-3">
+                <label for="largeSelect" class="form-label">Category</label>
+                <select id="largeSelect" class="form-select form-select-lg" name="category">
+                  <option>choose</option>
+                  <option value="Men">Men</option>
+                  <option value="Women">Women</option>
+                  <option value="Children">Children</option>
+                </select>
+              </div>
+
+             
+              <div class="mb-3">
+                <label for="defaultSelect" class="form-label">Sub Category</label>
+                <select id="defaultSelect" class="form-select" name="subcategory">
+                  <option>choose</option>
+                  <option value="clothes">clothes</option>
+                  <option value="footwears">footwears</option>
+                  <option value="accessories">accessories</option>
+                </select>
+              </div>
+              
+              
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Price</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="number" value="18" id="html5-number-input" name="price" />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label">size</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text"  id="html5-text-input" name="size"/>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Quantity</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="number" value="18" id="html5-number-input" name="quantity"/>
+                </div>
+              </div>
+             
+             
+              <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Images</label>
+                <input class="form-control" type="file" id="myFile" name="myFile" multiple />
+              </div>
+<!-- 
+              <div class="mb-3 row">
+                <label for="html5-color-input" class="col-md-2 col-form-label">Color</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="color" value="#666EE8" id="html5-color-input" name="color" />
+                </div>
+              </div> -->
+
+              <div>
+                <label for="exampleFormControlTextarea1" class="form-label">Discription</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description" itemid="description" ></textarea>
+
+              </div>
+
+              <div class=" mt-2">
+
+                <button type="submit" class="btn btn-primary">submit</button>
+
+              </div>
+              
+            </form>
+              
+           </div>
+         </div>
+
+         
+        </div>
+      </div>
+    </div>
+    <!-- / Content -->
+
+    <!-- Footer
+    <footer class="content-footer footer bg-footer-theme">
+      <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+        <div class="mb-2 mb-md-0">
+          ©
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          , made with ❤️ by
+          <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+        </div>
+        <div>
+          <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+          <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+          <a
+            href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+            target="_blank"
+            class="footer-link me-4"
+            >Documentation</a
+          >
+
+          <a
+            href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+            target="_blank"
+            class="footer-link me-4"
+            >Support</a
+          >
+        </div>
+      </div>
+    </footer> -->
+
+    <!-- / Footer -->
+
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<!-- <div class="buy-now">
+<a
+href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+target="_blank"
+class="btn btn-danger btn-buy-now"
+>Upgrade to Pro</a
+>
+</div> -->
+
+<%- include('partials/adminfooter.ejs') %>
