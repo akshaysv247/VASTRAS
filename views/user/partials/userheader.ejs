@@ -1,4 +1,4 @@
-
+<% let user = locals.user || null %> 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -80,19 +80,31 @@
               </ul>
             </li> -->
             
+          
             <li class="has-children">
               <a href="#">Account</a>
               <ul class="dropdown">
+                <% if (user) { %>
+                <li><a href="#"><%= user.Name %></a></li>
+                <li><a href="/logout">Logout</a></li>
+                <% }else{ %>
+                  <li><a href="/login">Login</a></li>
+                  <% } %>
+              </ul>
+            </li>
+          
+
+            <li class="has-children">
+            
+              <ul class="dropdown">
                 
-              
-              
               </ul>
             </li>
            
             <li><a href="#">Cart</a></li>
             <!-- <li><a href="#">New Arrivals</a></li> -->
-            <li><a href="contact.html">Contact</a></li>
-             <li><a href="#">about</a></li>
+            <li><a href="/contact">Contact</a></li>
+             <li><a href="/about">about</a></li>
           </ul>
         </div>
       </nav>

@@ -26,30 +26,47 @@
 
           
           <tbody class="table-border-bottom-0">
-            <% for(var i=0; i < data.length; i++) { %>
+            <% for(var i=0; i < product.length; i++) { %>
 
             <tr>
-              <td><img style="width: 100px; height: 100px;  " src="/images/<%= data[i].img %>" alt=""></td>
-              <td><%= data[i].title %></td>
+              <td><img style="width: 100px; height: 100px;  " src="/images/<%= product[i].img %>" alt=""></td>
+              <td><%= product[i].title %></td>
              
-              <td><%= data[i].price %></td>
-              <td><%= data[i].size %></td>
-              <td><%= data[i].quantity %></td>
+              <td><%= product[i].price %></td>
+              <td><%= product[i].size %></td>
+              <td><%= product[i].quantity %></td>
+              <!-- <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" product-bs-toggle="dropdown">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/admin/editproduct/<%= product[i]._id %>"
+                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                    >
+                    <a class="dropdown-item" href="/admin/deleteproduct/<%= product[i]._id %>"
+                      ><i class="bx bx-trash me-1"></i> Delete</a
+                    >
+                  </div>
+                </div>
+              </td> -->
+
               <td>
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                     <i class="bx bx-dots-vertical-rounded"></i>
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/admin/editproduct/<%= data[i]._id %>"
+                    <a class="dropdown-item" href="/admin/editproduct/<%= product[i]._id %>"
                       ><i class="bx bx-edit-alt me-1"></i> Edit</a
                     >
-                    <a class="dropdown-item" href="/admin/deleteproduct/<%= data[i]._id %>"
+                    <a class="dropdown-item" href="/admin/deleteproduct/<%= product[i]._id %>"
                       ><i class="bx bx-trash me-1"></i> Delete</a
                     >
                   </div>
                 </div>
               </td>
+
             </tr>
 
             <% } %>

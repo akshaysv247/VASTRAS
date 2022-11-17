@@ -5,6 +5,7 @@ const productData = require('../models/productSchema');
 const dbProduct = require('../models/productSchema');
 const admindata = require('../models/adminShema')
 const bcrypt = require('bcrypt')
+const dbUser = require('../models/userSchema')
 
 
 
@@ -35,7 +36,7 @@ module.exports = {
                     resolve(false)
                 }
         })
-    }
+    },
 
     // adminId : (data)=>{
     //     return new Promise (async(resolve,reject)=>{
@@ -49,5 +50,29 @@ module.exports = {
     //         reject(Error)
     //           }
     //     })
-    // }
+    // },
+
+    userBlock : (userID)=>{
+        return new Promise ((resolve,reject)=>{
+            dbUser.updateOne({_id:userID},{$set:{is_active:false}}).then((result)=>{
+                resolve(result)
+            })
+        })
+    },
+    userUnBlock : (userID)=>{
+        return new Promise ((resolve,reject)=>{
+            dbUser.updateOne({_id:userID},{$set:{is_active:true}}).then((result)=>{
+                resolve(result)
+            })
+        })
+    },
+
+    getProducts:() => {
+        return new Promise ((resolve,reject)=>{
+           dbProduct.find().then((result)=>{
+            
+            resolve(result)
+          })
+        })
+      },
 }

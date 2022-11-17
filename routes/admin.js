@@ -19,6 +19,9 @@ router.get('/allusers',adminControllers.admingetUsers);
 router.get('/editproduct/:id',adminControllers.editProduct);
 router.get('/deleteproduct/:id',adminControllers.deleteProducts);
 router.post('/editproduct/:id',upload.single('myFile'),adminControllers.updateProduct);
+router.get('/userblock/:id',adminControllers.blockUser);
+router.get('/userUnblock/:id',adminControllers.unBlockUser);
+
 
 
 module.exports = router;

@@ -62,7 +62,7 @@ app.use('/admin/assets',express.static(path.join(__dirname,'public/assets')))
 app.use(sessions({
     secret: "thiskey",
     saveUninitialized:true,
-    cookie: { maxAge: 6000 },
+    cookie: { maxAge: 600000 },
     resave: false
 }));
 app.use(flash());

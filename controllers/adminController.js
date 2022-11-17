@@ -1,8 +1,7 @@
-const { response } = require('../app')
 const app = require('../app')
-const productHelpers = require('../helpers/productHelper')
-const userHelper = require('../helpers/userHelper')
-const adminHelpers = require('../helpers/adminHelper')
+const userHelper = require('../helpers/userHelper');
+const adminHelper = require('../helpers/adminHelper');
+const productHelper = require('../helpers/productHelpers');
 
    
 
@@ -10,19 +9,22 @@ const adminHelpers = require('../helpers/adminHelper')
 
 
     const adminLogin =(req,res)=>{
-
+       if(!req.session.admin){
      
         res.render("admin/login",{ message: req.flash('adminErr') })
+       }else{
+        res.redirect('/admin/dashboards')
+       }
   
     }
 
 
 
   const adminSign = (req,res)=>{
-       console.log(req.body);
-    adminHelpers.adminId(req.body).then((response)=>{
+      // console.log(req.body);
+    adminHelper.adminId(req.body).then((response)=>{
         if(response){
-      console.log(response);
+            req.session.admin=true
 
         res.redirect('/admin/dashboards')
         }else{
@@ -37,16 +39,20 @@ const adminHelpers = require('../helpers/adminHelper')
     }
 
  const adminView = (req, res) => {
+    if(req.session.admin){
 
     res.render("admin/dashboard")
+    }else{
+        res.redirect('/admin')
+    }
 }
 
 
-const adminProduct = (req, res) => {
- productHelpers.getAllProducts().then((data)=>{
-    res.render("admin/products",{data})
- })
+const adminProduct = (req,res) => {
+ adminHelper.getProducts().then((product)=>{
     
+    res.render('admin/products',{product})
+ })
 }
 
 const addProduct = (req,res)=>{
@@ -56,10 +62,10 @@ const addProduct = (req,res)=>{
 
 const addProductAdd =async(req,res)=>{
    
-   const image =await req.file.filename
+   const image = await req.file.filename
    Object.assign(req.body,{img:image});
   // console.log(req.body)
-    productHelpers.addproduct(req.body).then((response)=>{
+    productHelper.addproduct(req.body).then((response)=>{
        // console.log(response);
         res.redirect('/admin/products')
     })
@@ -67,8 +73,7 @@ const addProductAdd =async(req,res)=>{
 
 const adminLogout = (req,res)=>{
    
-   
-    //req.flash("success_message", "You logged out successfully!");
+    req.session.destroy();
     res.redirect('/admin')
 }
 
@@ -80,8 +85,8 @@ const admingetUsers = (req,res)=>{
 
 const editProduct = async(req,res)=>{
     //console.log(req.params.id);
-    const ID = req.params.id
-    const product= await productHelpers.getProductDetails(ID).then((data)=>{
+    
+    const product= await productHelper.getProductDetails(req.params.id).then((data)=>{
         res.render('admin/editProduct',{data:data[0]})
     })
    
@@ -89,8 +94,8 @@ const editProduct = async(req,res)=>{
 
 const deleteProducts = async(req,res)=>{
   // console.log(req.params.id);
-    const product = await productHelpers.deleteProduct(req.params.id).then((result)=>{
-        console.log(result);
+    const product = await productHelper.deleteProduct(req.params.id).then((result)=>{
+       // console.log(result);
         res.redirect('/admin/products')
     })
 }
@@ -99,10 +104,25 @@ const deleteProducts = async(req,res)=>{
     const image =await req.file.filename
     Object.assign(req.body,{img:image});
     
-    const data = await productHelpers.updateProduct(req.params.id,req.body).then((response)=>{
+    const data = await productHelper.updateProduct(req.params.id,req.body).then((response)=>{
        
-        console.log(response);
+       // console.log(response);
         res.redirect('/admin/products')
+    })
+ }
+
+ const blockUser = (req,res)=>{
+    //console.log(req.body);
+    adminHelper.userBlock(req.params.id).then((response)=>{
+
+        res.redirect('/admin/allusers');
+    })
+ }
+
+ const unBlockUser = (req,res)=>{
+    adminHelper.userUnBlock(req.params.id).then((response)=>{
+
+        res.redirect('/admin/allusers');
     })
  }
    
@@ -117,6 +137,8 @@ module.exports = {
     admingetUsers,
     editProduct,
     deleteProducts,
-    updateProduct
+    updateProduct,
+    blockUser,
+    unBlockUser
     
 }

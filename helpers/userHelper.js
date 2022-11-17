@@ -3,6 +3,7 @@ const dbUser = require('../models/userSchema')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const { db } = require('../models/productSchema');
+const { reject } = require('bcrypt/promises');
 
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
         return new Promise(async (resolve,reject)=>{
             let loginStatus=false
             let response={}
-           const user =  await dbUser.findOne({Email:userData.Email})
+           const user =  await dbUser.findOne({$and:[{Email:userData.Email},{is_active:true}]})
                    
             if(user){
                 bcrypt.compare(userData.Password,user.Password).then((status)=>{
@@ -73,7 +74,8 @@ module.exports = {
                 resolve(data)
             })
         })
-    }
+    },
+    
 
 
 

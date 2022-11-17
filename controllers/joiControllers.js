@@ -1,4 +1,5 @@
-const { message } = require('../models/joiShema');
+const { response } = require('../app')
+const {  error } = require('../models/joiShema');
 const validation = require('../models/joiShema');
 const errorFunction = require('../utils/errorFunction')
 
@@ -13,7 +14,7 @@ const userValidation = async (req) => {
 	};
 
 	const {error} = validation.validate(data)
-    console.log({error});
+   
 	if (error) {
 		
 		return 

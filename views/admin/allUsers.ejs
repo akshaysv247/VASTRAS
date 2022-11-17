@@ -31,9 +31,9 @@
             
              <td><%= data[i].Email %></td>
             
-             
-          <td><button type="button" class="btn btn-danger">Block</button></td>
-          <td><button type="button" class="btn btn-info">UnBlock</button></td>
+             <td><a href="/admin/userblock/<%= data[i]._id %>"><button type="button" class="btn btn-danger">Block</button></a></td>
+         
+          <td><a href="/admin/userUnblock/<%= data[i]._id %>"><button type="button" class="btn btn-info">UnBlock</button></a></td>
            </tr>
 
            <% } %>
