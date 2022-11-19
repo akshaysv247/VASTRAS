@@ -1,31 +1,32 @@
-const multer = require('multer');
+
+const multer = require("multer");
+
 
 //Configuration for Multer
 const multerStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "public/images");
-    },
-    filename: (req, file, cb) => {
-      const ext = file.mimetype.split("/")[1];
-      cb(null, `img-${Date.now()}.${ext}`);
-    },
-  });
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, 'image-'+Date.now()+" "+file.originalname)
+   
+  },
+});
 
-  // Multer Filter
 const multerFilter = (req, file, cb) => {
-    if (file.mimetype.split("/")[1] === "pdf") {
-      cb(null, true);
-    } else {
-      cb(new Error("Not a PDF File!!"), false);
-    }
-  };
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb("Please upload only images.", false);
+  }
+};
 
-  //Calling the "multer" Function
-const upload = multer({
-    storage: multerStorage,
-    
-  });
+//Calling the "multer" Function
+const multiImage = multer({
+  storage: multerStorage,
+});
 
-  
+const upload = multiImage.array('myFile',2)
+
 module.exports = upload;
-  

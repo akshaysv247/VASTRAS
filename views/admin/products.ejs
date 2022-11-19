@@ -20,21 +20,23 @@
               <th>Price</th>
               <th>Size</th>
               <th>Quantity</th>
-              <th>Actions</th>
+              <th>Action</th>
+              <th>Action</th>
             </tr>
           </thead>
 
           
-          <tbody class="table-border-bottom-0">
+          <tbody class="table-border-bottom-0"
             <% for(var i=0; i < product.length; i++) { %>
 
             <tr>
-              <td><img style="width: 100px; height: 100px;  " src="/images/<%= product[i].img %>" alt=""></td>
+              <td><img style="width: 100px; height: 100px;  " src="/images/<%= product[i].images[0] %>" alt=""></td>
               <td><%= product[i].title %></td>
-             
+              <td><%= product[i].category %> </td>
               <td><%= product[i].price %></td>
               <td><%= product[i].size %></td>
               <td><%= product[i].quantity %></td>
+             
               <!-- <td>
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" product-bs-toggle="dropdown">
@@ -51,7 +53,11 @@
                 </div>
               </td> -->
 
-              <td>
+              <td><a href="/admin/editproduct/<%= product[i]._id %>"><button type="submit" class="btn btn-primary">Edit</button></a></td>
+
+              <td><button type="submit" class="btn btn-danger" onclick="alertMsg('<%=product[i]._id %>')">Delete</button></td>
+
+              <!-- <td>
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                     <i class="bx bx-dots-vertical-rounded"></i>
@@ -60,12 +66,11 @@
                     <a class="dropdown-item" href="/admin/editproduct/<%= product[i]._id %>"
                       ><i class="bx bx-edit-alt me-1"></i> Edit</a
                     >
-                    <a class="dropdown-item" href="/admin/deleteproduct/<%= product[i]._id %>"
-                      ><i class="bx bx-trash me-1"></i> Delete</a
+                    <i class="bx bx-trash me-1" onclick="alertMsg('<%=product._id %>')">Delete</i>
                     >
                   </div>
                 </div>
-              </td>
+              </td> -->
 
             </tr>
 
@@ -80,5 +85,28 @@
     <!--/ Basic Bootstrap Table -->
 
  </div>
+
+
+ <script>
+  function alertMsg(id){
+      swal({
+title: "Are you sure?",
+text: "Once deleted, you will not be able to recover this  file!",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+  swal(" Your  file has been deleted!", {
+    icon: "success",
+  });
+  location.href="/admin/deleteproduct/"+id
+} else {
+  swal("Your file is safe!");
+}
+});
+  }
+</script>
 
  <%- include('partials/adminfooter.ejs') %>

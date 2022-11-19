@@ -1,67 +1,71 @@
-const dbProduct = require('../models/productSchema');
+const dbProduct = require("../models/productSchema");
+const category = require('../models/categorySchema');
 
 module.exports = {
-     addproduct : (productData)=>{
-        return new Promise(async(resolve,reject)=>{
-      const product = await dbProduct.create(productData).then((data)=>{
-              resolve(data._id)
-          })
+  addproduct: (productData) => {
+    return new Promise(async (resolve, reject) => {
+      
+      const product = await dbProduct.create(productData).then((data) => {
+        resolve(data._id);
+      });
+    });
+  },
 
-        })
-},
+  // getAllProducts:() => {
+  //   return new Promise ((resolve,reject)=>{
+  //      dbProduct.find().then((result)=>{
 
-// getAllProducts:() => {
-//   return new Promise ((resolve,reject)=>{
-//      dbProduct.find().then((result)=>{
-    
-//       resolve(result)
-//     })
-//   })
-// },
+  //       resolve(result)
+  //     })
+  //   })
+  // },
 
- getProductDetails:(producId)=>{
-return new Promise ((resolve,reject)=>{
-  dbProduct.find({_id:producId}).then((data)=>{
-    //console.log(data);
-    resolve(data)
-  })
-})
-},
+  getProductDetails: (producId) => {
+    return new Promise((resolve, reject) => {
+      dbProduct.find({ _id: producId }).then((data) => {
+        //console.log(data);
+        resolve(data);
+      });
+    });
+  },
 
- deleteProduct : (producId)=>{
-return new Promise ((resolve,reject)=>{
-  dbProduct.remove({_id:Object(producId)}).then((response)=>{
-     resolve(response)
-  })
-})
-},
+  deleteProduct: (producId) => {
+    return new Promise((resolve, reject) => {
+      dbProduct.remove({ _id: Object(producId) }).then((response) => {
+        resolve(response);
+      });
+    });
+  },
 
- updateProduct: (producId,productData)=>{
-return new Promise ((resolve,reject)=>{
-  dbProduct.updateOne({_id:producId},
-  {
-    $set:{ title : productData.title,
-           price : productData.price,
-           description : productData.description,
-           quantity : productData.quantity,
-           category : productData.category,
-           subcategory : productData.subcategory,
-           size : productData.size ,
-           img : productData.img}
+  updateProduct: (producId, productData) => {
+    return new Promise((resolve, reject) => {
+      dbProduct
+        .updateMany(
+          { _id: producId },
+          {
+            $set: {
+              title: productData.title,
+              price: productData.price,
+              description: productData.description,
+              quantity: productData.quantity,
+              category: productData.category,
+              subcategory: productData.subcategory,
+              size: productData.size,
+              images: productData.img,
+            },
+          }
+        )
+        .then((response) => {
+          resolve();
+        });
+    });
+  },
 
-  }).then((response)=>{
-    resolve()
-  })
-})
-},
-
- productsUserSide: ()=>{
-return new Promise ((resolve,reject)=>{
-  dbProduct.find().then((data)=>{
-    resolve(data)
-  })
-})
-}
-
-
-}
+  productsUserSide: () => {
+    return new Promise((resolve, reject) => {
+      dbProduct.find().then((data) => {
+        resolve(data);
+      });
+    });
+  },
+};

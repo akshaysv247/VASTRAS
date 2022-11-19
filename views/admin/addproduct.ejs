@@ -25,17 +25,19 @@
               </div>
 
               <div class=" mb-3">
+                
                 <label for="largeSelect" class="form-label">Category</label>
                 <select id="largeSelect" class="form-select form-select-lg" name="category">
                   <option>choose</option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Children">Children</option>
+                  <% for(var i=0; i < data.length; i++) { %>
+                  <option value="<%= data[i].title %>"><%= data[i].title %></option>
+                  <% } %>
                 </select>
+                
               </div>
 
              
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="defaultSelect" class="form-label">Sub Category</label>
                 <select id="defaultSelect" class="form-select" name="subcategory">
                   <option>choose</option>
@@ -43,7 +45,7 @@
                   <option value="footwears">footwears</option>
                   <option value="accessories">accessories</option>
                 </select>
-              </div>
+              </div> -->
               
               
               <div class="mb-3 row">

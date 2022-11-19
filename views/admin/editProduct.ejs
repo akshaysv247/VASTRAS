@@ -28,7 +28,10 @@
               <div class=" mb-3">
                 <label for="largeSelect" class="form-label">Category</label>
                 <select id="largeSelect" class="form-select form-select-lg" name="category" >
+                  <% for(var i=0; i < data.length; i++) { %>
+                    <option value="">choose</option>
                  <option ><%= data.category %></option>
+                 <% } %>
                 </select>
               </div>
 

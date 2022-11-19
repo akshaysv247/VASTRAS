@@ -1,0 +1,79 @@
+
+<%- include('partials/adminheader.ejs') %>
+
+<div>
+
+<div class="container">
+    <div>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Name</th>
+                <th scope="col">Action</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+                <% for(var i=0; i < data.length; i++) { %>
+              <tr>
+                <th scope="row">1 </th>
+                <td><%= data[i].title %> </td>
+                <td> <button type="submit" class="btn btn-danger"  onclick="alertMsg('<%=data._id %>')">Delete</button> </td>
+                
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+    </div>
+   
+</div>
+
+
+</div>
+<div class="Container p-5">
+    <h3>Add Categories</h3>
+    <form action="/admin/category" method="post" >
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"  name="title">
+            <label for="floatingInput">Category Name</label>
+          </div>
+    
+        <!-- <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="discription" name="discription"></textarea>
+            <label for="floatingTextarea">Discription</label>
+        </div> -->
+        <div>
+            <button type="submit" class="btn btn-success">Success</button>
+        </div>
+    
+    </form>
+</div>
+
+
+<script>
+    function alertMsg(id){
+        swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this  file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+  })
+  .then((willDelete) => {
+  if (willDelete) {
+    swal(" Your  file has been deleted!", {
+      icon: "success",
+    });
+    location.href="/admin/deletecategory/"+id;
+  } else {
+    swal("Your file is safe!");
+  }
+  });
+    }
+  </script>
+  
+
+
+
+<%- include('partials/adminfooter.ejs') %>

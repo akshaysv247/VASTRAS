@@ -17,7 +17,7 @@
              <th>Email</th>
             
              <th>Action</th>
-             <th>Action</th>
+            
            </tr>
          </thead>
 
@@ -30,10 +30,16 @@
              <td><%= data[i].Name %></td>
             
              <td><%= data[i].Email %></td>
+
+             <% if(data[i].is_active===true){ %> 
             
              <td><a href="/admin/userblock/<%= data[i]._id %>"><button type="button" class="btn btn-danger">Block</button></a></td>
+
+             <% }else{ %> 
          
           <td><a href="/admin/userUnblock/<%= data[i]._id %>"><button type="button" class="btn btn-info">UnBlock</button></a></td>
+
+            <% } %> 
            </tr>
 
            <% } %>
