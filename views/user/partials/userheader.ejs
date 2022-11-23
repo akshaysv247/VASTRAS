@@ -1,4 +1,5 @@
 <% let user = locals.user || null %> 
+<% let cartCount = locals.cartCount || 0 %> 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,9 +51,9 @@
                   <li><a href="/login"><span class="icon icon-person"></span></a></li>
                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                   <li>
-                    <a href="cart.html" class="site-cart">
+                    <a href="/cart" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
-                      <span class="count">1</span>
+                      <span class="count" id="cart" ><%= cartCount %> </span>
                     </a>
                   </li> 
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -70,6 +71,8 @@
 
             <li><a href="/">Home</a></li>
             <li><a href="/showProducts">Shop</a></li>
+            <li><a href="/cart">Cart</a></li>
+
 
             <!-- <li class="has-children">
               <a href="#">shop</a>
@@ -80,18 +83,17 @@
               </ul>
             </li> -->
             
-          
+            <% if (user) { %>
             <li class="has-children">
-              <a href="#">Account</a>
+              <a href="#"><%= user.Name %></a>
               <ul class="dropdown">
-                <% if (user) { %>
-                <li><a href="#"><%= user.Name %></a></li>
+                <li><a href="/profile">My profile</a></li>
                 <li><a href="/logout">Logout</a></li>
-                <% }else{ %>
-                  <li><a href="/login">Login</a></li>
-                  <% } %>
               </ul>
             </li>
+            <% }else{ %>
+              <li><a href="/login">Login</a></li>
+            <% } %>
           
 
             <li class="has-children">
@@ -101,10 +103,9 @@
               </ul>
             </li>
            
-            <li><a href="/cart">Cart</a></li>
             <!-- <li><a href="#">New Arrivals</a></li> -->
-            <li><a href="/contact">Contact</a></li>
-             <li><a href="/about">about</a></li>
+            <!-- <li><a href="/contact">Contact</a></li> -->
+             <!-- <li><a href="/about">about</a></li> -->
           </ul>
         </div>
       </nav>

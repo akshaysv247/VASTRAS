@@ -14,9 +14,11 @@ const productSchema = new mongoose.Schema({
   quantity: {
     type: Number,
   },
-  images: [{
-    type: String,
-    }],
+  images: [
+    {
+      type: String,
+    },
+  ],
   category: {
     type: String,
   },
@@ -26,10 +28,10 @@ const productSchema = new mongoose.Schema({
   size: {
     type: String,
   },
-  active:{
-   type: Boolean,
-   default:true
-  }
+  active: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const productData = mongoose.model("productData", productSchema);

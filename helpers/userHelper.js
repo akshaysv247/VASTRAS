@@ -4,12 +4,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { db } = require("../models/productSchema");
 const { reject } = require("bcrypt/promises");
+const { verifySMS } = require("../middleware/otpVerification");
+const cartDB = require("../models/cartShcema");
 
 module.exports = {
   signinData: (userData) => {
     //console.log(userData);
     return new Promise(async (resolve, reject) => {
       const user = await dbUser.findOne({ Email: userData.Email });
+
       if (!user) {
         userData.Password = await bcrypt.hash(userData.Password, 10);
         await dbUser.create(userData).then((data) => {
@@ -69,6 +72,17 @@ module.exports = {
       dbUser.find().then((data) => {
         resolve(data);
       });
+    });
+  },
+
+  getCartCount: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      let count = null;
+      const cart = await cartDB.findOne({ userId: userId });
+      if (cart) {
+        count = cart.products.length;
+      }
+      resolve(count);
     });
   },
 };

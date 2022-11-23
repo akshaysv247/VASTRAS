@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 const flash = require("connect-flash");
 require("dotenv").config();
+
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 
@@ -22,7 +23,7 @@ mongoose.connect("mongodb://localhost:27017/ecommercedb", {
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.set("views", path.join(__dirname, "views"));
@@ -34,6 +35,37 @@ app.use("/fonts", express.static(path.join(__dirname, "public/user/fonts")));
 app.use("/images", express.static(path.join(__dirname, "public/user/images")));
 app.use("/js", express.static(path.join(__dirname, "public/user/js")));
 
+app.use(
+  "/editaddress/css",
+  express.static(path.join(__dirname, "public/user/css"))
+);
+app.use(
+  "/editaddress/fonts",
+  express.static(path.join(__dirname, "public/user/fonts"))
+);
+app.use(
+  "/editaddress/images",
+  express.static(path.join(__dirname, "public/user/images"))
+);
+app.use(
+  "/editaddress/js",
+  express.static(path.join(__dirname, "public/user/js"))
+);
+
+app.use(
+  "/product/css",
+  express.static(path.join(__dirname, "public/user/css"))
+);
+app.use(
+  "/product/fonts",
+  express.static(path.join(__dirname, "public/user/fonts"))
+);
+app.use(
+  "/product/images",
+  express.static(path.join(__dirname, "public/user/images"))
+);
+app.use("/product/js", express.static(path.join(__dirname, "public/user/js")));
+
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
 
@@ -44,7 +76,7 @@ app.use(
   sessions({
     secret: "thiskey",
     saveUninitialized: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
     resave: false,
   })
 );

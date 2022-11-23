@@ -42,10 +42,10 @@
             <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
               <div class="block-4 text-center border">
                 <figure class="block-4-image">
-                  <a href="#"><img src="/images/<%= data[i].images[0] %>" alt="Image placeholder" style="height: 14rem; width: 11rem;" class="img-fluid" ></a>
+                  <a href="/product/<%= data[i]._id %> "><img src="/images/<%= data[i].images[0] %>" alt="Image placeholder" style="height: 14rem; width: 11rem;" class="img-fluid" ></a>
                 </figure>
                 <div class="block-4-text p-4">
-                  <h3><a href="#"></a><%= data[i].title %></h3>
+                  <h3><a href="/product"></a><%= data[i].title %></h3>
                   <!-- <p class="mb-0">Finding perfect t-shirt</p> -->
                   <p class="text-primary font-weight-bold"><%= data[i].price %></p>
                 </div>
@@ -56,9 +56,14 @@
                     <button type="submit" class="btn btn-primary">Add to cart</button>
                    </form>
                 </div> -->
-
+       
                 <div class="mb-3">
-                  <a href="/addtocart/<%= data[i]._id %>"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a>
+                  <!-- <a href="/addtocart/<%= data[i]._id %>"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a> -->
+                  <% if(user){ %> 
+                  <button type="button" class="btn btn-primary" onclick="addToClik('<%= data[i]._id %>')">Add to Cart</button>
+                  <% }else{ %> 
+                <a href="/login"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a>
+                <% } %> 
                 </div>
               </div>
 
@@ -252,7 +257,7 @@
               </label>
             </div>
 
-            <div class="mb-4">
+            <!-- <div class="mb-4">
               <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
               <a href="#" class="d-flex color-item align-items-center" >
                 <span class="bg-danger color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Red (2,429)</span>
@@ -266,7 +271,7 @@
               <a href="#" class="d-flex color-item align-items-center" >
                 <span class="bg-primary color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Purple (1,075)</span>
               </a>
-            </div>
+            </div> -->
 
           </div>
         </div>
@@ -322,6 +327,21 @@
       
     </div>
   </div>
-
+   <script>
+    function addToClik(proId) {
+         $.ajax({
+          url:'/addtocart/'+proId,
+          method:'get',
+          success:(response)=>{
+              if(response.status){
+                let count = $('#cart').html()
+                count=parseInt(count)+1
+                $('#cart').html(count)
+              }
+          }
+          
+         })
+    }
+   </script>
 
 <%- include('partials/userfooter.ejs') %>

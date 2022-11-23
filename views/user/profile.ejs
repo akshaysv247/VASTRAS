@@ -1,0 +1,283 @@
+<%- include('partials/userheader.ejs') %>
+
+<section class="container">
+  <div class="jumbotron">
+    <h1 class="display-4">Hello, <%= user.Name %>!</h1>
+    <p class="lead">
+      A person who enjoys shopping very much and does it a lot: A self-confessed shopaholic, Diane loved looking for new clothes with her two daughters.</p>
+    <hr class="my-4">
+    <p>we are the best shopping and perfect shopping app </p>
+    <!-- <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
+  </div>
+</section>
+
+<section class="container">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4 "><span class="text-muted fw-light">Personal Information</h4>
+    
+        <!-- Basic Layout & Basic with Icons -->
+        <div class="row d-flex justify-content-between container">
+          <!-- Basic Layout -->
+          <div class="col-xxl">
+            <div class="card mb-4">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">You can edit your data</h5>
+                <small class="text-muted float-end"></small>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" for="basic-default-name">Name </label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="basic-default-name" placeholder="" value="<%= user.Name %> " disabled/>
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" for="basic-default-email">Email </label>
+                    <div class="col-sm-9">
+                      <div class="input-group input-group-merge">
+                        <input
+                          type="text"
+                          id="basic-default-email"
+                          value="<%= user.Email %> "
+                          class="form-control"
+                          
+                          aria-label="john.doe"
+                          aria-describedby="basic-default-email2"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" for="basic-default-phone">Phone No</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        id="basic-default-phone"
+                        class="form-control phone-mask"
+                        
+                        value="<%= user.PhoneNumber %> "
+                        aria-describedby="basic-default-phone"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <!-- <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="basic-default-message">Message</label>
+                    <div class="col-sm-10">
+                      <textarea
+                        id="basic-default-message"
+                        class="form-control"
+                        placeholder="Hi, Do you have a moment to talk Joe?"
+                        aria-label="Hi, Do you have a moment to talk Joe?"
+                        aria-describedby="basic-icon-default-message2"
+                      ></textarea>
+                    </div>
+                  </div> -->
+                   <div class="row justify-content-end">
+                    <div class="col-sm-10">
+                      <button type="submit" class="btn btn-primary">Edit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+            <div class="col-xxl">
+              <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <h5 class="mb-0 text-center">Your Address</h5>
+                  <small class="text-muted float-end"></small>
+                </div>
+                <div class="card-body">
+                    <% if (address.length>0) { %>
+                        <% address.forEach(el => { %>
+              
+                            <div class="col">
+                              
+                                  <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
+                                  <ul class="list-unstyled mt-3 mb-4">
+                                    <li><%= el.adress %></li>
+                                    <li><%= el.landmark %></li>
+                                    <li><%= el.city %></li>
+                                    <li><%= el.locality %></li>
+                                    <li><%= el.state %></li>
+                                    <li><%= el.pincode %></li>
+                                    <li><%= el.mob %></li>
+                                  </ul>
+                                 <a href="/editaddress/<%= el._id %> "><button type="button" class=" btn btn-lg btn-outline-primary">Edit</button></a> 
+                                 <a href="/deleteaddress/<%= el._id %>"><button type="button" class=" btn btn-lg btn-outline-danger">Delete</button></a> 
+
+                                
+                            </div>
+                            
+                            <% }) %>
+                          </div>
+                          <% }else{ %>
+                          <div class="alert alert-warning d-flex align-items-center " role="alert">
+                            <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg> -->
+                            <p class="text-center align-items-center m-5 p-5">You have not added any address yet</p>
+                          </div>
+                          <% }%>
+                </div>
+              </div>
+            </div>
+
+
+          <!-- <% if (address.length>0) { %>
+
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center  d-flex flex-column">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Your Adress</h5>
+                    <small class="text-muted float-end"></small>
+                  </div>
+
+             <% address.forEach(el => { %>
+              
+              <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                  <div class="card-body">
+                    <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
+                    <ul class="list-unstyled mt-3 mb-4">
+                      <li><%= el.adress %></li>
+                      <li><%= el.landmark %></li>
+                      <li><%= el.city %></li>
+                      <li><%= el.locality %></li>
+                      <li><%= el.state %></li>
+                      <li><%= el.pincode %></li>
+                      <li><%= el.mob %></li>
+                    </ul>
+                    <button type="button" class="w-100 btn btn-lg btn-outline-primary">Edit</button>
+                  </div>
+                </div>
+              </div>
+              
+              <% }) %>
+            </div>
+            <% }else{ %>
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+              <div>You have not added any address yet</div>
+            </div>
+            <% }%> -->
+
+
+          <!-- Basic with Icons -->
+          <!-- <div class="col-xxl">
+            <div class="card mb-4">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Basic with Icons</h5>
+                <small class="text-muted float-end">Merged input group</small>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Name</label>
+                    <div class="col-sm-10">
+                      <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"
+                          ><i class="bx bx-user"></i
+                        ></span>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="basic-icon-default-fullname"
+                          placeholder="John Doe"
+                          aria-label="John Doe"
+                          aria-describedby="basic-icon-default-fullname2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Company</label>
+                    <div class="col-sm-10">
+                      <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-company2" class="input-group-text"
+                          ><i class="bx bx-buildings"></i
+                        ></span>
+                        <input
+                          type="text"
+                          id="basic-icon-default-company"
+                          class="form-control"
+                          placeholder="ACME Inc."
+                          aria-label="ACME Inc."
+                          aria-describedby="basic-icon-default-company2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Email</label>
+                    <div class="col-sm-10">
+                      <div class="input-group input-group-merge">
+                        <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                        <input
+                          type="text"
+                          id="basic-icon-default-email"
+                          class="form-control"
+                          placeholder="john.doe"
+                          aria-label="john.doe"
+                          aria-describedby="basic-icon-default-email2"
+                        />
+                        <span id="basic-icon-default-email2" class="input-group-text">@example.com</span>
+                      </div>
+                      <div class="form-text">You can use letters, numbers & periods</div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 form-label" for="basic-icon-default-phone">Phone No</label>
+                    <div class="col-sm-10">
+                      <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-phone2" class="input-group-text"
+                          ><i class="bx bx-phone"></i
+                        ></span>
+                        <input
+                          type="text"
+                          id="basic-icon-default-phone"
+                          class="form-control phone-mask"
+                          placeholder="658 799 8941"
+                          aria-label="658 799 8941"
+                          aria-describedby="basic-icon-default-phone2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 form-label" for="basic-icon-default-message">Message</label>
+                    <div class="col-sm-10">
+                      <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-message2" class="input-group-text"
+                          ><i class="bx bx-comment"></i
+                        ></span>
+                        <textarea
+                          id="basic-icon-default-message"
+                          class="form-control"
+                          placeholder="Hi, Do you have a moment to talk Joe?"
+                          aria-label="Hi, Do you have a moment to talk Joe?"
+                          aria-describedby="basic-icon-default-message2"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row justify-content-end">
+                    <div class="col-sm-10">
+                      <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+</section>
+<section class="container">
+    <a href="/addadress"><button type="button" class="btn btn-success">Add Address</button></a>
+</section>
+
+<%- include('partials/userfooter.ejs') %>

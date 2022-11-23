@@ -2,6 +2,7 @@ const express = require("express");
 const adminControllers = require("../controllers/adminController");
 const upload = require("../middleware/productMulter");
 const productController = require('../controllers/productController')
+const cartController = require('../controllers/cartController')
 
 const { route } = require("./user");
 
@@ -17,10 +18,12 @@ router.get("/logout", adminControllers.adminLogout);
 router.get("/allusers", adminControllers.admingetUsers);
 router.get("/editproduct/:id", adminControllers.editProduct);
 router.get("/deleteproduct/:id", adminControllers.deleteProducts);
+router.get("/activeproduct/:id",adminControllers.productActive);
 router.post("/editproduct/:id",upload,adminControllers.updateProduct);
 router.get("/userblock/:id", adminControllers.blockUser);
 router.get("/userUnblock/:id", adminControllers.unBlockUser);
 router.get('/category',productController.admincategory);
 router.post('/category',productController.addCategory);
+router.get('/deletecategory/:id',productController.removeCategory);
 
 module.exports = router;

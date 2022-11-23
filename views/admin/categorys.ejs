@@ -18,8 +18,8 @@
                 <% for(var i=0; i < data.length; i++) { %>
               <tr>
                 <th scope="row">1 </th>
-                <td><%= data[i].title %> </td>
-                <td> <button type="submit" class="btn btn-danger"  onclick="alertMsg('<%=data._id %>')">Delete</button> </td>
+                <td><%= data[i].name %> </td>
+                <td> <button type="submit" class="btn btn-danger" onclick="alertMsg('<%=data[i]._id %>')" >Delete</button> </td>
                 
               </tr>
               <% } %>
@@ -35,7 +35,7 @@
     <h3>Add Categories</h3>
     <form action="/admin/category" method="post" >
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput"  name="title">
+            <input type="text" class="form-control" id="floatingInput"  name="name">
             <label for="floatingInput">Category Name</label>
           </div>
     
@@ -44,7 +44,7 @@
             <label for="floatingTextarea">Discription</label>
         </div> -->
         <div>
-            <button type="submit" class="btn btn-success">Success</button>
+            <button type="submit" class="btn btn-success">Add</button>
         </div>
     
     </form>
@@ -65,7 +65,7 @@
     swal(" Your  file has been deleted!", {
       icon: "success",
     });
-    location.href="/admin/deletecategory/"+id;
+    location.href="/admin/deletecategory/"+id
   } else {
     swal("Your file is safe!");
   }

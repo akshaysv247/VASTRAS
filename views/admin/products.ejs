@@ -17,11 +17,13 @@
             <tr>
               <th>Image</th>
               <th>Title</th>
+              <th>category</th>
               <th>Price</th>
               <th>Size</th>
               <th>Quantity</th>
               <th>Action</th>
               <th>Action</th>
+             
             </tr>
           </thead>
 
@@ -53,9 +55,27 @@
                 </div>
               </td> -->
 
-              <td><a href="/admin/editproduct/<%= product[i]._id %>"><button type="submit" class="btn btn-primary">Edit</button></a></td>
+              <td><a href="/admin/editproduct/<%= product[i]._id %>"><button type="submit" class="btn btn-primary">Edit</button></a></td> 
 
-              <td><button type="submit" class="btn btn-danger" onclick="alertMsg('<%=product[i]._id %>')">Delete</button></td>
+
+                <% if(product[i].active===true){ %> 
+            
+             <!-- <td><a href="/admin/deleteproduct/<%= product[i]._id %>"><button type="submit" class="btn btn-danger">Block</button></a></td> -->
+
+
+             <td><button type="submit" class="btn btn-danger"  onclick="deleteMsg('<%=product[i]._id %>')" >Block</button></td>
+
+             <% }else{ %> 
+         
+          <!-- <td><a href="/admin/userUnblock/<%= product[i]._id %>"><button type="submit" class="btn btn-info">UnBlock</button></a></td> -->
+
+          <td><button type="submit" class="btn btn-info"  onclick="alertMsg('<%=product[i]._id %>')" >UnBlock</button></td>
+
+
+            <% } %> 
+
+
+              <!-- <td><button type="submit" class="btn btn-danger" onclick="alertMsg('<%=product[i]._id %>')">Delete</button></td> --> 
 
               <!-- <td>
                 <div class="dropdown">
@@ -91,14 +111,35 @@
   function alertMsg(id){
       swal({
 title: "Are you sure?",
-text: "Once deleted, you will not be able to recover this  file!",
+text: "UnBlock, you will  able to recover this  product!",
 icon: "warning",
 buttons: true,
 dangerMode: true,
 })
 .then((willDelete) => {
 if (willDelete) {
-  swal(" Your  file has been deleted!", {
+  swal(" Your  product has been UnBlocked!", {
+    icon: "success",
+  });
+  location.href="/admin/activeproduct/"+id
+} else {
+  swal("Your file is safe!");
+}
+});
+  }
+
+
+  function deleteMsg(id){
+      swal({
+title: "Are you sure?",
+text: "Block, you will  able to unblock this  product",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+  swal(" Your  product has been Blocked!", {
     icon: "success",
   });
   location.href="/admin/deleteproduct/"+id

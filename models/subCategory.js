@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
 const subCategory = new mongoose.Schema({
-     title:{
-        type:String
-     },
-     
-})
+  title: {
+    type: String,
+  },
+});
 
 const subCategorys = mongoose.model("productSubCategory", subCategory);
 

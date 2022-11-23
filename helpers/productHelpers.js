@@ -1,10 +1,9 @@
 const dbProduct = require("../models/productSchema");
-const category = require('../models/categorySchema');
+const category = require("../models/categorySchema");
 
 module.exports = {
   addproduct: (productData) => {
     return new Promise(async (resolve, reject) => {
-      
       const product = await dbProduct.create(productData).then((data) => {
         resolve(data._id);
       });
@@ -31,9 +30,15 @@ module.exports = {
 
   deleteProduct: (producId) => {
     return new Promise((resolve, reject) => {
-      dbProduct.remove({ _id: Object(producId) }).then((response) => {
-        resolve(response);
-      });
+      dbProduct
+        .findOneAndUpdate(
+          { _id: producId },
+          { active: false },
+          { upsert: true }
+        )
+        .then((response) => {
+          resolve(response);
+        });
     });
   },
 
@@ -63,7 +68,7 @@ module.exports = {
 
   productsUserSide: () => {
     return new Promise((resolve, reject) => {
-      dbProduct.find().then((data) => {
+      dbProduct.find({ active: true }).then((data) => {
         resolve(data);
       });
     });

@@ -25,24 +25,40 @@
                 </div>
               </div>
 
-              <div class=" mb-3">
+
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Category</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text" value="<%= data.category %>" id="html5-number-input" name="category"  />
+                </div>
+              </div>
+
+
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Active</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text" value="<%= data.active %>" id="html5-number-input" name="active"/>
+                </div>
+              </div>
+
+              <!-- <div class=" mb-3">
                 <label for="largeSelect" class="form-label">Category</label>
                 <select id="largeSelect" class="form-select form-select-lg" name="category" >
                   <% for(var i=0; i < data.length; i++) { %>
-                    <option value="">choose</option>
-                 <option ><%= data.category %></option>
+                    <option value="category"></option>
+                
                  <% } %>
                 </select>
-              </div>
+              </div> -->
 
              
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="defaultSelect" class="form-label" >Sub Category</label>
                 <select id="defaultSelect" class="form-select"  name="subcategory"   >
-                    <option ><%= data.subcategory %></option>
+                    <option value="subcategory" ><%= data.subcategory %></option>
                   
                 </select>
-              </div>
+              </div> -->
               
               
               <div class="mb-3 row">
@@ -69,7 +85,9 @@
              
               <div class="mb-3">
                 <label for="formFileMultiple" class="form-label">Images</label>
-                <img src="" alt="">
+                <% for(var i=0; i < data.images.length; i++) { %>
+                <img src="/images/<%= data.images[i]%>" alt="" style="height: 200px;width: 200px;">
+                <% } %>
                 <input class="form-control" type="file" id="myFile" name="myFile" multiple />
               </div>
 

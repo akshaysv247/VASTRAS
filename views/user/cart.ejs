@@ -1,7 +1,7 @@
 <%- include('partials/userheader.ejs') %>
 
 
-
+<% if(datas.products.length!=0){ %> 
 
   <div class="site-section">
     <div class="container">
@@ -21,30 +21,31 @@
               </thead>
               <tbody>
                
-                <% for(var i=0; i < products.length; i++) { %>
+                <% for(var i=0; i < product.length; i++) { %>
                 <tr>
                   
                   <td class="product-thumbnail">
-                    <img src="/images/<%= products[i].productId.images[0] %>" alt="Image" class="img-fluid">
+                    <img src="/images/<%= product[i].productId.images[0] %>" alt="Image" class="img-fluid">
                   </td>
                   <td class="product-name">
-                    <h2 class="h5 text-black"><%= products[i].productId.title %> </h2>
+                    <h2 class="h5 text-black"><%= product[i].productId.title %> </h2>
                   </td>
-                  <td><%= products[i].productId.price %> </td>
+                  <td><%= product[i].productId.price %> </td>
                   <td>
                     <div class="input-group mb-3" style="max-width: 120px;">
                       <div class="input-group-prepend">
-                        <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                        <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="changeQuantity('<%= product[i].productId._id %>','<%= datas.userId %>','<%= product[i].quantity %>','<%= product[i].total %>','<%= product[i].productId.price %>',-1)">&minus;</button>
                       </div>
-                      <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                      <input type="text" id="<%= product[i].productId._id %>" class="form-control text-center" value="<%= product[i].quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                       <div class="input-group-append">
-                        <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                        <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="changeQuantity('<%= product[i].productId._id %>','<%= datas.userId %>','<%= product[i].quantity %>','<%= product[i].total %>','<%= product[i].productId.price %>',1)" >&plus;</button>
                       </div>
                     </div>
 
                   </td>
-                  <td><%= products[i].productId.price %></td>
-                  <td><a href="/cartproductdelete/<%= products[i]._id %> " class="btn btn-primary btn-sm">X</a></td>
+                  <td class="total"><%= product[i].total %></td>
+                  <td><a href="/cartproductdelete/<%= product[i].productId._id %> "  class="btn btn-primary btn-sm">X</a></td>
+                  <!-- <td><button type="button" class="btn btn-primary" onclick="deleteProduct('<%= product[i].productId._id %>','<%= product[i].total %>',1)" >Primary</button></td> -->
                   
                 </tr>
 
@@ -57,7 +58,7 @@
         </form>
       </div>
 
-      <!-- <div class="row">
+      <div class="row">
         <div class="col-md-6">
           <div class="row mb-5">
             <div class="col-md-6 mb-3 mb-md-0">
@@ -88,20 +89,21 @@
                   <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
                 </div>
               </div>
-              <div class="row mb-3">
+              <!-- <div class="row mb-3">
                 <div class="col-md-6">
                   <span class="text-black">Subtotal</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black">$230.00</strong>
+                  <strong class="text-black"  id="grandtotal" > </strong>
+                 
                 </div>
-              </div>
+              </div> -->
               <div class="row mb-5">
                 <div class="col-md-6">
                   <span class="text-black">Total</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black">$230.00</strong>
+                  <strong class="text-black" id="grandtotal"> </strong>
                 </div>
               </div>
 
@@ -113,8 +115,59 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
+  <% }else{ %> 
+
+     <section class="container">
+       <h1>Cart Empty</h1>
+       <div>
+        <a href="/showProducts"><button type="button" class="w-100 btn btn-lg btn-outline-primary">shope</button></a>
+       </div>
+     </section>
+    <% } %> 
+
+  <script>
+    function changeQuantity(proId,userId,quantity,total,price,count) {
+      // let quantity=parseInt(document.getElementById(proId).innerHTML)
+      // count = parseInt(count)
+       $.ajax({
+        url:'/change-product-quantity',
+        data:{
+          user:userId,
+          product:proId,
+          count:count,
+          total:total,
+          price:price,
+          quantity:quantity
+        },
+        method:'post',
+        success:(response)=>{
+         if(response.removeProduct){
+          alert("Product Removed from cart")
+          location.reload()
+         }else{
+          document.getElementById(proId).innerHTML==quantity+count
+         }
+
+        }})
+       }
+
+
+    let arr = document.getElementsByClassName('total')
+
+    let sum = 0
+     for(let i = 0; i < arr.length; i++){
+      sum += parseInt(arr[i].innerText)}
+
+       document.getElementById('grandtotal').innerText=sum
+             
+        
+      
+
+       
+    
+  </script>
 
   <%- include('partials/userfooter.ejs') %>

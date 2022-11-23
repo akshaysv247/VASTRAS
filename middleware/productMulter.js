@@ -1,6 +1,4 @@
-
 const multer = require("multer");
-
 
 //Configuration for Multer
 const multerStorage = multer.diskStorage({
@@ -9,8 +7,7 @@ const multerStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, 'image-'+Date.now()+" "+file.originalname)
-   
+    cb(null, "image-" + Date.now() + " " + file.originalname);
   },
 });
 
@@ -27,6 +24,6 @@ const multiImage = multer({
   storage: multerStorage,
 });
 
-const upload = multiImage.array('myFile',2)
+const upload = multiImage.array("myFile", 2);
 
 module.exports = upload;
