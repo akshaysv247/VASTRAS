@@ -4,7 +4,6 @@ const logger = require("morgan");
 //const createError = require('http-errors');
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 const flash = require("connect-flash");
@@ -15,15 +14,15 @@ const adminRouter = require("./routes/admin");
 
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/ecommercedb", {
+mongoose.connect(process.env.local_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  // useCreateIndex: true
+   //useCreateIndex: true
 });
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.set("views", path.join(__dirname, "views"));
@@ -68,6 +67,8 @@ app.use("/product/js", express.static(path.join(__dirname, "public/user/js")));
 
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
+ app.use("/public/private", express.static(path.join(__dirname, "public/private")));
+
 
 //const upload = multer({ dest: "public/files" });
 
@@ -108,8 +109,13 @@ db.once("open", function () {
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
-const PORT = process.env.PORT || 5111;
+const PORT = process.env.PORT ;
 app.listen(PORT, console.log("Server has started at port " + PORT));
-//console.log(process.env);
 
-module.exports = app;
+
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).render("error")
+})
+
+//module.exports = app;
