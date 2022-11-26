@@ -3,6 +3,8 @@ const userValidation = require("../controllers/joiControllers");
 const userController = require("../controllers/userController");
 const cartController = require('../controllers/cartController');
 const router = express.Router();
+const wishlistController = require('../controllers/wishlistControllers')
+const productController  = require('../controllers/productController');
 
 router.get("/", userController.homeView);
 router.get("/login", userController.loginView);
@@ -26,5 +28,10 @@ router.get("/editaddress/:id",userController.editAddress);
 router.post("/editaddress/:id",userController.updateAddress);
 router.get("/deleteaddress/:id",userController.deleteAddress);
 router.get("/product/:id",userController.singleProduct);
+router.get("/addwishlist/:id",wishlistController.addWishlist);
+router.get("/wishlist",userController.verifyLogin,wishlistController.wishlistView);
+router.get("/wishlistproductdelete/:id",wishlistController.deleteProduct);
+router.get("/categoryproduct/:id", productController.categorySelect);
+
 
 module.exports = router;

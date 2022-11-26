@@ -4,28 +4,32 @@ const cartDB = require("../models/cartShcema");
 const userHelper = require("../helpers/userHelper");
 
 module.exports = {
-  cartView: async (req, res) => {
-    const user = await req.session.user;
-    let cartCount = null;
-    if (user) {
-      // console.log(user);
-      cartCount = await userHelper.getCartCount(user._id);
-      res.locals.cartCount = cartCount;
+  cartView: async (req, res, next) => {
+    try {
+      const user = await req.session.user;
+      const userId = await user._id;
+      let cartCount = null;
+      if (user) {
+        // console.log(user);
+        cartCount = await userHelper.getCartCount(user._id);
+        res.locals.cartCount = cartCount;
+      }
+      const datas = await cartDB
+        .findOne({ userId: userId })
+        .populate("products.productId");
+      //console.log(datas);
+      const product = datas.products;
+
+      //console.log(product);
+      //console.log(products[0].productId.title);
+
+      res.render("user/cart", { product, user, datas, cartCount });
+    } catch (err) {
+      next(err);
     }
-    const userId = await user._id;
-    const datas = await cartDB
-      .findOne({ userId: userId })
-      .populate("products.productId");
-    console.log(datas);
-    const product = datas.products;
-
-    //console.log(product);
-    //console.log(products[0].productId.title);
-
-    res.render("user/cart", { product, user, datas, cartCount });
   },
 
-  addCart: async (req, res) => {
+  addCart: async (req, res, next) => {
     // const user =  req.session.user
     // console.log(user);
     //console.log(req.body);
@@ -74,7 +78,11 @@ module.exports = {
           const add = await cartDB.findOneAndUpdate(
             { "products.productId": productId },
             {
-              $inc: { "products.$.quantity": 1, grandtotal: price },
+              $inc: {
+                "products.$.quantity": 1,
+                "products.$.total": price,
+                grandtotal: price,
+              },
             },
             { upsert: true }
           );
@@ -99,30 +107,50 @@ module.exports = {
         // res.redirect('/cart')
         res.json({ status: true });
       }
-    } catch {}
+    } catch (err) {
+      next(err);
+    }
   },
 
-  deleteProduct: async (req, res) => {
-    //console.log(req.body);
-    console.log(req.params.id);
-    const user = await req.session.user;
-    const userId = await user._id;
-    const proId = await req.params.id;
-    //  const product = await cartDB.findOne({ userId: userId },{ products: {productId:proId}});
-    //   const price = await cartDB.find({ userId: userId },{ products: {productId:proId}},"products.$.productId.total")
-    //   console.log(product);
-    //   console.log(price);
+  deleteProduct: async (req, res, next) => {
+    try {
+      //console.log(req.body);
+      //console.log(req.params.id);
+      const user = await req.session.user;
+      const userId = await user._id;
+      const proId = await req.params.id;
+      const userHow = await cartDB.findOne({ userId: userId });
 
-    const proDelete = await cartDB.findOneAndUpdate(
-      { userId: userId },
-      { $pull: { products: { productId: proId } } }
-    );
-    //   const priceIncrese = await cartDB.findOneAndUpdate({userId:userId},{$inc:{grandtotal:-price}})
+      if (userHow) {
+        const product = await userHow.products.find((elm) => {
+          return elm.productId.toString() === proId;
+        });
+        const decrese = await cartDB.findOneAndUpdate(
+          { userId: userId },
+          {
+            $inc: { grandtotal: -product.total },
+          },
+          { upsert: true }
+        );
+      }
 
-    res.redirect("/cart");
+      //   const price = await cartDB.find({ userId: userId },{ products: {productId:proId}},"products.$.productId.total")
+      //   console.log(product);
+      //   console.log(price);
+
+      const proDelete = await cartDB.findOneAndUpdate(
+        { userId: userId },
+        { $pull: { products: { productId: proId } } }
+      );
+      //   const priceIncrese = await cartDB.findOneAndUpdate({userId:userId},{$inc:{grandtotal:-price}})
+
+      res.redirect("/cart");
+    } catch (err) {
+      next(err);
+    }
   },
 
-  changeProductQuantity: async (req, res) => {
+  changeProductQuantity: async (req, res, next) => {
     // console.log(req.body);
     try {
       let total = parseInt(req.body.total);
@@ -132,12 +160,22 @@ module.exports = {
       const userId = req.body.user;
       let count = parseInt(req.body.count);
       total = count * price;
-      // console.log(total);
       const find = await cartDB.findOne({ userId: userId });
       let grandtotal = find.grandtotal;
 
       if (find) {
         if (count == -1 && quantity == 1) {
+          const productD = await find.products.find((elm) => {
+            return elm.productId.toString() === product;
+          });
+          const decrese = await cartDB.findOneAndUpdate(
+            { userId: userId },
+            {
+              $inc: { grandtotal: -productD.total },
+            },
+            { upsert: true }
+          );
+
           const remove = await cartDB.findOneAndUpdate(
             { "products.productId": product },
             { $pull: { products: { productId: product } } },
@@ -151,7 +189,7 @@ module.exports = {
               $inc: {
                 "products.$.quantity": count,
                 "products.$.total": total,
-                grandtotal: price,
+                grandtotal: total,
               },
             },
             { upsert: true }
@@ -160,7 +198,9 @@ module.exports = {
           res.json(true);
         }
       }
-    } catch {}
+    } catch (err) {
+      next(err);
+    }
   },
   // total : async(req,res)=>{
   //   const user = await req.session.user

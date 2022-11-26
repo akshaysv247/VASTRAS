@@ -18,7 +18,7 @@ function sendSMS(number) {
       .services(serviceId)
       .verifications.create({ to: `+91${number}`, channel: "sms" })
       .then((verifications) => {
-        console.log(verifications);
+        //console.log(verifications);
         resolve(verifications);
       });
   });
@@ -33,7 +33,7 @@ function verifySMS(number, otp) {
       .services(serviceId)
       .verificationChecks.create({ to: `+91${number}`, code: otp })
       .then((verification_check) => {
-        console.log(verification_check.status);
+        //console.log(verification_check.status);
         resolve(verification_check);
       });
   }).catch(console.error(Error));

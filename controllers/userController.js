@@ -8,6 +8,9 @@ const userDB = require("../models/userSchema");
 const cartDB = require("../models/cartShcema");
 const Twilio = require("../middleware/otpVerification");
 const adressDB = require("../models/adressScema");
+const wishlistDB = require('../models/wishlistSchema');
+const categoryDB = require('../models/categorySchema');
+const bannerDB = require('../models/banner');
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -20,8 +23,14 @@ const homeView = async (req, res, next) => {
       cartCount = await userHelper.getCartCount(user._id);
       res.locals.cartCount = cartCount;
     }
+    const banner = await bannerDB.find({})
+   const cat = await categoryDB.find({})
+   const product = await productDB.find({}).populate("category")
+   const bannerMain = banner.mainImage
+   
+  
     //console.log(cartCount);
-    res.render("user/home", { user, cartCount });
+    res.render("user/home", { user, cartCount,cat,banner,product });
   } catch (err) {
     next(err);
   }
@@ -144,15 +153,24 @@ const userSignup = async (req, res, next) => {
 const productView = async (req, res, next) => {
   try {
     const user = await req.session.user;
+   
     let cartCount = null;
+    let wishlist = null
     if (user) {
       // console.log(user);
-      cartCount = await userHelper.getCartCount(user._id);
+      const userId = await user._id;
+      cartCount = await userHelper.getCartCount(userId);
       res.locals.cartCount = cartCount;
+       wishlist = await wishlistDB.findOne({userId:userId})
+      //console.log(wishlist);
+       
     }
+    const cat = await categoryDB.find({})
+   
+    //console.log(wishlist);
     productHelper.productsUserSide().then((data) => {
       //console.log(data);
-      res.render("user/shope", { data, user, cartCount });
+      res.render("user/shope", { data, user, cartCount,wishlist,cat });
     });
   } catch (err) {
     next(err);
@@ -263,7 +281,7 @@ const singleProduct = async (req, res, next) => {
     const ID = req.params.id;
     const user = req.session.user;
     //console.log(ID);
-    const all = await productDB.find({ active: true });
+    const all = await productDB.find({ active: true }).populate("category");
     const product = await productDB.findOne({ _id: ID });
     // console.log(product);
     res.render("user/singleproduct", { product, all, user });

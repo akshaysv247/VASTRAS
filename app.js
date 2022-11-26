@@ -68,6 +68,11 @@ app.use("/product/js", express.static(path.join(__dirname, "public/user/js")));
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
  app.use("/public/private", express.static(path.join(__dirname, "public/private")));
+ app.use("/categoryproduct/css", express.static(path.join(__dirname, "public/user/css")));
+app.use("/categoryproduct/fonts", express.static(path.join(__dirname, "public/user/fonts")));
+app.use("/categoryproduct/images", express.static(path.join(__dirname, "public/user/images")));
+app.use("/categoryproduct/js", express.static(path.join(__dirname, "public/user/js")));
+
 
 
 //const upload = multer({ dest: "public/files" });
@@ -109,13 +114,16 @@ db.once("open", function () {
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
+
+
+// app.use((err, req, res, next) => {
+//   console.error(err.stack)
+//   res.status(500).render("error")
+// })
+
+
+
 const PORT = process.env.PORT ;
 app.listen(PORT, console.log("Server has started at port " + PORT));
-
-
-app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).render("error")
-})
 
 //module.exports = app;

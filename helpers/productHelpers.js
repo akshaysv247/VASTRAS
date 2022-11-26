@@ -3,9 +3,10 @@ const category = require("../models/categorySchema");
 
 module.exports = {
   addproduct: (productData) => {
+    console.log(productData);
     return new Promise(async (resolve, reject) => {
       const product = await dbProduct.create(productData).then((data) => {
-        resolve(data._id);
+        resolve(data);
       });
     });
   },

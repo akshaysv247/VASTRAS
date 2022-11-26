@@ -30,7 +30,7 @@
                 <select id="largeSelect" class="form-select form-select-lg" name="category">
                   <option>choose</option>
                   <% for(var i=0; i < data.length; i++) { %>
-                  <option value="<%= data[i].name %>"><%= data[i].name %></option>
+                  <option value="<%= data[i]._id %>"><%= data[i].name %></option>
                   <% } %>
                 </select>
                 

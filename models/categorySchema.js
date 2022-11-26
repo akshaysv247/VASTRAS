@@ -8,6 +8,11 @@ const productCategory = new mongoose.Schema({
   id: {
     type: String,
   },
+  images: [
+    {
+      type: String,
+    },
+  ],
   discription: {
     type: String,
   },

@@ -24,6 +24,6 @@ const multiImage = multer({
   storage: multerStorage,
 });
 
-const upload = multiImage.array("myFile", 2);
+const upload = multiImage.array("myFile", 4);
 
 module.exports = upload;

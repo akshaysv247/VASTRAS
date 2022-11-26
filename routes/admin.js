@@ -23,7 +23,7 @@ router.post("/editproduct/:id",upload,adminControllers.updateProduct);
 router.get("/userblock/:id", adminControllers.blockUser);
 router.get("/userUnblock/:id", adminControllers.unBlockUser);
 router.get('/category',productController.admincategory);
-router.post('/category',productController.addCategory);
+router.post('/category',upload,productController.addCategory);
 router.get('/deletecategory/:id',productController.removeCategory);
 
 module.exports = router;

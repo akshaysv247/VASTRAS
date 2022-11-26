@@ -10,6 +10,7 @@
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Name</th>
+                <th scope="col">Images</th>
                 <th scope="col">Action</th>
                
               </tr>
@@ -19,7 +20,15 @@
               <tr>
                 <th scope="row">1 </th>
                 <td><%= data[i].name %> </td>
+                <td>
+                  
+                    
+                    <img src="/images/<%= data[i].images [0]%>" alt="" style="height: 100px;width: 100px;">
+                    
+                  
+                </td>
                 <td> <button type="submit" class="btn btn-danger" onclick="alertMsg('<%=data[i]._id %>')" >Delete</button> </td>
+               
                 
               </tr>
               <% } %>
@@ -33,12 +42,18 @@
 </div>
 <div class="Container p-5">
     <h3>Add Categories</h3>
-    <form action="/admin/category" method="post" >
+    <form action="/admin/category" method="post" enctype="multipart/form-data" >
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput"  name="name">
             <label for="floatingInput">Category Name</label>
           </div>
-    
+           
+          <div class="mb-3">
+            <label for="formFileMultiple" class="form-label">Images</label>
+            <input class="form-control" type="file" id="myFile" name="myFile" multiple />
+          </div>
+
+
         <!-- <div class="form-floating">
             <textarea class="form-control" placeholder="Leave a comment here" id="discription" name="discription"></textarea>
             <label for="floatingTextarea">Discription</label>

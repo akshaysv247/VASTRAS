@@ -65,11 +65,14 @@ module.exports = {
     });
   },
 
-  getProducts: () => {
+  getProducts: async () => {
     return new Promise((resolve, reject) => {
-      dbProduct.find().then((result) => {
-        resolve(result);
-      });
+      dbProduct
+        .find()
+        .populate("category")
+        .then((result) => {
+          resolve(result);
+        });
     });
   },
 };

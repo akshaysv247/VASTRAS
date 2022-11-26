@@ -8,31 +8,32 @@
       <div class="row mb-5">
         <form class="col-md-12" method="post">
           <div class="site-blocks-table">
-            <table class="table table-bordered">
-              <thead>
+            <table class="table ">
+                <h1>My Wishlist(<%= datas.products.length %>)</h1>
+              <!-- <thead>
                 <tr>
                   <th class="product-thumbnail">Image</th>
                   <th class="product-name">Product</th>
                   <th class="product-price">Price</th>
-                  <th class="product-quantity">Quantity</th>
+                  
                   <th class="product-total">Total</th>
-                  <th>Add Wishlist</th>
                   <th class="product-remove">Remove</th>
                 </tr>
-              </thead>
+              </thead> -->
               <tbody>
                
                 <% for(var i=0; i < product.length; i++) { %>
                 <tr>
                   
                   <td class="product-thumbnail">
-                    <img src="/images/<%= product[i].productId.images[0] %>" alt="Image" class="img-fluid">
+                    <img src="/images/<%= product[i].productId.images[0] %>"  alt="Image" class="img-fluid">
                   </td>
                   <td class="product-name">
                     <h2 class="h5 text-black"><%= product[i].productId.title %> </h2>
+                    <h2 class="fa fa-inr"> <%= product[i].productId.price %></h2>
                   </td>
-                  <td><%= product[i].productId.price %> </td>
-                  <td>
+                  <!-- <td><%= product[i].productId.price %> </td> -->
+                  <!-- <td>
                     <div class="input-group mb-3" style="max-width: 120px;">
                       <div class="input-group-prepend">
                         <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="changeQuantity('<%= product[i].productId._id %>','<%= datas.userId %>','<%= product[i].quantity %>','<%= product[i].total %>','<%= product[i].productId.price %>',-1)">&minus;</button>
@@ -43,10 +44,15 @@
                       </div>
                     </div>
 
-                  </td>
-                  <td class="total"><%= product[i].total %></td>
-                  <td> <button type="button" onclick="addToWhilst('<%= product[i].productId._id %>')" class="btn fa fa-heart" style="font-size:24px; color: red;" name="productId"></button></td>
-                  <td><a href="/cartproductdelete/<%= product[i].productId._id %> "  class="btn btn-primary btn-sm">X</a></td>
+                  </td> -->
+                  <td>
+                    <% if(user){ %> 
+                        <button type="button" class="btn btn-primary"  onclick="addToClik('<%=product[i].productId._id %>')">Add To Cart</button>
+                      <% }else{ %> 
+                        <p><a href="/cart" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+                      <% } %> 
+                  </td> 
+                  <td><button class="btn btn-primary btn-sm" onclick="deleteWhilstProduct('<%= product[i].productId._id %>')">Delete</button></td>
                   <!-- <td><button type="button" class="btn btn-primary" onclick="deleteProduct('<%= product[i].productId._id %>','<%= product[i].total %>',1)" >Primary</button></td> -->
                   
                 </tr>
@@ -60,14 +66,14 @@
         </form>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-6">
           <div class="row mb-5">
             <div class="col-md-6 mb-3 mb-md-0">
-              <a href="/cart"><button class="btn btn-primary btn-sm btn-block">Update Cart</button></a>
+              <button class="btn btn-primary btn-sm btn-block">Update Cart</button>
             </div>
             <div class="col-md-6">
-              <a href="/showProducts"><button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button></a>
+              <button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
             </div>
           </div>
           <div class="row">
@@ -119,11 +125,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <% }else{ %> 
 
      <section class="container">
-       <h1>Cart Empty</h1>
+       <h1>Wishlist Empty</h1>
        <div>
         <a href="/showProducts"><button type="button" class="w-100 btn btn-lg btn-outline-primary">shope</button></a>
        </div>
@@ -167,7 +173,33 @@
        document.getElementById('grandtotal').innerText=sum
              
         
-      
+       function addToClik(proId) {
+         $.ajax({
+          url:'/addtocart/'+proId,
+          method:'get',
+          success:(response)=>{
+              if(response.status){
+                let count = $('#cart').html()
+                count=parseInt(count)+1
+                $('#cart').html(count)
+              }
+          }
+          
+         })
+    }
+
+    function deleteWhilstProduct(proId) {
+         $.ajax({
+          url:'/wishlistproductdelete/'+proId,
+          method:'get',
+          success:(response)=>{
+              if(response.status){
+                location.reload(true)
+              }
+          }
+          
+         })
+    }
 
        
     
