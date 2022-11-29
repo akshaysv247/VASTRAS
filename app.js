@@ -64,14 +64,20 @@ app.use(
   express.static(path.join(__dirname, "public/user/images"))
 );
 app.use("/product/js", express.static(path.join(__dirname, "public/user/js")));
-
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
-app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
- app.use("/public/private", express.static(path.join(__dirname, "public/private")));
- app.use("/categoryproduct/css", express.static(path.join(__dirname, "public/user/css")));
+app.use("/public/private", express.static(path.join(__dirname, "public/private")));
+app.use("/categoryproduct/css", express.static(path.join(__dirname, "public/user/css")));
 app.use("/categoryproduct/fonts", express.static(path.join(__dirname, "public/user/fonts")));
 app.use("/categoryproduct/images", express.static(path.join(__dirname, "public/user/images")));
 app.use("/categoryproduct/js", express.static(path.join(__dirname, "public/user/js")));
+
+app.use("/conform/css", express.static(path.join(__dirname, "public/user/css")));
+app.use("/conform/fonts", express.static(path.join(__dirname, "public/user/fonts")));
+app.use("/conform/images", express.static(path.join(__dirname, "public/user/images")));
+app.use("/conform/js", express.static(path.join(__dirname, "public/user/js")));
+
+
+app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
 
 
 

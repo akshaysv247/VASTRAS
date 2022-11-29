@@ -94,35 +94,64 @@
                   <small class="text-muted float-end"></small>
                 </div>
                 <div class="card-body">
-                    <% if (address.length>0) { %>
-                        <% address.forEach(el => { %>
-              
-                            <div class="col">
-                              
-                                  <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
-                                  <ul class="list-unstyled mt-3 mb-4">
-                                    <li><%= el.adress %></li>
-                                    <li><%= el.landmark %></li>
-                                    <li><%= el.city %></li>
-                                    <li><%= el.locality %></li>
-                                    <li><%= el.state %></li>
-                                    <li><%= el.pincode %></li>
-                                    <li><%= el.mob %></li>
-                                  </ul>
-                                 <a href="/editaddress/<%= el._id %> "><button type="button" class=" btn btn-lg btn-outline-primary">Edit</button></a> 
-                                 <a href="/deleteaddress/<%= el._id %>"><button type="button" class=" btn btn-lg btn-outline-danger">Delete</button></a> 
 
-                                
-                            </div>
+                  <% if (address.length!=null) { %>
+                    <% for(var i=0; i < address.length; i++) { %>
+        
+                       
+                      <div class="accordion" id="accordionExample">
+                        <div class="card">
+                          <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                              <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne<%= address[i]._id %>"  aria-expanded="false" aria-controls="collapseOne<%= address[i]._id %>">
+        
+                                <h1 class="card-title pricing-card-title"><%= address[i].name %> </h1>
+        
+                              </button>
+                            </h2>
+                          </div>
+                      
+                          <div id="collapseOne<%= address[i]._id %>" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                  
+                              <div class="col-md-6">
                             
-                            <% }) %>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                  <li><%=address[i].adress %></li>
+                                  <li><%= address[i].landmark %></li>
+                                  <li><%= address[i].city %></li>
+                                  <li><%= address[i].locality %></li>
+                                  <li><%= address[i].state %></li>
+                                  <li><%= address[i].pincode %></li>
+                                  <li><%= address[i].phoneNumber %></li>
+                                </ul>
+                                <a href="/editaddress/<%= address[i]._id %> "><button type="button" class=" btn btn-lg btn-outline-primary">Edit</button></a> 
+                                
+                                <a href="/deleteaddress/<%= address[i]._id %>"><button type="button" class=" btn btn-lg btn-outline-danger">Delete</button></a> 
+
+                              
                           </div>
-                          <% }else{ %>
-                          <div class="alert alert-warning d-flex align-items-center " role="alert">
-                            <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg> -->
-                            <p class="text-center align-items-center m-5 p-5">You have not added any address yet</p>
+                            </div>
                           </div>
+                        </div>
+                        
+                       
+                      </div>
+            
+                         
+                          
+                          
                           <% }%>
+                        
+                        <% }else{ %>
+                        <div class="alert alert-warning d-flex align-items-center " role="alert">
+                          <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg> -->
+                          <p class="text-center align-items-center m-5 p-5">You have not added any address yet</p>
+                        </div>
+                        <% }%>
+
+
+                    
                 </div>
               </div>
             </div>

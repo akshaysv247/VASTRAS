@@ -1,5 +1,6 @@
 <% let user = locals.user || null %> 
 <% let cartCount = locals.cartCount || 0 %> 
+<% let wishlistCount = locals.wishlistCount || 0 %> 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,6 +25,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     
   </head>
   <body>
@@ -51,7 +55,11 @@
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/login"><span class="icon icon-person"></span></a></li>
-                  <li><a href="/wishlist"><span class="icon icon-heart-o"></span></a></li>
+                  <li><a href="/wishlist" class="site-cart">
+                    <span class="icon icon-heart " ></span>
+                    <span class="count" id="cart" ><%= wishlistCount %></span>
+                    
+                  </a></li>
                   <li>
                     <a href="/cart" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
@@ -73,7 +81,7 @@
 
             <li><a href="/">Home</a></li>
             <li><a href="/showProducts">Shop</a></li>
-            <li><a href="/cart">Cart</a></li>
+            <!-- <li><a href="/cart">Cart</a></li> -->
 
 
             <!-- <li class="has-children">

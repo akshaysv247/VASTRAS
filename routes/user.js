@@ -5,6 +5,7 @@ const cartController = require('../controllers/cartController');
 const router = express.Router();
 const wishlistController = require('../controllers/wishlistControllers')
 const productController  = require('../controllers/productController');
+const orderController = require('../controllers/orderControllers');
 
 router.get("/", userController.homeView);
 router.get("/login", userController.loginView);
@@ -21,7 +22,7 @@ router.get('/cartproductdelete/:id',userController.verifyLogin,cartController.de
 router.get('/otplogin',userController.otpSend);
 router.post("/otplogin",userController.postOTP);
 router.post("/change-product-quantity",cartController.changeProductQuantity);
-router.get("/profile",userController.viewProfile);
+router.get("/profile",userController.verifyLogin,userController.viewProfile);
 router.get("/addadress",userController.addAdress);
 router.post("/addadress",userController.saveAdress);
 router.get("/editaddress/:id",userController.editAddress);
@@ -32,6 +33,8 @@ router.get("/addwishlist/:id",wishlistController.addWishlist);
 router.get("/wishlist",userController.verifyLogin,wishlistController.wishlistView);
 router.get("/wishlistproductdelete/:id",wishlistController.deleteProduct);
 router.get("/categoryproduct/:id", productController.categorySelect);
+router.get("/checkout",orderController.checkOutPage);
+router.post("/conform/:id",orderController.orderConform);
 
 
 module.exports = router;

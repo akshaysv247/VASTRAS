@@ -1,6 +1,8 @@
 const wishlistDB = require('../models/wishlistSchema')
 const productDB = require('../models/productSchema')
-const userHelper = require('../helpers/userHelper')
+const userHelper = require('../helpers/userHelper');
+const { $_match } = require('../models/joiShcema');
+const { findOne } = require('../models/wishlistSchema');
 
 module.exports = {
     wishlistView: async (req, res, next) => {
@@ -8,10 +10,13 @@ module.exports = {
           const user = await req.session.user;
           const userId = await user._id;
           let cartCount = null;
+          let wishlistCount = null
           if (user) {
             // console.log(user);
             cartCount = await userHelper.getCartCount(user._id);
             res.locals.cartCount = cartCount;
+            wishlistCount = await userHelper.getWishListCount(user._id)
+            res.locals.wishlistCount = wishlistCount
           }
           const datas = await wishlistDB
             .findOne({ userId: userId })
@@ -22,58 +27,132 @@ module.exports = {
           //console.log(product);
           //console.log(products[0].productId.title);
     
-          res.render("user/wishlist", { product, user, datas, cartCount });
+          res.render("user/wishlist", { product, user, datas, cartCount,wishlistCount });
        
       },
     
-      addWishlist: async (req, res, next) => {
+      // addWishlist: async (req, res, next) => {
 
-          const productId = await req.params.id;
-          const user = await req.session.user;
-          const userId = await user._id;
-          const product = await productDB.findById(productId);
-          //    const name = await product.title
-          //    const price = await product.price
-          //console.log(product);
-          const userwishlist = await wishlistDB.findOne({ userId: userId });
-          //console.log(userCart);
+      //     const productId = await req.params.id;
+      //     const newProductId = productId
+      //     const user = await req.session.user;
+      //     const userId = await user._id;
+      //     const product = await productDB.findById(productId);
+      //     //    const name = await product.title
+      //     //    const price = await product.price
+      //     //console.log(product);
+      //     const userwishlist = await wishlistDB.findOne({ userId: userId });
+      //     //console.log(userCart);
          
-          // console.log(total);
-          const proD = await { productId: productId}
+      //     // console.log(total);
+      //     const proD = await { productId: newProductId}
             
           
-          const products = [];
-          products.push(proD);
+      //     const products = [];
+      //     products.push(proD);
     
-          Object.assign(
-            req.body,
-            { userId: userId },
-            { products: products }
+      //     Object.assign(
+      //       req.body,
+      //       { userId: userId },
+      //       { products: products }
             
-          );
-          //console.log(req.body);
-          const wishlistData = await req.body;
-          // console.log(cartData);
-          if (userwishlist) {
+      //     );
+      //     //console.log(req.body);
+      //     const wishlistData = await req.body;
+      //     // console.log(cartData);
+      //     if (userwishlist) {
             
             
-              const wishlist = await wishlistDB.findOneAndUpdate(
-                { userId: userId },
-                { $push: { products: proD } },
-                { upsert: true }
-              );
-              
-              // console.log(cart);
-              //res.redirect('/cart')
-              res.json({ status: true });
-            }
-           else {
-            const cart = await wishlistDB.create(wishlistData);
-            // res.redirect('/cart')
-            res.json({ status: true });
-          }
+      //         const wishlist = await wishlistDB.findOneAndUpdate(
+      //           { userId: userId },
+      //           { $push: { products: proD } },
+      //           { upsert: true }
+      //         );
+      //         const newPro = newProductId
+      //         // const find = await wishlistDB.findOne({ userId: userId })
+      //         // console.log(find);
+      //         // const count = find.products.length
+      //         // console.log(count);
+      //         // console.log(cart);
+      //         //res.redirect('/cart')
+      //         res.json({ status: true ,newPro });
+      //       }
+      //      else {
+      //       const cart = await wishlistDB.create(wishlistData);
+      //       // res.redirect('/cart')
+      //       res.json({ status: true });
+      //     }
        
-      },
+      // },
+
+      addWishlist: async (req, res, next) => {
+        //console.log(req.params.id);
+        const productId = await req.params.id;
+       console.log(productId);
+        const user = await req.session.user;
+        const userId = await user._id;
+        const product = await productDB.findById(productId);
+        //    const name = await product.title
+        //    const price = await product.price
+        //console.log(product);
+        const userwishlist = await wishlistDB.findOne({ userId: userId });
+        //console.log(userCart);
+       
+        // console.log(total);
+        const proD = await { productId: productId}
+          
+        
+        const products = [];
+        products.push(proD);
+  
+        Object.assign(
+          req.body,
+          { userId: userId },
+          { products: products }
+          
+        );
+        //console.log(req.body);
+        const wishlistData = await req.body;
+
+          
+        // console.log(cartData);
+        if (userwishlist) {
+
+           const find = await wishlistDB.findOne( { userId: userId , "products.productId": productId })
+          // console.log(find);
+           if(find==null){
+             const wishlist = await wishlistDB.findOneAndUpdate(
+              { userId: userId },
+              { $push: { products: proD } },
+              { upsert: true }
+            );
+
+           // console.log(wishlist);
+            
+            // const find = await wishlistDB.findOne({ userId: userId })
+            // console.log(find);
+            // const count = find.products.length
+            // console.log(count);
+            // console.log(cart);
+            //res.redirect('/cart')
+            res.json({ add: true ,productId })
+            
+           }else{
+           
+            const proDelete = await wishlistDB.findOneAndUpdate(
+              { userId: userId },
+              { $pull: { products: { productId: productId } } }
+            )
+           // console.log(proDelete);
+            res.json({ remove:true ,productId });
+          }}
+         else {
+          const cart = await wishlistDB.create(wishlistData);
+          // res.redirect('/cart')
+          res.json({ status: true });
+        }
+     
+    },
 
       deleteProduct: async (req, res, next) => {
        

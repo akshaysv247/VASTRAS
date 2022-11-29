@@ -1,6 +1,8 @@
 const category = require("../models/categorySchema");
 const bannerDB = require('../models/banner')
 const productDB = require('../models/productSchema')
+const userHelper =require("../helpers/userHelper")
+const wishlistDB = require("../models/wishlistSchema")
 
 module.exports = {
   admincategory: async (req, res) => {
@@ -43,14 +45,17 @@ module.exports = {
     
     let cartCount = null;
     let wishlist = null
+    let wishlistCount = null
     if (user) {
       // console.log(user);
       const userId = await user._id;
       cartCount = await userHelper.getCartCount(userId);
       res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id)
+      res.locals.wishlistCount = wishlistCount
        wishlist = await wishlistDB.findOne({userId:userId})
     }
-    res.render("user/categoryList",{data,user,cartCount,wishlist})
+    res.render("user/categoryList",{data,user,cartCount,wishlist,wishlistCount})
 
   },
 

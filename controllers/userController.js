@@ -18,10 +18,13 @@ const homeView = async (req, res, next) => {
     const user = req.session.user;
     res.locals.user = user || null;
     let cartCount = null;
+    let wishlistCount = null
     if (user) {
       // console.log(user);
       cartCount = await userHelper.getCartCount(user._id);
       res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id)
+      res.locals.wishlistCount = wishlistCount
     }
     const banner = await bannerDB.find({})
    const cat = await categoryDB.find({})
@@ -30,7 +33,7 @@ const homeView = async (req, res, next) => {
    
   
     //console.log(cartCount);
-    res.render("user/home", { user, cartCount,cat,banner,product });
+    res.render("user/home", { user, cartCount,cat,banner,product,wishlistCount });
   } catch (err) {
     next(err);
   }
@@ -156,11 +159,14 @@ const productView = async (req, res, next) => {
    
     let cartCount = null;
     let wishlist = null
+    let wishlistCount = null
     if (user) {
       // console.log(user);
       const userId = await user._id;
       cartCount = await userHelper.getCartCount(userId);
       res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id)
+      res.locals.wishlistCount = wishlistCount
        wishlist = await wishlistDB.findOne({userId:userId})
       //console.log(wishlist);
        
@@ -170,7 +176,7 @@ const productView = async (req, res, next) => {
     //console.log(wishlist);
     productHelper.productsUserSide().then((data) => {
       //console.log(data);
-      res.render("user/shope", { data, user, cartCount,wishlist,cat });
+      res.render("user/shope", { data, user, cartCount,wishlist,cat,wishlistCount });
     });
   } catch (err) {
     next(err);
@@ -194,9 +200,20 @@ const viewProfile = async (req, res, next) => {
     const user = req.session.user;
     const userId = user._id;
     //console.log(userId);
-    const address = await adressDB.find({ userId: userId });
-    //console.log(address);
-    res.render("user/profile", { user, address });
+    let address = null
+    let cartCount = null;
+    let wishlistCount = null
+    if (user) {
+      // console.log(user);
+      cartCount = await userHelper.getCartCount(user._id);
+      res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id)
+      res.locals.wishlistCount = wishlistCount
+    }
+    const addressData = await adressDB.findOne({ userId: userId });
+     address = addressData.address
+    console.log(address);
+    res.render("user/profile", { user, address,cartCount,wishlistCount });
   } catch (err) {
     next(err);
   }
@@ -213,9 +230,23 @@ const saveAdress = async (req, res, next) => {
   try {
     const user = req.session.user;
     const userId = user._id;
-    Object.assign(req.body, { userId: userId });
-    const data = req.body;
-    const save = await adressDB.create(data);
+    const newAddress = req.body
+    console.log(newAddress);
+    const addressdata = []
+    addressdata.push(newAddress);
+    const data = {}
+
+    Object.assign(data, { userId: userId },{address:addressdata});
+
+   
+    
+    const find = await adressDB.findOne({ userId: userId })
+
+    if(find){
+      const add = await adressDB.findOneAndUpdate({ userId: userId },{$push:{address:newAddress}}, { upsert: true })
+    }else{
+   
+    const save = await adressDB.create(data);}
     res.redirect("/profile");
   } catch (err) {
     next(err);
@@ -227,10 +258,22 @@ const editAddress = async (req, res, next) => {
     const user = req.session.user;
     const userId = user._id;
     const Id = req.params.id;
-    //console.log(Id);
-    const data = await adressDB.findOne({ _id: Id });
-    // console.log(data);
-    res.render("user/editaddress", { data });
+   // console.log(Id);
+    const add = await adressDB.findOne({ userId:userId })
+
+   // console.log(add);
+
+    if(add){
+      const adressExist = await add.address.findIndex(
+        (element) => element._id == Id
+      );
+     // console.log(adressExist);
+      const data = add.address[adressExist]
+      //console.log(data)
+      res.render("user/editaddress", { data });
+    }
+    
+   
   } catch (err) {
     next(err);
   }
@@ -238,9 +281,11 @@ const editAddress = async (req, res, next) => {
 
 const deleteAddress = async (req, res, next) => {
   try {
-    //console.log(req.params.id);
+    console.log(req.params.id);
     const Id = req.params.id;
-    const remove = await adressDB.findByIdAndRemove(Id);
+    const user = req.session.user;
+    const userId = user._id;
+    const remove = await adressDB.findOneAndUpdate({ userId: userId },{$pull:{address:{_id:Id}}}, { upsert: true })
     res.redirect("/profile");
   } catch (err) {
     next(err);
@@ -250,23 +295,32 @@ const deleteAddress = async (req, res, next) => {
 const updateAddress = async (req, res, next) => {
   try {
     const data = req.body;
-    const ID = req.params.id;
-    const update = await adressDB.findOneAndUpdate(
-      { _id: ID },
+    console.log(data);
+    const ID = req.params.id
+    console.log(ID);
+    const user = req.session.user;
+    const userId = user._id;
+    const address = await adressDB.findOne({ userId: userId })
+    console.log(address);
+    if(address){
+     
+      
+    const update = await adressDB.updateMany(
+      { "address._id":ID},
       {
-        $set: {
-          name: data.name,
-          phoneNumber: data.phoneNumber,
-          pincode: data.pincode,
-          locality: data.locality,
-          adress: data.adress,
-          city: data.city,
-          landmark: data.landmark,
-          AlternatePhone: data.AlternatePhone,
-          state: data.state,
-        },
-      }
-    );
+        "$set": {
+          "address.$.name": data.name,
+          "address.$.phoneNumber": data.phoneNumber,
+          "address.$.pincode": data.pincode,
+          "address.$.locality": data.locality,
+          "address.$.adress": data.adress,
+          "address.$.city": data.city,
+          "address.$.landmark": data.landmark,
+          "address.$.AlternatePhone": data.AlternatePhone,
+          "address.$.state": data.state,
+        }, new: true 
+      },{ upsert: true }
+    )};
 
     //console.log(data);
     //console.log(update);
@@ -281,10 +335,19 @@ const singleProduct = async (req, res, next) => {
     const ID = req.params.id;
     const user = req.session.user;
     //console.log(ID);
+    let cartCount = null
+    let wishlistCount = null
+    if (user) {
+      // console.log(user);
+      cartCount = await userHelper.getCartCount(user._id);
+      res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id)
+      res.locals.wishlistCount = wishlistCount
+    }
     const all = await productDB.find({ active: true }).populate("category");
     const product = await productDB.findOne({ _id: ID });
     // console.log(product);
-    res.render("user/singleproduct", { product, all, user });
+    res.render("user/singleproduct", { product, all, user,cartCount,wishlistCount });
   } catch (err) {
     next(err);
   }

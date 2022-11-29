@@ -6,6 +6,7 @@ const { db } = require("../models/productSchema");
 const { reject } = require("bcrypt/promises");
 const { verifySMS } = require("../middleware/otpVerification");
 const cartDB = require("../models/cartShcema");
+const wishlistDB = require("../models/wishlistSchema");
 
 module.exports = {
   signinData: (userData) => {
@@ -81,6 +82,17 @@ module.exports = {
       const cart = await cartDB.findOne({ userId: userId });
       if (cart) {
         count = cart.products.length;
+      }
+      resolve(count);
+    });
+  },
+
+  getWishListCount: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      let count = null;
+      const wishlist = await wishlistDB.findOne({ userId: userId });
+      if (wishlist) {
+        count = wishlist.products.length;
       }
       resolve(count);
     });

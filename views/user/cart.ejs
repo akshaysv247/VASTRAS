@@ -1,7 +1,9 @@
 <%- include('partials/userheader.ejs') %>
 
 
-<% if(datas.products.length!=0){ %> 
+<% if(  product!=null){ %> 
+
+  <% if(  datas.products.length!=0){ %> 
 
   <div class="site-section">
     <div class="container">
@@ -37,16 +39,17 @@
                       <div class="input-group-prepend">
                         <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="changeQuantity('<%= product[i].productId._id %>','<%= datas.userId %>','<%= product[i].quantity %>','<%= product[i].total %>','<%= product[i].productId.price %>',-1)">&minus;</button>
                       </div>
-                      <input type="text" id="<%= product[i].productId._id %>" class="form-control text-center" value="<%= product[i].quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                      <input type="text"  id="quantity<%= product[i].productId._id %>" class="form-control text-center" value="<%= product[i].quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                       <div class="input-group-append">
                         <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="changeQuantity('<%= product[i].productId._id %>','<%= datas.userId %>','<%= product[i].quantity %>','<%= product[i].total %>','<%= product[i].productId.price %>',1)" >&plus;</button>
                       </div>
                     </div>
 
                   </td>
-                  <td class="total"><%= product[i].total %></td>
-                  <td> <button type="button" onclick="addToWhilst('<%= product[i].productId._id %>')" class="btn fa fa-heart" style="font-size:24px; color: red;" name="productId"></button></td>
-                  <td><a href="/cartproductdelete/<%= product[i].productId._id %> "  class="btn btn-primary btn-sm">X</a></td>
+                  <td id="total<%=  product[i].productId._id %>" class="newtotal" ><%= product[i].total %> </td>
+                  <td> <button type="button" onclick="addToWhilst('<%= product[i].productId._id %>')" class="btn " style="font-size:24px; ;" name="productId">Add</button></td>
+                  <td><button type="button"  onclick="deleteMsg('<%= product[i].productId._id %>')" class="btn btn-primary " >Dele</button></td>
+                  <!-- <td><a href="/cartproductdelete/<%= product[i].productId._id %> "  class="btn btn-primary btn-sm">X</a></td> -->
                   <!-- <td><button type="button" class="btn btn-primary" onclick="deleteProduct('<%= product[i].productId._id %>','<%= product[i].total %>',1)" >Primary</button></td> -->
                   
                 </tr>
@@ -96,13 +99,13 @@
                   <span class="text-black">Subtotal</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black"  ><%= datas.grandtotal %>  </strong>
+                  <strong class="text-black" id="ingrand" ><%= datas.grandtotal %> </strong>
                  
                 </div>
               </div>
               <div class="row mb-5">
                 <div class="col-md-6">
-                  <span class="text-black">Total</span>
+                  <span class="text-black" >Total</span>
                 </div>
                 <div class="col-md-6 text-right">
                   <strong class="text-black" id="grandtotal"> </strong>
@@ -111,7 +114,8 @@
 
               <div class="row">
                 <div class="col-md-12">
-                  <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                  <a href="/checkout"><button class="btn btn-primary btn-lg py-3 btn-block" >Proceed To Checkout</button></a>
+                  
                 </div>
               </div>
             </div>
@@ -120,6 +124,16 @@
       </div>
     </div>
   </div>
+  <% }else{ %> 
+
+    <section class="container">
+      <h1>Cart Empty</h1>
+      <div>
+       <a href="/showProducts"><button type="button" class="w-100 btn btn-lg btn-outline-primary">shope</button></a>
+      </div>
+    </section>
+   <% } %> 
+
   <% }else{ %> 
 
      <section class="container">
@@ -132,8 +146,8 @@
 
   <script>
     function changeQuantity(proId,userId,quantity,total,price,count) {
-      // let quantity=parseInt(document.getElementById(proId).innerHTML)
-      // count = parseInt(count)
+       let quan=document.getElementById('quantity'+proId).value
+        quantity = parseInt(quan)
        $.ajax({
         url:'/change-product-quantity',
         data:{
@@ -150,15 +164,62 @@
           // alert("Product Removed from cart")
           location.reload()
          }else{
-          document.getElementById(proId).innerHTML==quantity+count
           
+          document.getElementById('quantity'+response.ID).value = response.quantity
+          
+          document.getElementById('ingrand').innerHTML=response.newGrand
+          document.getElementById('grandtotal').innerText=response.newGrand
+       
+          document.getElementById('total'+response.ID).innerHTML=response.newTotal
+         
          }
 
         }})
        }
 
+       function addToWhilst(proId) {
+         $.ajax({
+          url:'/addwishlist/'+proId,
+          method:'get',
+          success:(response)=>{
+           console.log( response);
+            if(response.add){
+              alert("Product add to wishlist")
+              
+             
+            }else{
+              alert("Product removed from   wishlist")
+             
+            
+            }
+          }
+          
+         })
+    }
 
-    let arr = document.getElementsByClassName('total')
+
+    function deleteMsg(id){
+      swal({
+title: "Are you sure?",
+text: "Delete, your product remove from cart",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+  swal(" Your  product has been removed!", {
+    icon: "success",
+  });
+  location.href="/cartproductdelete/"+id
+} else {
+  swal("Your product is safe!");
+}
+});
+  }
+
+
+    let arr = document.getElementsByClassName('newtotal')
 
     let sum = 0
      for(let i = 0; i < arr.length; i++){
@@ -166,7 +227,7 @@
 
        document.getElementById('grandtotal').innerText=sum
              
-        
+  
       
 
        
