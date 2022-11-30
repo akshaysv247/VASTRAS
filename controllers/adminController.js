@@ -4,7 +4,7 @@ const adminHelper = require("../helpers/adminHelper");
 const productHelper = require("../helpers/productHelpers");
 const category = require("../models/categorySchema");
 const productDB = require("../models/productSchema");
-const categoryDB = require('../models/categorySchema')
+const categoryDB = require("../models/categorySchema");
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -39,10 +39,9 @@ const adminView = (req, res) => {
 };
 
 const adminProduct = (req, res) => {
-  adminHelper.getProducts().then(async(product) => {
-    
+  adminHelper.getProducts().then(async (product) => {
     //console.log(product);
-   // console.log(product.category.name)
+    // console.log(product.category.name)
     res.render("admin/products", { product });
   });
 };

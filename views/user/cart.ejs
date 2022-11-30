@@ -144,6 +144,8 @@
      </section>
     <% } %> 
 
+
+
   <script>
     function changeQuantity(proId,userId,quantity,total,price,count) {
        let quan=document.getElementById('quantity'+proId).value
@@ -177,25 +179,7 @@
         }})
        }
 
-       function addToWhilst(proId) {
-         $.ajax({
-          url:'/addwishlist/'+proId,
-          method:'get',
-          success:(response)=>{
-           console.log( response);
-            if(response.add){
-              alert("Product add to wishlist")
-              
-             
-            }else{
-              alert("Product removed from   wishlist")
-             
-            
-            }
-          }
-          
-         })
-    }
+      
 
 
     function deleteMsg(id){
@@ -218,6 +202,27 @@ if (willDelete) {
 });
   }
 
+  function addToWhilst(proId) {
+         $.ajax({
+          url:'/addwishlist/'+proId,
+          method:'get',
+          success:(response)=>{
+           console.log( response);
+            if(response.add){
+              alert("Product added to   wishlist")
+              
+              
+             
+            }else{
+              alert("Product removed from   wishlist")
+             
+            
+            }
+          }
+          
+         })
+    }
+
 
     let arr = document.getElementsByClassName('newtotal')
 
@@ -227,11 +232,9 @@ if (willDelete) {
 
        document.getElementById('grandtotal').innerText=sum
              
-  
-      
-
-       
-    
   </script>
+
+
+   
 
   <%- include('partials/userfooter.ejs') %>

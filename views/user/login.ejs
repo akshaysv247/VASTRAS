@@ -3,6 +3,8 @@
 
   <link rel="stylesheet" href="/public/user/style.css">
 
+  
+
   <section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex align-items-center justify-content-center h-100">
@@ -14,7 +16,6 @@
 
           <% if(error.length>0){ %>
             <div class="alert alert-danger" role="alert">
-             <!-- Incorrect username or password ! -->
              <%= error %></div>
         <% } %>
             
@@ -64,4 +65,11 @@
     </div>
   </section>
 
+  <script>
+
+    document.getElementById('navbar').style.display = "none"
+    document.getElementById('cart').style.display = "none"
+    
+  </script>
+ 
   <%- include('partials/userfooter.ejs') %>

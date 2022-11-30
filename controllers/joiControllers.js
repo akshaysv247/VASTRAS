@@ -13,7 +13,7 @@ const userValidation = async (req) => {
     is_active: req.body.is_active,
   };
 
-  const { error } = validation.validate(data);
+  const { error, value } = validation.validate(data);
 
   if (error) {
     return;

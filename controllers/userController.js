@@ -8,9 +8,10 @@ const userDB = require("../models/userSchema");
 const cartDB = require("../models/cartShcema");
 const Twilio = require("../middleware/otpVerification");
 const adressDB = require("../models/adressScema");
-const wishlistDB = require('../models/wishlistSchema');
-const categoryDB = require('../models/categorySchema');
-const bannerDB = require('../models/banner');
+const wishlistDB = require("../models/wishlistSchema");
+const categoryDB = require("../models/categorySchema");
+const bannerDB = require("../models/banner");
+const loginValidation = require("../validation/login");
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -18,22 +19,28 @@ const homeView = async (req, res, next) => {
     const user = req.session.user;
     res.locals.user = user || null;
     let cartCount = null;
-    let wishlistCount = null
+    let wishlistCount = null;
     if (user) {
       // console.log(user);
       cartCount = await userHelper.getCartCount(user._id);
       res.locals.cartCount = cartCount;
-      wishlistCount = await userHelper.getWishListCount(user._id)
-      res.locals.wishlistCount = wishlistCount
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
     }
-    const banner = await bannerDB.find({})
-   const cat = await categoryDB.find({})
-   const product = await productDB.find({}).populate("category")
-   const bannerMain = banner.mainImage
-   
-  
+    const banner = await bannerDB.find({});
+    const cat = await categoryDB.find({});
+    const product = await productDB.find({}).populate("category");
+    const bannerMain = banner.mainImage;
+
     //console.log(cartCount);
-    res.render("user/home", { user, cartCount,cat,banner,product,wishlistCount });
+    res.render("user/home", {
+      user,
+      cartCount,
+      cat,
+      banner,
+      product,
+      wishlistCount,
+    });
   } catch (err) {
     next(err);
   }
@@ -59,20 +66,42 @@ const loginView = (req, res, next) => {
   }
 };
 
-const userLogin = (req, res, next) => {
+const userLogin = async (req, res, next) => {
   try {
-    userHelper.userLogin(req.body).then((response) => {
-      //console.log(response);
-      if (response.status) {
-        req.session.loggedIn = true;
-        req.session.user = response.user;
+    let validate = await loginValidation(req);
+    if (validate == true) {
+      userHelper.userLogin(req.body).then((response) => {
+        //console.log(response);
+        if (response.status) {
+          req.session.loggedIn = true;
+          req.session.user = response.user;
 
-        res.redirect("/");
+          res.redirect("/");
+        } else {
+          console.log(response);
+          if (response.Password) {
+            req.flash("userErr", "Incorrect password ! ");
+            res.redirect("/login");
+          } else {
+            req.flash("userErr", "Incorrect email ! ");
+            res.redirect("/login");
+          }
+        }
+      });
+    } else {
+      console.log(validate);
+
+      if (validate.length > 30) {
+        req.flash(
+          "userErr",
+          "Password length must be at least 8 characters long "
+        );
+        res.redirect("/login");
       } else {
-        req.flash("userErr", "Incorrect username or password ! ");
+        req.flash("userErr", "Email must be a valid email ");
         res.redirect("/login");
       }
-    });
+    }
   } catch (err) {
     next(err);
   }
@@ -156,27 +185,33 @@ const userSignup = async (req, res, next) => {
 const productView = async (req, res, next) => {
   try {
     const user = await req.session.user;
-   
+
     let cartCount = null;
-    let wishlist = null
-    let wishlistCount = null
+    let wishlist = null;
+    let wishlistCount = null;
     if (user) {
       // console.log(user);
       const userId = await user._id;
       cartCount = await userHelper.getCartCount(userId);
       res.locals.cartCount = cartCount;
-      wishlistCount = await userHelper.getWishListCount(user._id)
-      res.locals.wishlistCount = wishlistCount
-       wishlist = await wishlistDB.findOne({userId:userId})
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
+      wishlist = await wishlistDB.findOne({ userId: userId });
       //console.log(wishlist);
-       
     }
-    const cat = await categoryDB.find({})
-   
+    const cat = await categoryDB.find({});
+
     //console.log(wishlist);
     productHelper.productsUserSide().then((data) => {
       //console.log(data);
-      res.render("user/shope", { data, user, cartCount,wishlist,cat,wishlistCount });
+      res.render("user/shope", {
+        data,
+        user,
+        cartCount,
+        wishlist,
+        cat,
+        wishlistCount,
+      });
     });
   } catch (err) {
     next(err);
@@ -200,20 +235,20 @@ const viewProfile = async (req, res, next) => {
     const user = req.session.user;
     const userId = user._id;
     //console.log(userId);
-    let address = null
+    let address = null;
     let cartCount = null;
-    let wishlistCount = null
+    let wishlistCount = null;
     if (user) {
       // console.log(user);
       cartCount = await userHelper.getCartCount(user._id);
       res.locals.cartCount = cartCount;
-      wishlistCount = await userHelper.getWishListCount(user._id)
-      res.locals.wishlistCount = wishlistCount
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
     }
     const addressData = await adressDB.findOne({ userId: userId });
-     address = addressData.address
+    address = addressData.address;
     console.log(address);
-    res.render("user/profile", { user, address,cartCount,wishlistCount });
+    res.render("user/profile", { user, address, cartCount, wishlistCount });
   } catch (err) {
     next(err);
   }
@@ -230,23 +265,25 @@ const saveAdress = async (req, res, next) => {
   try {
     const user = req.session.user;
     const userId = user._id;
-    const newAddress = req.body
+    const newAddress = req.body;
     console.log(newAddress);
-    const addressdata = []
+    const addressdata = [];
     addressdata.push(newAddress);
-    const data = {}
+    const data = {};
 
-    Object.assign(data, { userId: userId },{address:addressdata});
+    Object.assign(data, { userId: userId }, { address: addressdata });
 
-   
-    
-    const find = await adressDB.findOne({ userId: userId })
+    const find = await adressDB.findOne({ userId: userId });
 
-    if(find){
-      const add = await adressDB.findOneAndUpdate({ userId: userId },{$push:{address:newAddress}}, { upsert: true })
-    }else{
-   
-    const save = await adressDB.create(data);}
+    if (find) {
+      const add = await adressDB.findOneAndUpdate(
+        { userId: userId },
+        { $push: { address: newAddress } },
+        { upsert: true }
+      );
+    } else {
+      const save = await adressDB.create(data);
+    }
     res.redirect("/profile");
   } catch (err) {
     next(err);
@@ -258,22 +295,20 @@ const editAddress = async (req, res, next) => {
     const user = req.session.user;
     const userId = user._id;
     const Id = req.params.id;
-   // console.log(Id);
-    const add = await adressDB.findOne({ userId:userId })
+    // console.log(Id);
+    const add = await adressDB.findOne({ userId: userId });
 
-   // console.log(add);
+    // console.log(add);
 
-    if(add){
+    if (add) {
       const adressExist = await add.address.findIndex(
         (element) => element._id == Id
       );
-     // console.log(adressExist);
-      const data = add.address[adressExist]
+      // console.log(adressExist);
+      const data = add.address[adressExist];
       //console.log(data)
       res.render("user/editaddress", { data });
     }
-    
-   
   } catch (err) {
     next(err);
   }
@@ -285,7 +320,11 @@ const deleteAddress = async (req, res, next) => {
     const Id = req.params.id;
     const user = req.session.user;
     const userId = user._id;
-    const remove = await adressDB.findOneAndUpdate({ userId: userId },{$pull:{address:{_id:Id}}}, { upsert: true })
+    const remove = await adressDB.findOneAndUpdate(
+      { userId: userId },
+      { $pull: { address: { _id: Id } } },
+      { upsert: true }
+    );
     res.redirect("/profile");
   } catch (err) {
     next(err);
@@ -296,31 +335,32 @@ const updateAddress = async (req, res, next) => {
   try {
     const data = req.body;
     console.log(data);
-    const ID = req.params.id
+    const ID = req.params.id;
     console.log(ID);
     const user = req.session.user;
     const userId = user._id;
-    const address = await adressDB.findOne({ userId: userId })
+    const address = await adressDB.findOne({ userId: userId });
     console.log(address);
-    if(address){
-     
-      
-    const update = await adressDB.updateMany(
-      { "address._id":ID},
-      {
-        "$set": {
-          "address.$.name": data.name,
-          "address.$.phoneNumber": data.phoneNumber,
-          "address.$.pincode": data.pincode,
-          "address.$.locality": data.locality,
-          "address.$.adress": data.adress,
-          "address.$.city": data.city,
-          "address.$.landmark": data.landmark,
-          "address.$.AlternatePhone": data.AlternatePhone,
-          "address.$.state": data.state,
-        }, new: true 
-      },{ upsert: true }
-    )};
+    if (address) {
+      const update = await adressDB.updateMany(
+        { "address._id": ID },
+        {
+          $set: {
+            "address.$.name": data.name,
+            "address.$.phoneNumber": data.phoneNumber,
+            "address.$.pincode": data.pincode,
+            "address.$.locality": data.locality,
+            "address.$.adress": data.adress,
+            "address.$.city": data.city,
+            "address.$.landmark": data.landmark,
+            "address.$.AlternatePhone": data.AlternatePhone,
+            "address.$.state": data.state,
+          },
+          new: true,
+        },
+        { upsert: true }
+      );
+    }
 
     //console.log(data);
     //console.log(update);
@@ -335,19 +375,25 @@ const singleProduct = async (req, res, next) => {
     const ID = req.params.id;
     const user = req.session.user;
     //console.log(ID);
-    let cartCount = null
-    let wishlistCount = null
+    let cartCount = null;
+    let wishlistCount = null;
     if (user) {
       // console.log(user);
       cartCount = await userHelper.getCartCount(user._id);
       res.locals.cartCount = cartCount;
-      wishlistCount = await userHelper.getWishListCount(user._id)
-      res.locals.wishlistCount = wishlistCount
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
     }
     const all = await productDB.find({ active: true }).populate("category");
     const product = await productDB.findOne({ _id: ID });
     // console.log(product);
-    res.render("user/singleproduct", { product, all, user,cartCount,wishlistCount });
+    res.render("user/singleproduct", {
+      product,
+      all,
+      user,
+      cartCount,
+      wishlistCount,
+    });
   } catch (err) {
     next(err);
   }

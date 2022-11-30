@@ -15,4 +15,8 @@ const validation = joi.object({
   is_active: joi.boolean().default(true),
 });
 
-module.exports = validation;
+
+
+module.exports = validation
+  
+

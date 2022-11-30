@@ -44,12 +44,12 @@ module.exports = {
             resolve(response);
           } else {
             console.log("login failed");
-            resolve({ status: false });
+            resolve({ Password: true });
           }
         });
       } else {
-        console.log("Login Failed");
-        resolve({ status: false });
+        console.log("Email Failed");
+        resolve({ Email: true });
       }
     });
   },
