@@ -5,6 +5,7 @@ const productHelper = require("../helpers/productHelpers");
 const category = require("../models/categorySchema");
 const productDB = require("../models/productSchema");
 const categoryDB = require("../models/categorySchema");
+const orderDB = require("../models/orderSchema")
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -152,6 +153,24 @@ const productActive = async (req, res) => {
   res.redirect("/admin/products");
 };
 
+const orderDetails = async(req,res)=>{
+  //const data = await orderDB.find()
+  const data = await orderDB.find().populate('userId')
+  const productData = await orderDB.find().populate('products.product')
+  const userAddress = await orderDB.find().populate('addressId')
+
+ // let name = userData.userId
+  const product = data.products
+
+  console.log(data)
+  //console.log(name)
+  console.log(product)
+ // console.log(userData);
+  //console.log(userAddress);
+  res.render('admin/orders',{data})
+
+}
+
 module.exports = {
   adminLogin,
   adminSign,
@@ -167,4 +186,5 @@ module.exports = {
   blockUser,
   unBlockUser,
   productActive,
+  orderDetails
 };

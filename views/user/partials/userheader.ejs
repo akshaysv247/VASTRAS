@@ -26,6 +26,8 @@
 
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -53,19 +55,19 @@
               </div>
             </div>
 
-            <div class="col-6 col-md-4 order-3 order-md-3 text-right" id="cart">
+            <div class="col-6 col-md-4 order-3 order-md-3 text-right" id="bar">
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/login"><span class="icon icon-person"></span></a></li>
                   <li><a href="/wishlist" class="site-cart">
                     <span class="icon icon-heart " ></span>
-                    <span class="count" id="cart" ><%= wishlistCount %></span>
+                    <span class="count"  ><%= wishlistCount %></span>
                     
                   </a></li>
                   <li>
                     <a href="/cart" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
-                      <span class="count" id="cart" ><%= cartCount %> </span>
+                      <span class="count"  ><%= cartCount %> </span>
                     </a>
                   </li> 
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -83,7 +85,7 @@
 
             <li><a href="/">Home</a></li>
             <li><a href="/showProducts">Shop</a></li>
-            <!-- <li><a href="/cart">Cart</a></li> -->
+            <!-- <li><a href="/order">orders</a></li> -->
 
 
             <!-- <li class="has-children">

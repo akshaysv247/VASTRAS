@@ -29,7 +29,15 @@ const order = new mongoose.Schema({
  },
  payment:{
     type:String
+ },
+ date:{
+  type:String,
+  default:Date.now
+ },
+ status:{
+  type:String
  }
+
 });
 
 const addOrder = mongoose.model("orders", order);

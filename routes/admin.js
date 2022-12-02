@@ -25,5 +25,6 @@ router.get("/userUnblock/:id", adminControllers.unBlockUser);
 router.get('/category',productController.admincategory);
 router.post('/category',upload,productController.addCategory);
 router.get('/deletecategory/:id',productController.removeCategory);
+router.get("/orders",adminControllers.orderDetails);
 
 module.exports = router;

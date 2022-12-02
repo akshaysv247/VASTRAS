@@ -24,9 +24,9 @@ module.exports = {
         datas = await cartDB
           .findOne({ userId: userId })
           .populate("products.productId");
-        console.log(datas);
+       // console.log(datas);
         product = datas.products;
-        console.log(product);
+       // console.log(product);
       }
 
       //console.log(products[0].productId.title);

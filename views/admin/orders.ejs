@@ -1,0 +1,52 @@
+
+<%- include('partials/adminheader.ejs') %>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">All Orders</h4>
+
+     
+
+   <!-- Basic Bootstrap Table -->
+   <div class="card mt-2">
+     <h5 class="card-header"></h5>
+     <div class="table-responsive text-nowrap">
+       <table class="table">
+         <thead>
+           <tr>
+             <th>Name</th>
+             <th>price</th>
+            
+             <th>payment</th>
+             <th>Date</th>
+            
+           </tr>
+         </thead>
+
+         
+         <tbody class="table-border-bottom-0">
+           <% for(var i=0; i < data.length; i++) { %>
+
+           <tr>
+             <td><%= data[i].userId.Name %> </td>
+             <td><%= data[i].price %></td>
+            
+             <td><%= data[i].payment %></td>
+             <td><%= data[i].date %></td>
+             
+
+            <td></td>
+           </tr>
+
+           <% } %>
+          
+          
+          
+         </tbody>
+       </table>
+     </div>
+   </div>
+   <!--/ Basic Bootstrap Table -->
+
+</div>
+
+<%- include('partials/adminfooter.ejs') %>

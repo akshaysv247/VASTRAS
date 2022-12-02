@@ -244,10 +244,13 @@ const viewProfile = async (req, res, next) => {
       res.locals.cartCount = cartCount;
       wishlistCount = await userHelper.getWishListCount(user._id);
       res.locals.wishlistCount = wishlistCount;
+     
     }
     const addressData = await adressDB.findOne({ userId: userId });
-    address = addressData.address;
+    if(addressData){
+    address = addressData.address}
     console.log(address);
+   
     res.render("user/profile", { user, address, cartCount, wishlistCount });
   } catch (err) {
     next(err);

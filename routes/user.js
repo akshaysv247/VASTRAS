@@ -34,7 +34,10 @@ router.get("/wishlist",userController.verifyLogin,wishlistController.wishlistVie
 router.get("/wishlistproductdelete/:id",wishlistController.deleteProduct);
 router.get("/categoryproduct/:id", productController.categorySelect);
 router.get("/checkout",orderController.checkOutPage);
-router.post("/conform/:id",orderController.orderConform);
+router.post("/place-order",orderController.orderConform);
+router.get("/vieworders",orderController.viewOreders)
+router.get("/verifyPayment",orderController.verifyPayment)
+router.get("/order-conform",orderController.thankYou)
 
 
 module.exports = router;
