@@ -91,18 +91,11 @@ const userLogin = async (req, res, next) => {
     } else {
       console.log(validate);
 
-      if (validate.length > 30) {
-        req.flash(
-          "userErr",
-          "Password length must be at least 8 characters long "
-        );
-        res.redirect("/login");
-      } else {
         req.flash("userErr", "Email must be a valid email ");
         res.redirect("/login");
       }
     }
-  } catch (err) {
+   catch (err) {
     next(err);
   }
 };
@@ -251,7 +244,7 @@ const viewProfile = async (req, res, next) => {
     address = addressData.address}
     console.log(address);
    
-    res.render("user/profile", { user, address, cartCount, wishlistCount });
+    res.render("user/profile", { user, address, cartCount, wishlistCount,addressData });
   } catch (err) {
     next(err);
   }

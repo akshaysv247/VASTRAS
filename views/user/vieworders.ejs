@@ -1,231 +1,148 @@
+
+<link rel="stylesheet" href="/private/orderview.css">
+
 <!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-<%- include('partials/userheader.ejs') %>
+<section class=" gradient-custom">
+    <div class="container py-5 ">
+      <div class="row d-flex justify-content-center align-items-center ">
+        <div class="col-lg-10 col-xl-8">
+          <div class="card" style="border-radius: 10px;">
+            <div class="card-header px-4 py-5">
+              <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #a8729a;"><%= userData.Name %> </span>!</h5>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
+                <p class="small text-muted mb-0">Receipt Number : <%= order._id %></p>
+              </div>
 
-<!-- Start Banner Area -->
-<section class="banner-area organic-breadcrumb">
-    <div class="container">
-        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-            <div class="col-first">
-                <h1>Order summary</h1>
-                <nav class="d-flex align-items-center">
-                    <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="#">Order summary</a>
-                </nav>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End Banner Area -->
+              <% for(var i=0; i < product.length; i++) { %>
 
-<!--================Order Details Area =================-->
-<section class="order_details section_gap">
-    <div class="container">
-        <% if (id.orderStatus=="Cancellede") { %>
-            <h3 class="title_confirmation text-danger"> Your order has been Cancelled.</h3>
-        <% } else if(id.orderStatus == 'Delivered'){%>
-            
-            <h3 class="title_confirmation">Thank you. Your order has been Delivered.</h3>
-            <% }else{ %>
-                <h3 class="title_confirmation">Thank you. Your order has been recived.</h3>
-                <% } %> 
-        <div class="row order_d_inner">
-            <div class="col-lg-4">
-                <div class="details_item">
-                    <h4>Order Info</h4>
-                    <ul class="list">
-                        <li><a href="#"><span>Order number</span> : 60235</a></li>
-                        <li><a href="#"><span>Date</span> : <%= id.date %></a></li>
-                        <li><a href="#"><span>Total</span> : Rs<%= id.total %></a></li>
-                        <li><a href="#"><span>Payment method</span> : <%= id.paymentMethod %></a></li>
-                    </ul>
+              <div class="card shadow-0 border mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <img src="/images/<%= product[i].productId.images[0] %>"
+                        class="img-fluid" alt="Phone">
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0"><%= product[i].productId.title %></p>
+                    </div>
+                    <!-- <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">White</p>
+                    </div> -->
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small"><%= product[i].productId.price %></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small"><%= product[i].quantity %></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small"><%= product[i].total %></p>
+                    </div>
+                  </div>
+                  <!-- <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;"> -->
+                  <!-- <div class="row d-flex align-items-center">
+                    <div class="col-md-2">
+                      <p class="text-muted mb-0 small">Track Order</p>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="progress" style="height: 6px; border-radius: 16px;">
+                        <div class="progress-bar" role="progressbar"
+                          style="width: 65%; border-radius: 16px; background-color: #a8729a;" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <div class="d-flex justify-content-around mb-1">
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                      </div>
+                    </div>
+                  </div> -->
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="details_item">
-                    <h4>Billing Address</h4>
-                    <ul class="list">
-                        <li><a href="#"><span>Street</span> : <%= id.address.city %></a></li>
-                        <li><a href="#"><span>City</span> :<%= id.address.district %></a></li>
-                        <li><a href="#"><span>Country</span> : <%= id.address.country %></a></li>
-                        <li><a href="#"><span>Postcode </span> : <%= id.address.zipcode %></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="details_item">
-                    <h4>Shipping Address</h4>
-                    <ul class="list">
-                        <li><a href="#"><span>City</span> : <%= id.address.city %></a></li>
-                        <li><a href="#"><span>District</span> : <%= id.address.district %></a></li>
-                        <li><a href="#"><span>Country</span> : <%= id.address.country %></a></li>
-                        <li><a href="#"><span>Postcode </span> : <%= id.address.zipcode %></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="order_details_table">
-            <h2>Order Details</h2>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                            <% for( let i = 0; i < id.products.length; i++ ) { %>
-                            
-                        <tr>
-                            <td>
-                                <p><%= id.products[i].name %></p>
-                            </td>
-                            <td>
-                                <h5>x0<%= id.products[i].quantity %></h5>
-                            </td>
-                            <td>
-                                <p>Rs<%= id.products[i].price %></p>
-                            </td>
-                        </tr>
-                        <%} %>
-                        <tr>
-                            <td>
-                                <h4>SubTotal</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>Rs<%= id.total %></p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="container text-center mt-5">
-            <% if(id.orderStatus != 'Cancellede' && id.orderStatus != 'Delivered'){ %>
-                <button onclick="cancelOrder('<%=id._id%>')" class="genric-btn danger">
-                  Cancel Order
-                </button>
+              </div>
+
               <% } %>
-            <a class="btn btn-outline-primary" href="/">Go back to Shopping</a>
 
-
-      <% if ( id.orderStatus == 'Delivered') { %>
-       
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Return Order
-          </button>
-      <% } %>      <!-- Button trigger modal -->
+              <!-- <div class="card shadow-0 border mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
+                        class="img-fluid" alt="Phone">
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0">iPad</p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Pink rose</p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Capacity: 32GB</p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Qty: 1</p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">$399</p>
+                    </div>
+                  </div>
+                  <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                  <div class="row d-flex align-items-center">
+                    <div class="col-md-2">
+                      <p class="text-muted mb-0 small">Track Order</p>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="progress" style="height: 6px; border-radius: 16px;">
+                        <div class="progress-bar" role="progressbar"
+                          style="width: 20%; border-radius: 16px; background-color: #a8729a;" aria-valuenow="20"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <div class="d-flex justify-content-around mb-1">
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
   
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Return Order #<%= id._id %> </h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <p>Why are you retturning this order ?</p>
-        <div class="modal-body">
-            <select style="background-color: yellow ; text-size-adjust: 12px; "data-oid="<%= id._id %> "  name="track" id="track">     
-                <option value="Delivery is later than expected">Delivery is later than expected</option>
-            
-                <option value="Purchased by mistake ">Purchased by mistake </option>
-                <option value="Item no longer needed" >Item no longer needed </option>
-              <option value="Other reasons"  >Other reasons</option>
-            
-            </select>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="orderStatus(this)">Return</button>
+              <div class="d-flex justify-content-between pt-2">
+                <p class="fw-bold mb-0">Shipping Address</p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> <%= order.price %></p>
+              </div>
+  
+              <div class="d-flex justify-content-between pt-2">
+                <p class="text-muted mb-0"><%= adressData.name %> </p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>
+              </div>
+  
+              <div class="d-flex justify-content-between">
+                <p class="text-muted mb-0"><%= adressData.phoneNumber %></p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
+              </div>
+  
+              <div class="d-flex justify-content-between ">
+                <p class="text-muted mb-0"><%= adressData.adress %></p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+                
+              </div>
+
+              <div class="d-flex justify-content-between mb-4">
+                <p class="text-muted mb-0"><%= adressData.city %></p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+
+              </div>
+
+            </div>
+            <div class="card-footer border-0 px-4 py-4"
+              style="background-color: #ea82d8; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+                paid: <span class="h2 mb-0 ms-2"><%= order.price %> </span></h5>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-            
-        </div>
-    </div>
-</section>
-<!--================End Order Details Area =================-->
-
-
-<%- include('partials/userfooter.ejs') %>
-
-
-
-<!-- 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- <script>
-
-function cancelOrder(orderId){
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Cancel Order!",
-      cancelButtonText : 'No'
-}).then((result) => {
-   if(result.isConfirmed) {
-    console.log(orderId);
-    $.ajax({
-          url:'/cancelOrder/?id='+orderId,
-          method:'get',
-    })
-     Swal.fire("Cancelled!", "Your orderd has been Cancelled.", "success").then(()=>{
-          window.location = "/myOrders"
-        })
-   }
-})
-}
-
- </script> 
-
- <script>
-
-function orderStatus(e){
-  
-  const oid = $('#track').data('oid')
-  const value = $('#track').find(":selected").val();
-  alert(`oid = ${oid}`)
-  alert(`value = ${value}`)
-    
-$.ajax({
-  url:"/returnOrder",
-  data:{
-    oid,
-    value
-  },
-  method:"post",
-  success:(response)=>{
-   if(response.status){
-
-    Swal.fire({
-  position: 'top-end',
-  icon: 'success',
-  title: 'Track statuse has been changed',
-  showConfirmButton: false,
-  timer: 1000
-})
-    
-   }
-
-  }
-
-})
-    
-}
-
- </script>
- <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script> -->
+  </section>

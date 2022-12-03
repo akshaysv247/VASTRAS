@@ -1,10 +1,12 @@
 <%- include('partials/userheader.ejs') %>
+<% let addressData = locals.addressData || null %> 
 
 <div class="site-section">
   <div class="container">
     <form method="post" id="chechout-form">
       <div class="row">
         <div class="col-md-6 mb-5 mb-md-0">
+          
           <h2 class="h3 mb-3 text-black">Choose Address</h2>
           <input
             type="text"
@@ -13,26 +15,31 @@
             hidden
           />
 
-          <% if (address.length!=null) { %> <% for(var i=0; i < address.length;
-          i++) { %>
 
-          <div class="accordion" id="accordionExample">
-            <div class="card">
-              <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
+          <% if (addressData!=null) { %> 
+
+          <% if (address.length!=null) { %> 
+          <% for(var i=0; i < address.length;i++) { %>
+
+          <div class="accordion" id="accordionExample" >
+            <div class="card"   >
+              <div class="card-header " id="headingOne"  >
+                
                   <button
-                    class="btn btn-link btn-block text-left collapsed"
+                    class="btn btn-link btn-block text-left collapsed "
                     type="button"
                     data-toggle="collapse"
                     data-target="#collapseOne<%= address[i]._id %>"
                     aria-expanded="false"
                     aria-controls="collapseOne<%= address[i]._id %>"
+                    
                   >
-                    <h1 class="card-title pricing-card-title">
+                    <h3 class="card-title pricing-card-title fa-solid fa-angle-down">
                       <%= address[i].name %>
-                    </h1>
+                    </h3>
+
                   </button>
-                </h2>
+               
               </div>
 
               <div
@@ -74,7 +81,8 @@
             </div>
           </div>
 
-          <% }%> <% }else{ %>
+          <% }%> 
+          <% }else{ %>
           <div
             class="alert alert-warning d-flex align-items-center"
             role="alert"
@@ -85,6 +93,17 @@
             </p>
           </div>
           <% }%>
+           <% }else{ %>
+            <div
+              class="alert alert-warning d-flex align-items-center"
+              role="alert"
+            >
+              <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg> -->
+              <p class="text-center align-items-center m-5 p-5">
+                You have not added any address yet
+              </p>
+            </div>
+            <% }%>
           <div class="pt-3">
             <a href="/addadress"
               ><button type="button" class="btn btn-success">
@@ -172,20 +191,12 @@
                       role="button"
                       aria-expanded="false"
                       aria-controls="collapsebank"
+                      
                       >Cash on delivery</a
                     >
                   </h3>
 
-                  <div class="collapse" id="collapsebank">
-                    <div class="py-2">
-                      <p class="mb-0">
-                        Make your payment directly into our bank account. Please
-                        use your Order ID as the payment reference. Your order
-                        won’t be shipped until the funds have cleared in our
-                        account.
-                      </p>
-                    </div>
-                  </div>
+                  
                   <div class="form-check">
                     <input
                       class="form-check-input"
@@ -213,16 +224,7 @@
                     >
                   </h3>
 
-                  <div class="collapse" id="collapsecheque">
-                    <div class="py-2">
-                      <p class="mb-0">
-                        Make your payment directly into our bank account. Please
-                        use your Order ID as the payment reference. Your order
-                        won’t be shipped until the funds have cleared in our
-                        account.
-                      </p>
-                    </div>
-                  </div>
+                  
                   <div class="form-check">
                     <input
                       class="form-check-input"
@@ -234,6 +236,7 @@
                       Please Select
                     </label>
                   </div>
+                  
                 </div>
 
                
@@ -247,6 +250,10 @@
                     Place Order
                   </button>
                 </div>
+                <% if(error.length>0){ %>
+                  <div class="alert alert-danger" role="alert">
+                   <%= error %></div>
+              <% } %>
               </div>
             </div>
           </div>
@@ -262,16 +269,18 @@
   $("#chechout-form").submit((e) => {
     e.preventDefault();
     $.ajax({
-      url: "/place-order",
+      url: "/placeorder",
       method: "post",
       data: $("#chechout-form").serialize(),
       success: (response) => {
         //console.log(response);
         //alert(response.status);
+        let ID = response.newOrderId
         if (response.cod) {
           alert("cod");
-          location.href = "/order-conform"
+          location.href = "/order-conform/"+ID
         } else {
+         
           razorPayPayment(response.onlinePay);
         }
       },
@@ -288,9 +297,8 @@ var options = {
     "image": "https://example.com/your_logo",
     "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
+        
+        
         verifyPayment(response,order)
     },
     "prefill": {
@@ -307,13 +315,9 @@ var options = {
 }
 var rzp1 = new Razorpay(options);
 rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
+       
         alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
+        
 });
 
 //document.getElementById('rzp-button1').onclick = function(e){
@@ -324,13 +328,23 @@ rzp1.on('payment.failed', function (response){
   
 
   function verifyPayment(payment,order) {
+   const ID = order.receipt
      $.ajax({
-      url:'/verifyPayment',
+      url:'/verify-Payment',
       data:{
         payment,
         order
+
       },
       method:'post',
+      success : (response)=>{
+        
+      if(response.status){
+        location.href = "/order-conform/"+ID
+      }else{
+        alert("Online failed")
+      }
+      }
      })
   }
 </script>

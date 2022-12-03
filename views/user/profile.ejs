@@ -1,4 +1,6 @@
 <%- include('partials/userheader.ejs') %>
+<% let addressData = locals.addressData || null %> 
+
 
 <section class="container">
   <div class="jumbotron">
@@ -94,7 +96,7 @@
                   <small class="text-muted float-end"></small>
                 </div>
                 <div class="card-body">
-
+                  <% if (addressData!=null) { %>
                   <% if (address.length!=null) { %>
                     <% for(var i=0; i < address.length; i++) { %>
         
@@ -142,6 +144,7 @@
                           
                           
                           <% }%>
+                          
                         
                         <% }else{ %>
                         <div class="alert alert-warning d-flex align-items-center " role="alert">
@@ -150,49 +153,22 @@
                         </div>
                         <% }%>
 
+                       
 
+                        <% }else{ %>
+                          <div class="alert alert-warning d-flex align-items-center " role="alert">
+                            <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg> -->
+                            <p class="text-center align-items-center m-5 p-5">You have not added any address yet</p>
+                          </div>
+                          <% }%>
                     
                 </div>
               </div>
             </div>
 
 
-          <!-- <% if (address.length>0) { %>
-
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center  d-flex flex-column">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Your Adress</h5>
-                    <small class="text-muted float-end"></small>
-                  </div>
-
-             <% address.forEach(el => { %>
-              
-              <div class="col">
-                <div class="card mb-4 rounded-3 shadow-sm">
-                  <div class="card-body">
-                    <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
-                    <ul class="list-unstyled mt-3 mb-4">
-                      <li><%= el.adress %></li>
-                      <li><%= el.landmark %></li>
-                      <li><%= el.city %></li>
-                      <li><%= el.locality %></li>
-                      <li><%= el.state %></li>
-                      <li><%= el.pincode %></li>
-                      <li><%= el.mob %></li>
-                    </ul>
-                    <button type="button" class="w-100 btn btn-lg btn-outline-primary">Edit</button>
-                  </div>
-                </div>
-              </div>
-              
-              <% }) %>
-            </div>
-            <% }else{ %>
-            <div class="alert alert-warning d-flex align-items-center" role="alert">
-              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
-              <div>You have not added any address yet</div>
-            </div>
-            <% }%> -->
+          
+           
 
 
           <!-- Basic with Icons -->
