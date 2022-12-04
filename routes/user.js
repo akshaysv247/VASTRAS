@@ -33,11 +33,13 @@ router.get("/addwishlist/:id",wishlistController.addWishlist);
 router.get("/wishlist",userController.verifyLogin,wishlistController.wishlistView);
 router.get("/wishlistproductdelete/:id",wishlistController.deleteProduct);
 router.get("/categoryproduct/:id", productController.categorySelect);
-router.get("/checkout",orderController.checkOutPage);
-router.post("/placeorder",orderController.orderConform);
+router.get("/checkout",userController.verifyLogin,orderController.checkOutPage);
+router.post("/placeorder",userController.verifyLogin,orderController.orderConform);
 router.get("/vieworders/:id",orderController.viewOreders)
 router.post("/verify-Payment",orderController.verifyPayment);
 router.get("/order-conform/:id",orderController.thankYou)
+router.post("/apply-coupon",orderController.applyCoupon);
+
 
 
 module.exports = router;

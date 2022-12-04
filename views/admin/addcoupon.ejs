@@ -1,0 +1,136 @@
+<%- include('partials/adminheader.ejs') %>
+
+
+<!-- Content wrapper -->
+ <div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">New Coupon</h4>
+
+       <div >
+         
+        
+        <div class="col-xl-12">
+          <!-- HTML5 Inputs -->
+          <div class="card mb-4">
+            <h5 class="card-header"> Add Details</h5>
+          <div class="card-body">
+            <form action="/admin/add-coupon" method="post" >
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label">CODE</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text"  id="html5-text-input" name="CODE" />
+                </div>
+              </div>
+                
+               <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Select Type</label>
+                <div class="col-md-10">
+                  <select class="form-select" aria-label="Default select example" name="couponType">
+                    <option selected>choose</option>
+                    <option value="cash">cash</option>
+                    <option value="Percentage">Percentage</option>
+                  </select>
+                </div>
+              </div>
+              
+          
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Rate</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="number"  id="html5-number-input" name="cutOff" />
+                </div>
+              </div>
+             
+              <!-- <div class="mb-3">
+                <label for="defaultSelect" class="form-label">Sub Category</label>
+                <select id="defaultSelect" class="form-select" name="subcategory">
+                  <option>choose</option>
+                  <option value="clothes">clothes</option>
+                  <option value="footwears">footwears</option>
+                  <option value="accessories">accessories</option>
+                </select>
+              </div> -->
+              
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label">Minimum Cart Amount</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text"  id="html5-text-input" name="minCartAmount"/>
+                </div>
+              </div>
+             
+
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label">Max Redeem Amount</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="text"  id="html5-text-input" name="maxRedeemAmount"/>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">Count</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="number"  id="html5-number-input" name="generateCount"/>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-number-input" class="col-md-2 col-form-label">ExpireDate</label>
+                <div class="col-md-10">
+                  <input class="form-control" type="date"  id="html5-number-input" name="expireDate"/>
+                </div>
+              </div>
+             
+             
+              
+
+
+              <!-- <div>
+
+                <label for="exampleFormControlTextarea1" class="form-label">Discription</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description" itemid="description" ></textarea>
+
+              </div> -->
+
+              <div class=" mt-2">
+
+                <button type="submit" class="btn btn-primary">submit</button>
+
+              </div>
+              
+            </form>
+              
+           </div>
+         </div>
+
+         
+        </div>
+      </div>
+    </div>
+    <!-- / Content -->
+
+   
+
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<!-- <div class="buy-now">
+<a
+href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+target="_blank"
+class="btn btn-danger btn-buy-now"
+>Upgrade to Pro</a
+>
+</div> -->
+
+<%- include('partials/adminfooter.ejs') %>

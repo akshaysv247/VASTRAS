@@ -21,7 +21,7 @@
           <% if (address.length!=null) { %> 
           <% for(var i=0; i < address.length;i++) { %>
 
-          <div class="accordion" id="accordionExample" >
+          <div class="accordion " id="accordionExample" >
             <div class="card"   >
               <div class="card-header " id="headingOne"  >
                 
@@ -34,7 +34,7 @@
                     aria-controls="collapseOne<%= address[i]._id %>"
                     
                   >
-                    <h3 class="card-title pricing-card-title fa-solid fa-angle-down">
+                    <h3 class="card-title pricing-card-title fa-solid fa-angle-down h6">
                       <%= address[i].name %>
                     </h3>
 
@@ -111,10 +111,64 @@
               </button></a
             >
           </div>
-
+          
           <div class="row mt-4">
             <div class="col-md-12">
               <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+
+              <% if (coupon!=null) { %> 
+                <% for(var i=0; i < coupon.length;i++) { %>
+              
+                  <div class="accordion " id="accordionExample" >
+                    <div class="card"   >
+                      <div class="card-header " id="headingOne"  >
+                        
+                          <button
+                            class="btn btn-link btn-block text-left collapsed "
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseOne<%= coupon[i]._id %>"
+                            aria-expanded="false"
+                            aria-controls="collapseOne<%= coupon[i]._id %>"
+                            id="coupon<%= coupon[i]._id %>"
+                          >
+                            <h5 >
+                             <%= i+1 %>. <% if(coupon[i].couponType==="cash"){ %> 
+                              Rs <%= coupon[i].cutOff %> 
+                              <% }else{ %> 
+                                <%= coupon[i].cutOff %> %
+                                <% } %>  offer
+                            </h5>
+        
+                          </button>
+                       
+                      </div>
+        
+                      <div
+                        id="collapseOne<%= coupon[i]._id %>"
+                        class="collapse"
+                        aria-labelledby="headingOne"
+                        data-parent="#accordionExample"
+                      >
+                        <div class="card-body">
+                          <div class="col-md-6">
+                            <ul class="list-unstyled mt-3 mb-4">
+                              <li>Please use CODE <%= coupon[i].CODE %></li>
+                              <li> Cart Amount up to : <%=coupon[i].minCartAmount %></li>
+                              <li>Max Radeem Amount : <%=coupon[i].maxRedeemAmount %></li>
+                              <li>ExpireDate : <%=coupon[i].expireDate.toLocaleDateString() %></li>
+                             
+                            </ul>
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <% }%>
+                  <% }%>
+
               <div class="p-3 p-lg-5 border">
                 <label for="c_code" class="text-black mb-3"
                   >Enter your coupon code if you have one</label
@@ -123,25 +177,39 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="c_code"
+                    id="couponcode"
                     placeholder="Coupon Code"
                     aria-label="Coupon Code"
                     aria-describedby="button-addon2"
+                    value=""
                   />
                   <div class="input-group-append">
                     <button
                       class="btn btn-primary btn-sm"
                       type="button"
                       id="button-addon2"
+                      onclick="addCoupon()"
                     >
                       Apply
                     </button>
                   </div>
                 </div>
               </div>
+             
             </div>
           </div>
+          <div class="alert alert-danger" role="alert" style="display: none;" id="errorDis">
+            Coupon not usable please read deatils
+          </div>
+          <div class="alert alert-danger" role="alert" style="display: none;" id="dateDis">
+            Coupon Expired
+          </div>
+          <div class="alert alert-danger" role="alert" style="display: none;" id="currect">
+            Plese enter currect
+          </div>
         </div>
+
+        
 
         <div class="col-md-6">
           <div class="row mb-4">
@@ -169,13 +237,13 @@
                       <td class="text-black font-weight-bold">
                         <strong>Cart Subtotal</strong>
                       </td>
-                      <td class="text-black"><%= product.grandtotal %></td>
+                      <td class="text-black" id="carttotal"><%= product.grandtotal %></td>
                     </tr>
                     <tr>
                       <td class="text-black font-weight-bold">
                         <strong>Order Total</strong>
                       </td>
-                      <td class="text-black font-weight-bold">
+                      <td class="text-black font-weight-bold" id="totalDis">
                         <strong><%= product.grandtotal %></strong>
                       </td>
                     </tr>
@@ -267,6 +335,8 @@
 
 <script>
   $("#chechout-form").submit((e) => {
+    let grandtotal=document.getElementById('carttotal').value
+    console.log(grandtotal);
     e.preventDefault();
     $.ajax({
       url: "/placeorder",
@@ -346,6 +416,37 @@ rzp1.on('payment.failed', function (response){
       }
       }
      })
+  }
+
+  function addCoupon() {
+    let code = document.getElementById('couponcode').value
+    let total = document.getElementById('carttotal').innerHTML
+
+    console.log(code);
+    console.log(total);
+    $.ajax({
+      url:'/apply-coupon',
+      data:{
+        code:code,
+        total:total
+      },
+      method:'post',
+      success:(response)=>{
+        if(response.total){
+          document.getElementById('totalDis').innerHTML=response.total
+        }else if(response.newTotal){
+          document.getElementById('totalDis').innerHTML=response.newTotal
+        }else if(response.price){
+          document.getElementById('errorDis').style.display = "block";
+        }else if(response.date){
+          document.getElementById('dateDis').style.display = "block";
+        }else{
+          document.getElementById('currect').style.display = "block";
+        }
+        
+      }
+    })
+    
   }
 </script>
 

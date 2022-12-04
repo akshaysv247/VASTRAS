@@ -1,0 +1,94 @@
+<%- include('partials/adminheader.ejs') %>
+
+<div>
+  <div class="container pt-5">
+
+       <div class="row m" >
+        <a href="/admin/add-coupon"><button type="button" class="btn btn-success ">Add Coupon</button></a>
+       </div>
+
+       <h5 class="card-header">Coupon Details</h5>
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Coupon Type</th>
+            <th scope="col">CODE</th>
+            <th scope="col">Discount Rate</th>
+            <th scope="col">Max Redeem Amount</th>
+            <th scope="col">MinCart Amount</th>
+            <th scope="col">Count</th>
+            <th scope="col">Expire Date</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <% for(var i=0; i < show.length; i++) { %>
+            <th scope="row">1</th>
+            <td><%= show[i].couponType %></td>
+            <td><%= show[i].CODE %></td>
+            <td >
+              <% if(show[i].couponType==="cash"){ %> 
+                Rs <%= show[i].cutOff %> 
+                <% }else{ %> 
+                  <%= show[i].cutOff %> %
+                  <% } %> 
+              </td>
+            <td><%= show[i].maxRedeemAmount %></td>
+            <td><%= show[i].minCartAmount %></td>
+            <td><%= show[i].generateCount %></td>
+            <td><%= show[i].expireDate.toLocaleDateString() %></td>
+
+            
+              <% if(show[i].active===true){ %> 
+            
+   
+   
+                <td><button type="submit" class="btn btn-danger"   onclick="alertMsg('<%=show[i]._id %>')" >Block</button></td>
+   
+                <% }else{ %> 
+            
+   
+             <td><button type="submit" class="btn btn-info"  onclick="alertMsg('<%=show[i]._id %>')" >Activate</button></td>
+   
+   
+               <% } %> 
+            
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function alertMsg(id){
+      swal({
+title: "Are you sure?",
+text: "status, you will  able to change status!",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+  swal(" Your  action procced!", {
+    icon: "success",
+  });
+  location.href="/admin/activate-product/"+id
+} else {
+  swal("Your file is safe!");
+}
+});
+  }
+
+
+
+</script>
+
+
+<%- include('partials/adminfooter.ejs') %>

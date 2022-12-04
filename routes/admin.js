@@ -26,5 +26,13 @@ router.get('/category',productController.admincategory);
 router.post('/category',upload,productController.addCategory);
 router.get('/deletecategory/:id',productController.removeCategory);
 router.get("/orders",adminControllers.orderDetails);
+router.get("/banner",adminControllers.getBannerPage);
+router.post("/banner",upload,adminControllers.addBanner);
+router.get("/remove-banner/:id",adminControllers.removeBanner);
+router.get("/coupons",adminControllers.getCouponsPage);
+router.get("/add-coupon",adminControllers.addCoupon);
+router.post("/add-coupon",adminControllers.addCouponAdd);
+router.get("/activate-product/:id",adminControllers.activateCoupons);
+
 
 module.exports = router;

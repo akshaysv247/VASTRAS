@@ -6,6 +6,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto")
 const userDB = require("../models/userSchema")
 const checkOutValidation = require("../validation/checkout")
+const couponDB = require("../models/coupon")
 
 const instance = new Razorpay({
   key_id: "rzp_test_gVjE7EEMOSkshL",
@@ -22,17 +23,19 @@ module.exports = {
       .populate("products.productId");
 
     let address = null;
+    let coupon = null
     const productData = product.products;
    // console.log(product);
     //console.log(productData);
-
+    coupon = await couponDB.find({active:true})
+    console.log(coupon);
     const addressData = await addressDB.findOne({ userId: userId });
     if (addressData) {
       address = addressData.address;
     }
     //console.log(address);
 
-    res.render("user/checkoutbox", { product, productData, address ,error: req.flash("userErr") ,addressData});
+    res.render("user/checkoutbox", { product, productData, address ,error: req.flash("userErr") ,addressData,coupon});
   },
 
   orderConform : async(req, res) => {
@@ -55,7 +58,7 @@ module.exports = {
       { userId: userId },
       { price: price },
       { products: products },
-      { date: moment().format("MMMM Do YYYY, h:mm:ss a") },
+      { date: moment().format("MMMM Do YYYY") },
       { status: status }
     );
     const order = await orderDB.create(req.body);
@@ -147,4 +150,47 @@ module.exports = {
     const order = await orderDB.findOne({_id:orderId})
     res.render("user/thankyou",{order})
   },
+
+  applyCoupon : async(req,res)=>{
+    console.log(req.body);
+    const code = req.body.code
+    const price = parseInt(req.body.total)
+    console.log(price);
+    const data = await couponDB.findOne({CODE:code})
+    console.log(data);
+    let  nowDate = moment().format("MM/DD/YYYY") 
+    console.log(nowDate);
+    if(data){
+    const type = data.couponType 
+    const min = data.minCartAmount
+    const max = data.maxRedeemAmount
+    const date = data.expireDate.toLocaleDateString()
+    console.log(type);
+     if(nowDate<date){
+    if(min<price){
+    if(type==="cash"){
+     const dataCash = data.cutOff
+     console.log(dataCash);
+     const total = price-dataCash
+     console.log(total);
+     res.json({total})
+    }else{
+      const dataPer = data.cutOff
+      let perOne = price/100
+      let newPer = perOne*dataPer
+      let  newTotal = null
+      if(max<newPer){
+        newTotal = price-max
+      }else{
+        newTotal = price-newPer
+      }
+      res.json({newTotal})
+    }}else{
+      res.json({price})
+    }}else{
+      res.json({date})
+    }}else{
+      res.json({status:false})
+    }
+  }
 };

@@ -5,7 +5,11 @@ const productHelper = require("../helpers/productHelpers");
 const category = require("../models/categorySchema");
 const productDB = require("../models/productSchema");
 const categoryDB = require("../models/categorySchema");
-const orderDB = require("../models/orderSchema")
+const orderDB = require("../models/orderSchema");
+const bannerDB = require("../models/banner");
+const couponDB = require("../models/coupon");
+const moment = require("moment");
+
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -153,23 +157,80 @@ const productActive = async (req, res) => {
   res.redirect("/admin/products");
 };
 
-const orderDetails = async(req,res)=>{
+const orderDetails = async (req, res) => {
   //const data = await orderDB.find()
-  const data = await orderDB.find().populate('userId')
-  const productData = await orderDB.find().populate('products.product')
-  const userAddress = await orderDB.find().populate('addressId')
+  const data = await orderDB.find().populate("userId");
+  const productData = await orderDB.find().populate("products.productId");
+  const userAddress = await orderDB.find().populate("addressId");
 
- // let name = userData.userId
-  const product = data.products
+  // let name = userData.userId
+  const product = data.products;
 
-  console.log(data)
-  //console.log(name)
-  console.log(product)
- // console.log(userData);
-  //console.log(userAddress);
-  res.render('admin/orders',{data})
+  res.render("admin/orders", { data });
+};
 
-}
+const getBannerPage = async (req, res) => {
+  const data = await bannerDB.find({});
+  const dataIm = data.images;
+  res.render("admin/banner", { data, dataIm });
+};
+
+const addBanner = async (req, res) => {
+  console.log(req.body);
+  console.log(req.files);
+  if (req.files.length == 0) {
+    const data = await bannerDB.create(req.body);
+    res.redirect("/admin/banner");
+  } else {
+    const img = [];
+    req.files.forEach((element) => {
+      img.push(element.filename);
+    });
+    Object.assign(req.body, { images: img });
+    // console.log(req.body)
+    const dataI = await bannerDB.create(req.body);
+    res.redirect("/admin/banner");
+  }
+};
+
+const removeBanner = async (req, res) => {
+  const Id = req.params.id;
+  const remove = await bannerDB.findOneAndDelete({ _id: Id });
+  res.redirect("/admin/banner");
+};
+
+const getCouponsPage = async (req, res) => {
+  const show = await couponDB.find({});
+  res.render("admin/coupon", { show });
+};
+
+const addCoupon = async(req, res) => {
+ 
+  res.render("admin/addcoupon");
+};
+
+const addCouponAdd = async (req, res) => {
+  const data = req.body;
+  const save = await couponDB.create(data);
+  res.redirect("/admin/coupons");
+};
+
+const activateCoupons = async (req, res) => {
+  const ID = req.params.id;
+  const data = await couponDB.findOne({ _id: ID });
+  if (data.active == true) {
+    const update = await couponDB.findOneAndUpdate(
+      { _id: ID },
+      { active: false }
+    );
+  } else {
+    const updateNew = await couponDB.findOneAndUpdate(
+      { _id: ID },
+      { active: true }
+    );
+  }
+  res.redirect("/admin/coupons");
+};
 
 module.exports = {
   adminLogin,
@@ -186,5 +247,12 @@ module.exports = {
   blockUser,
   unBlockUser,
   productActive,
-  orderDetails
+  orderDetails,
+  getBannerPage,
+  addBanner,
+  removeBanner,
+  getCouponsPage,
+  addCoupon,
+  addCouponAdd,
+  activateCoupons,
 };

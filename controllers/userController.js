@@ -30,7 +30,9 @@ const homeView = async (req, res, next) => {
     const banner = await bannerDB.find({});
     const cat = await categoryDB.find({});
     const product = await productDB.find({}).populate("category");
-    const bannerMain = banner.mainImage;
+    //console.log(product);
+    
+    //console.log(banner);
 
     //console.log(cartCount);
     res.render("user/home", {
