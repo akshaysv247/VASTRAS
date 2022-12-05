@@ -5,7 +5,7 @@ const order = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "userData",
   },
-  cartId:{
+  cartId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "addCart",
   },
@@ -17,27 +17,34 @@ const order = new mongoose.Schema({
       },
       quantity: { type: Number },
       total: { type: Number },
-      
     },
   ],
-  addressId:{
-     type: mongoose.Schema.Types.ObjectId,
-        ref: "userAdress",
- },
- price:{
-    type:Number
- },
- payment:{
-    type:String
- },
- date:{
-  type:String,
-  default:Date.now
- },
- status:{
-  type:String
- }
-
+  addressId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userAdress",
+  },
+  price: {
+    type: Number,
+  },
+  payment: {
+    type: String,
+  },
+  date: {
+    type: String,
+    default: Date.now,
+  },
+  status: {
+    type: String,
+  },
+  couponname: {
+    type: String,
+  },
+  discount: {
+    type: Number,
+  },
+  productPrice: {
+    type: Number,
+  },
 });
 
 const addOrder = mongoose.model("orders", order);

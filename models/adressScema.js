@@ -6,35 +6,37 @@ const adress = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "userData",
   },
-  address:[{
-    name: {
-      type: String,
+  address: [
+    {
+      name: {
+        type: String,
+      },
+      phoneNumber: {
+        type: Number,
+      },
+      pincode: {
+        type: Number,
+      },
+      locality: {
+        type: String,
+      },
+      adress: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      landmark: {
+        type: String,
+      },
+      AlternatePhone: {
+        type: Number,
+      },
+      state: {
+        type: String,
+      },
     },
-    phoneNumber: {
-      type: Number,
-    },
-    pincode: {
-      type: Number,
-    },
-    locality: {
-      type: String,
-    },
-    adress: {
-      type: String,
-    },
-    city: {
-      type: String,
-    },
-    landmark: {
-      type: String,
-    },
-    AlternatePhone: {
-      type: Number,
-    },
-    state: {
-      type: String,
-    },
-}]
+  ],
 });
 
 const addAdress = mongoose.model("userAdress", adress);

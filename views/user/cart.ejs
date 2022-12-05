@@ -18,7 +18,7 @@
                   <th class="product-price">Price</th>
                   <th class="product-quantity">Quantity</th>
                   <th class="product-total">Total</th>
-                  <th>Add Wishlist</th>
+                  <!-- <th>Add Wishlist</th> -->
                   <th class="product-remove">Remove</th>
                 </tr>
               </thead>
@@ -47,8 +47,8 @@
 
                   </td>
                   <td id="total<%=  product[i].productId._id %>" class="newtotal" ><%= product[i].total %> </td>
-                  <td> <button type="button" onclick="addToWhilst('<%= product[i].productId._id %>')" class="btn " style="font-size:24px; ;" name="productId">Add</button></td>
-                  <td><button type="button"  onclick="deleteMsg('<%= product[i].productId._id %>')" class="btn btn-primary " >Dele</button></td>
+                  <!-- <td> <button type="button" onclick="addToWhilst('<%= product[i].productId._id %>')" class="btn " style="font-size:24px; ;" name="productId">Add</button></td> -->
+                  <td><button type="button"  onclick="deleteMsg('<%= product[i].productId._id %>')" class="btn btn-primary " >X</button></td>
                   <!-- <td><a href="/cartproductdelete/<%= product[i].productId._id %> "  class="btn btn-primary btn-sm">X</a></td> -->
                   <!-- <td><button type="button" class="btn btn-primary" onclick="deleteProduct('<%= product[i].productId._id %>','<%= product[i].total %>',1)" >Primary</button></td> -->
                   
@@ -73,7 +73,7 @@
               <a href="/showProducts"><button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button></a>
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-12">
               <label class="text-black h4" for="coupon">Coupon</label>
               <p>Enter your coupon code if you have one.</p>
@@ -84,7 +84,7 @@
             <div class="col-md-4">
               <button class="btn btn-primary btn-sm">Apply Coupon</button>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-6 pl-5">
           <div class="row justify-content-end">

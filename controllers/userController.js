@@ -12,6 +12,8 @@ const wishlistDB = require("../models/wishlistSchema");
 const categoryDB = require("../models/categorySchema");
 const bannerDB = require("../models/banner");
 const loginValidation = require("../validation/login");
+const url = require("url");
+const querystring = require("querystring");
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -31,7 +33,7 @@ const homeView = async (req, res, next) => {
     const cat = await categoryDB.find({});
     const product = await productDB.find({}).populate("category");
     //console.log(product);
-    
+
     //console.log(banner);
 
     //console.log(cartCount);
@@ -93,11 +95,10 @@ const userLogin = async (req, res, next) => {
     } else {
       console.log(validate);
 
-        req.flash("userErr", "Email must be a valid email ");
-        res.redirect("/login");
-      }
+      req.flash("userErr", "Email must be a valid email ");
+      res.redirect("/login");
     }
-   catch (err) {
+  } catch (err) {
     next(err);
   }
 };
@@ -239,14 +240,20 @@ const viewProfile = async (req, res, next) => {
       res.locals.cartCount = cartCount;
       wishlistCount = await userHelper.getWishListCount(user._id);
       res.locals.wishlistCount = wishlistCount;
-     
     }
     const addressData = await adressDB.findOne({ userId: userId });
-    if(addressData){
-    address = addressData.address}
+    if (addressData) {
+      address = addressData.address;
+    }
     console.log(address);
-   
-    res.render("user/profile", { user, address, cartCount, wishlistCount,addressData });
+
+    res.render("user/profile", {
+      user,
+      address,
+      cartCount,
+      wishlistCount,
+      addressData,
+    });
   } catch (err) {
     next(err);
   }
@@ -397,6 +404,11 @@ const singleProduct = async (req, res, next) => {
   }
 };
 
+const productSearch = async(req,res)=>{
+
+  
+}
+
 const contactView = (req, res) => {
   res.render("user/contact");
 };
@@ -428,4 +440,5 @@ module.exports = {
   deleteAddress,
   updateAddress,
   singleProduct,
+  productSearch,
 };

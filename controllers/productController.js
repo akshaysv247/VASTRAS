@@ -74,6 +74,4 @@ module.exports = {
       next(err);
     }
   },
-
-  
 };

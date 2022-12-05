@@ -17,7 +17,7 @@ const app = express();
 mongoose.connect(process.env.local_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-   //useCreateIndex: true
+  //useCreateIndex: true
 });
 
 app.use(logger("dev"));
@@ -64,27 +64,60 @@ app.use(
   express.static(path.join(__dirname, "public/user/images"))
 );
 app.use("/product/js", express.static(path.join(__dirname, "public/user/js")));
-app.use("/public/private", express.static(path.join(__dirname, "public/private")));
-app.use("/categoryproduct/css", express.static(path.join(__dirname, "public/user/css")));
-app.use("/categoryproduct/fonts", express.static(path.join(__dirname, "public/user/fonts")));
-app.use("/categoryproduct/images", express.static(path.join(__dirname, "public/user/images")));
-app.use("/categoryproduct/js", express.static(path.join(__dirname, "public/user/js")));
+app.use(
+  "/public/private",
+  express.static(path.join(__dirname, "public/private"))
+);
+app.use(
+  "/categoryproduct/css",
+  express.static(path.join(__dirname, "public/user/css"))
+);
+app.use(
+  "/categoryproduct/fonts",
+  express.static(path.join(__dirname, "public/user/fonts"))
+);
+app.use(
+  "/categoryproduct/images",
+  express.static(path.join(__dirname, "public/user/images"))
+);
+app.use(
+  "/categoryproduct/js",
+  express.static(path.join(__dirname, "public/user/js"))
+);
 
-app.use("/conform/css", express.static(path.join(__dirname, "public/user/css")));
-app.use("/conform/fonts", express.static(path.join(__dirname, "public/user/fonts")));
-app.use("/conform/images", express.static(path.join(__dirname, "public/user/images")));
+app.use(
+  "/conform/css",
+  express.static(path.join(__dirname, "public/user/css"))
+);
+app.use(
+  "/conform/fonts",
+  express.static(path.join(__dirname, "public/user/fonts"))
+);
+app.use(
+  "/conform/images",
+  express.static(path.join(__dirname, "public/user/images"))
+);
 app.use("/conform/js", express.static(path.join(__dirname, "public/user/js")));
 
-app.use("/order-conform/css", express.static(path.join(__dirname, "public/user/css")));
-app.use("/order-conform/fonts", express.static(path.join(__dirname, "public/user/fonts")));
-app.use("/order-conform/images", express.static(path.join(__dirname, "public/user/images")));
-app.use("/order-conform/js", express.static(path.join(__dirname, "public/user/js")));
-
+app.use(
+  "/order-conform/css",
+  express.static(path.join(__dirname, "public/user/css"))
+);
+app.use(
+  "/order-conform/fonts",
+  express.static(path.join(__dirname, "public/user/fonts"))
+);
+app.use(
+  "/order-conform/images",
+  express.static(path.join(__dirname, "public/user/images"))
+);
+app.use(
+  "/order-conform/js",
+  express.static(path.join(__dirname, "public/user/js"))
+);
 
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use("/admin/assets", express.static(path.join(__dirname, "public/assets")));
-
-
 
 //const upload = multer({ dest: "public/files" });
 
@@ -125,16 +158,12 @@ db.once("open", function () {
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
-
-
 // app.use((err, req, res, next) => {
 //   console.error(err.stack)
 //   res.status(500).render("error")
 // })
 
-
-
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 app.listen(PORT, console.log("Server has started at port " + PORT));
 
 //module.exports = app;

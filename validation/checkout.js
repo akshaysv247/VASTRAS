@@ -11,7 +11,7 @@ const userCheckOutData = async (req) => {
   const data = {
     userId: req.body.userId,
     addressId: req.body.addressId,
-    payment: req.body.payment
+    payment: req.body.payment,
   };
 
   const { error } = checkout.validate(data);

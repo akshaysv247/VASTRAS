@@ -11,12 +11,8 @@ const wishlist = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "productData",
       },
-      //quantity: { type: Number },
-      //total: { type: Number },
-      // price:{type:Number},
     },
   ],
-  
 });
 
 const wishlistAdd = mongoose.model("wishlist", wishlist);

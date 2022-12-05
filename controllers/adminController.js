@@ -10,7 +10,6 @@ const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
 
-
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
     res.render("admin/login", { message: req.flash("adminErr") });
@@ -204,8 +203,7 @@ const getCouponsPage = async (req, res) => {
   res.render("admin/coupon", { show });
 };
 
-const addCoupon = async(req, res) => {
- 
+const addCoupon = async (req, res) => {
   res.render("admin/addcoupon");
 };
 

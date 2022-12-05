@@ -187,7 +187,8 @@
                     <button
                       class="btn btn-primary btn-sm"
                       type="button"
-                      id="button-addon2"
+                      id="button-addcoupon"
+                     
                       onclick="addCoupon()"
                     >
                       Apply
@@ -246,6 +247,8 @@
                       <td class="text-black font-weight-bold" id="totalDis">
                         <strong><%= product.grandtotal %></strong>
                       </td>
+                      <input type="text" name="couponname" id="codeId" value="" hidden>
+                      <input type="text" value="" id="discountTotal" name="grandtotal" hidden>
                     </tr>
                   </tbody>
                 </table>
@@ -335,8 +338,7 @@
 
 <script>
   $("#chechout-form").submit((e) => {
-    let grandtotal=document.getElementById('carttotal').value
-    console.log(grandtotal);
+   
     e.preventDefault();
     $.ajax({
       url: "/placeorder",
@@ -421,6 +423,7 @@ rzp1.on('payment.failed', function (response){
   function addCoupon() {
     let code = document.getElementById('couponcode').value
     let total = document.getElementById('carttotal').innerHTML
+    document.getElementById('codeId').value = code
 
     console.log(code);
     console.log(total);
@@ -434,8 +437,10 @@ rzp1.on('payment.failed', function (response){
       success:(response)=>{
         if(response.total){
           document.getElementById('totalDis').innerHTML=response.total
+          document.getElementById('discountTotal').value=response.total
         }else if(response.newTotal){
           document.getElementById('totalDis').innerHTML=response.newTotal
+          document.getElementById('discountTotal').value=response.newTotal
         }else if(response.price){
           document.getElementById('errorDis').style.display = "block";
         }else if(response.date){

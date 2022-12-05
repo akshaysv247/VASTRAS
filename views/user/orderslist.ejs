@@ -1,0 +1,45 @@
+<%- include('partials/userheader.ejs') %>
+
+<section>
+    <% if (data.length>0) { %>
+    <div class="container">
+        <table class="table">
+           
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">orderId</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Status</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% for(var i=0; i < data.length; i++) { %>
+              <tr>
+                <th scope="row"><%= i+1 %> </th>
+                <td><%= data[i]._id %></td>
+                <td><%= data[i].date %></td>
+                <td><%= data[i].price %></td>
+                <td><%= data[i].payment %></td>
+                <td><%= data[i].status %></td>
+                <td><a href="/vieworders/<%= data[i]._id %>" class="btn btn-sm btn-primary">View Orders</a></td>
+              </tr>
+              <% } %> 
+            </tbody>
+          </table>
+          
+    </div>
+    <% }else{ %> 
+        <section class="container">
+            <h1>No Orders</h1>
+            <div>
+             <a href="/showProducts"><button type="button" class="w-100 btn btn-lg btn-outline-primary">shope</button></a>
+            </div>
+          </section>
+        <% } %> 
+</section>
+
+<%- include('partials/userfooter.ejs') %>
