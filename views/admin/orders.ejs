@@ -13,11 +13,13 @@
        <table class="table">
          <thead>
            <tr>
+              <th>order ID</th>
              <th>Name</th>
              <th>price</th>
+             <th>Payment</th>
              <th>Status</th>
-             <th>payment</th>
              <th>Date</th>
+             <th>product</th>
              
             
            </tr>
@@ -28,15 +30,18 @@
            <% for(var i=0; i < data.length; i++) { %>
 
            <tr>
+            <td><%= data[i]._id %> </td>
              <td><%= data[i].userId.Name %> </td>
              <td><%= data[i].price %></td>
             
              <td><%= data[i].payment %></td>
              <td><%= data[i].status %></td>
              <td><%= data[i].date %></td>
-             
-
-            <td></td>
+             <!-- <td><a href="/admin/view-product/<%= data[i]._id %>"><button type="button" class="btn btn-primary">view</button></a></td> -->
+             <td><button type="submit" class="btn btn-primary" onclick="orderDetails('<%= data[i]._id %>')" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+               product data
+            </button>
+              </td>
            </tr>
 
            <% } %>
@@ -49,6 +54,192 @@
    </div>
    <!--/ Basic Bootstrap Table -->
 
+   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Products Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mt-4 mb-6">
+            <!-- Order status change dropdown -->
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400"> Order status </span>
+              <select class="form-select" aria-label="Default select example" id="order_status_select12"
+              name="orderstat">
+                
+              </select>
+              <!-- <select
+               
+                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+              >
+                
+              </select> -->
+            </label>
+
+            <button type="submit" id="order_update12" class="btn btn-primary">Update Order Status</button>
+           
+      
+            
+      
+            <!-- product details table -->
+            <div class="w-full overflow-x-auto mt-4">
+              <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">Product Details</h4>
+              <table class="w-full whitespace-no-wrap">
+                <thead>
+                  <tr
+                    class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                  >
+                    <th class="px-4 py-3">#</th>
+                    <th class="px-4 py-3">Title</th>
+                    <th class="px-4 py-3">Quantity</th>
+                    <th class="px-4 py-3">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+
+<!-- Modal backdrop. This what you want to place close to the closing body tag -->
+
+<!-- End of modal backdrop -->
+
+<script>
+  function orderDetails(id) {
+    $.ajax({
+      url: '/admin/view-product/'+id,
+      method: 'get',
+     
+    }).then((response) => {
+      let data = response.data
+      let order = response.order;
+
+      console.log(order);
+      let table_data = '';
+      $.each(data, function (index, value) {
+        /*console.log(value);*/
+        table_data += '<tr class="text-gray-700 dark:text-gray-400">';
+        table_data += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">' + value.productId.title + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">' + value.quantity + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">₹' + value.total + '</td>';
+        table_data += '</tr>';
+      });
+      $('#table_body13').html(table_data);
+
+      if (order.status === 'placed') {
+        var order_option =
+          '<option value="CONFORMED" selected disabled hidden>CONFORMED</option><option value="SHIPPED">SHIPPED</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCEL</option>';
+      } else if (order.status === 'SHIPPED') {
+        var order_option =
+          '<option value="SHIPPED" selected disabled hidden>SHIPPED</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCEL">CANCELLED</option>';
+      } else if (order.status === 'OUT FOR DELIVERY') {
+        var order_option =
+          '<option value="OUT FOR DELIVERY" selected disabled hidden>OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCEL</option>';
+      } else if (order.status === 'DELIVERED') {
+        var order_option = '<option value="DELIVERED" selected disabled hidden>DELIVERED</option>';
+      } else {
+        var order_option = '<option value="CANCELLED" selected disabled hidden>CANCELLED</option>';
+      }
+      $('#order_status_select12').empty().append(order_option);
+
+      // $('#tracking_id').text(order._id);
+      // $('#order_number').text(order.address._id);
+      // $('#order_date').text(order.date);
+      // $('#order_amount').text(order.total + 50);
+      // $('#add_home').text(order.address.house);
+      // $('#add_city').text(order.address.city);
+      // $('#add_district').text(order.address.district);
+      // $('#add_state').text(order.address.state);
+      // $('#add_pin').text(order.address.pincode);
+
+      $('#order_update12').on('click', () => {
+        updateOrderStatus(order._id, $('#order_status_select12 option:selected').val());
+      })
+    });
+  }
+  
+  function updateOrderStatus(id, status) {
+    $.ajax({
+      url: '/admin/update-order',
+      method: 'POST',
+      data: {
+        orderId: id,
+        newOrderStatus: status,
+      },
+    }).then((response) => {
+      response.orderUpdate;
+      if (response.orderUpdate == 'success') {
+        successAlert();
+        setTimeout(() => {
+          location.reload(true);
+        }, 300);
+      } else {
+        failedAlert();
+        setTimeout(() => {
+          location.reload(true);
+        }, 300);
+      }
+    });
+  }
+  
+  function successAlert() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Update Success',
+      text: 'You are good to go',
+    });
+  }
+  
+  function failedAlert() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Update failed',
+      text: 'You  can try again later',
+    });
+  }
+</script>
+
+<!-- <script>
+  function viewProduct(ID) {
+    $.ajax({
+      url:'/admin/view-product/'+ID,
+      method:'get',
+      success:(response)=>{
+        ;
+        if(response.order){
+       let order = response.order
+       console.log(order);
+       let table_data = '';
+      $.each(order, function (index, value) {
+        console.log(value)
+        table_data += '<tr class="text-gray-700 dark:text-gray-400">';
+        table_data += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">' + value.productId.title + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">' + value.quantity + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">₹' + value.total + '</td>';
+        table_data += '</tr>';
+      });
+      $('#table_body13').html(table_data);
+        }
+      }
+    })
+  }
+</script> -->
+
+
 
 <%- include('partials/adminfooter.ejs') %>

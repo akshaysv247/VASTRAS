@@ -44,9 +44,15 @@
           <div class="row align-items-center">
 
             <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left"  >
-              <form  class="site-block-top-search" onclick="search()" id="search-form">
-                <span class="icon icon-search2" ></span>
-                <input type="text" value="" class="form-control border-0" placeholder="Search" id="searchDataProducts" name="data"  >
+              <form  class="site-block-top-search"  id="search-form" action="/search-Products" method="post" >
+                <!-- <span class="icon icon-search2" ></span> -->
+                <!-- <span class="btn fa fa-search"></span> -->
+                <div class="d-flex">
+                  <button type="submit" class="btn btn-light fa fa-search " ></button>
+                  <input type="text" value="" class="form-control border-0" placeholder="Search" id="searchDataProducts" name="data"  >
+                  
+                </div>
+
               </form>
             </div>
 
@@ -127,16 +133,17 @@
       </nav>
     </header>
     <script>
-     
-     function search() {
-      let data = document.getElementById('searchDataProducts').value
-      $.ajax({
-        url:'/search-product',
-        method:'get',
-        success:(response)=>{
-
-        }
-      })
+    //  function search() {
+    //   let data = document.getElementById('searchDataProducts').value
+    //   console.log(data);
+    //   $.ajax({
+    //     url:'/search-product',
+    //     method:'post',
+    //     data:{
+    //       data:data
+    //     },
+        
+    //   })
       
-     }
+    //  }
     </script>

@@ -39,7 +39,7 @@
 
             <% for(var i=0; i < data.length; i++) { %>
 
-            <div class="col-sm-4 mb-4" data-aos="fade-up">
+            <div class="col-sm-4 col-lg-4 mb-4" data-aos="fade-up">
               <div class="block-4 text-center border">
                 <figure class="block-4-image">
                   <a href="/product/<%= data[i]._id %> "><img src="/images/<%= data[i].images[0] %>" alt="Image placeholder" style="height: 18rem; width: 14rem;"  ></a>
@@ -311,7 +311,23 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+
+                <% for(var i=0; i < cat.length; i++) { %>
+                    <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+                      <a class="block-2-item" href="#">
+                        <figure class="image">
+                          <a href="/categoryproduct/<%= cat[i]._id %> "><img src="/images/<%= cat[i].images[0] %>" alt="" class="img-fluid"></a>
+                        </figure>
+                        <div class="text">
+                          <span class="text-uppercase">Collections</span>
+                          <h3><%= cat[i].name %> </h3>
+                        </div>
+                      </a>
+                    </div>
+                    
+                    <% } %>
+
+                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
                   <a class="block-2-item" href="#">
                     <figure class="image">
                       <img src="images/women.jpg" alt="" class="img-fluid">
@@ -321,8 +337,8 @@
                       <h3>Women</h3>
                     </div>
                   </a>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+                </div> -->
+                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
                   <a class="block-2-item" href="#">
                     <figure class="image">
                       <img src="images/children.jpg" alt="" class="img-fluid">
@@ -332,8 +348,8 @@
                       <h3>Children</h3>
                     </div>
                   </a>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+                </div> -->
+                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
                   <a class="block-2-item" href="#">
                     <figure class="image">
                       <img src="images/men.jpg" alt="" class="img-fluid">
@@ -343,7 +359,7 @@
                       <h3>Men</h3>
                     </div>
                   </a>
-                </div>
+                </div> -->
               </div>
             
           </div>

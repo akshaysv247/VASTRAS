@@ -93,9 +93,9 @@ module.exports = {
       const newOrderId = order._id;
       //console.log(order.id);
       //console.log(newOrderId);
-      const remove = await cartDB.findOneAndRemove({ userId: userId });
 
       if (req.body["payment"] == "COD") {
+        const remove = await cartDB.findOneAndRemove({ userId: userId });
         res.json({ cod: true, newOrderId });
       } else {
         const onlinePay = await instance.orders.create({
@@ -149,6 +149,8 @@ module.exports = {
     res.render("user/vieworders", { userData, product, order, adressData });
   },
   verifyPayment: async (req, res) => {
+    const user = await req.session.user;
+    const userId = await user._id;
     //console.log(req.body);
     const orderId = req.body.payment["razorpay_order_id"];
     const paymentId = req.body.payment["razorpay_payment_id"];
@@ -167,6 +169,8 @@ module.exports = {
           },
         }
       );
+
+      const remove = await cartDB.findOneAndRemove({ userId: userId });
 
       res.json({ status: true });
     } else {

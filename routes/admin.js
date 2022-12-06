@@ -33,6 +33,9 @@ router.get("/coupons",adminControllers.getCouponsPage);
 router.get("/add-coupon",adminControllers.addCoupon);
 router.post("/add-coupon",adminControllers.addCouponAdd);
 router.get("/activate-product/:id",adminControllers.activateCoupons);
+router.get("/deletecoupon/:id",adminControllers.deletecoupon)
+router.get("/view-product/:id",adminControllers.viewOrdersProduct);
+router.post("/update-order",adminControllers.orderStatus);
 
 
 module.exports = router;

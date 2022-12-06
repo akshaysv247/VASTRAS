@@ -38,8 +38,12 @@
    
 </div>
 
-
+<% if(error.length>0){ %>
+  <div class="alert alert-danger" role="alert">
+   <%= error %></div>
+<% } %>
 </div>
+
 <div class="Container p-5">
     <h3>Add Categories</h3>
     <form action="/admin/category" method="post" enctype="multipart/form-data" >

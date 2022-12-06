@@ -159,11 +159,9 @@ const productActive = async (req, res) => {
 const orderDetails = async (req, res) => {
   //const data = await orderDB.find()
   const data = await orderDB.find().populate("userId");
-  const productData = await orderDB.find().populate("products.productId");
-  const userAddress = await orderDB.find().populate("addressId");
-
-  // let name = userData.userId
-  const product = data.products;
+  // let products = await orderDB.findOne().populate("products.productId");
+  // console.log(data);
+  // console.log(products);
 
   res.render("admin/orders", { data });
 };
@@ -230,6 +228,39 @@ const activateCoupons = async (req, res) => {
   res.redirect("/admin/coupons");
 };
 
+const deletecoupon = async (req, res) => {
+  const ID = req.params.id;
+  const deleteCoupon = await couponDB.findOneAndDelete({ _id: ID });
+  res.redirect("/admin/coupons");
+};
+
+const viewOrdersProduct = async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
+  const ID = req.params.id;
+  let order = null;
+  let data = null;
+  const find = await orderDB.findOne({ _id: ID });
+  if (find) {
+    order = await orderDB.findOne({ _id: ID }).populate("products.productId");
+    data = order.products;
+    console.log(order);
+  }
+  res.json({ status: true, order, data });
+};
+const orderStatus = async (req, res) => {
+  console.log(req.body);
+  const orderId = req.body.orderId;
+  const status = req.body.newOrderStatus;
+  const update = await orderDB.findOneAndUpdate(
+    { _id: orderId },
+    { $set: { status: status } }
+  );
+  const orderUpdate = update.status;
+
+  res.json({ status: true, orderUpdate });
+};
+
 module.exports = {
   adminLogin,
   adminSign,
@@ -253,4 +284,7 @@ module.exports = {
   addCoupon,
   addCouponAdd,
   activateCoupons,
+  deletecoupon,
+  viewOrdersProduct,
+  orderStatus,
 };

@@ -21,6 +21,8 @@
             <th scope="col">Count</th>
             <th scope="col">Expire Date</th>
             <th scope="col">Action</th>
+            <th scope="col">Delete</th>
+
           </tr>
         </thead>
         <tbody>
@@ -56,6 +58,7 @@
    
    
                <% } %> 
+               <td><button type="submit" class="btn btn-danger"   onclick="deleteMsg('<%=show[i]._id %>')" >X</button></td>
             
           </tr>
           <% } %>
@@ -86,6 +89,25 @@ if (willDelete) {
 });
   }
 
+  function deleteMsg(id){
+      swal({
+title: "Are you sure?",
+text: "Block, you will  able to unblock this  product",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+  swal(" Your  product has been Blocked!", {
+    icon: "success",
+  });
+  location.href="/admin/deletecoupon/"+id
+} else {
+  swal("Your file is safe!");
+}
+});
+  }
 
 
 </script>

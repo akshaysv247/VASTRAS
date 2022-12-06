@@ -404,10 +404,35 @@ const singleProduct = async (req, res, next) => {
   }
 };
 
-const productSearch = async(req,res)=>{
+const productSearch = async (req, res) => {
+  console.log(req.body);
+  const user = req.session.user;
+  const searchdata = req.body.data;
+  let qData = new RegExp(searchdata, "i");
+  let data = await productDB.find({ title: { $regex: qData } });
+  //console.log(data);
 
-  
-}
+  let cartCount = null;
+  let wishlist = null;
+  let wishlistCount = null;
+  if (user) {
+    // console.log(user);
+    const userId = await user._id;
+    cartCount = await userHelper.getCartCount(userId);
+    res.locals.cartCount = cartCount;
+    wishlistCount = await userHelper.getWishListCount(user._id);
+    res.locals.wishlistCount = wishlistCount;
+    wishlist = await wishlistDB.findOne({ userId: userId });
+  }
+  const cat = await categoryDB.find({});
+  res.render("user/searchproduct", {
+    data,
+    user,
+    cartCount,
+    wishlistCount,
+    cat,
+  });
+};
 
 const contactView = (req, res) => {
   res.render("user/contact");

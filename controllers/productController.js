@@ -1,4 +1,4 @@
-const category = require("../models/categorySchema");
+const categoryDB = require("../models/categorySchema");
 const bannerDB = require("../models/banner");
 const productDB = require("../models/productSchema");
 const userHelper = require("../helpers/userHelper");
@@ -7,9 +7,9 @@ const wishlistDB = require("../models/wishlistSchema");
 module.exports = {
   admincategory: async (req, res) => {
     try {
-      const data = await category.find();
+      const data = await categoryDB.find();
       console.log(data);
-      res.render("admin/categorys", { data });
+      res.render("admin/categorys", { data, error: req.flash("catErr") });
     } catch (err) {
       next(err);
     }
@@ -18,7 +18,7 @@ module.exports = {
   addCategory: async (req, res) => {
     try {
       if (req.files.length === 0) {
-        const data = await category.create(req.body);
+        const data = await categoryDB.create(req.body);
         res.redirect("/admin/category");
       } else {
         const img = [];
@@ -27,7 +27,7 @@ module.exports = {
         });
         Object.assign(req.body, { images: img });
         // console.log(req.body)
-        const dataI = await category.create(req.body);
+        const dataI = await categoryDB.create(req.body);
         res.redirect("/admin/category");
       }
     } catch (err) {
@@ -38,8 +38,19 @@ module.exports = {
     try {
       //console.log(req.params.id);
       const catId = req.params.id;
-      const dele = await category.findByIdAndDelete(catId);
-      res.redirect("/admin/category");
+
+      const find = await productDB.find({ category: catId });
+      //console.log(find);
+      if (find.length < 0) {
+        const dele = await categoryDB.findByIdAndDelete(catId);
+        res.redirect("/admin/category");
+      } else {
+        req.flash(
+          "catErr",
+          " This Catagory have some products please go and delete products"
+        );
+        res.redirect("/admin/category");
+      }
     } catch (err) {
       next(err);
     }
