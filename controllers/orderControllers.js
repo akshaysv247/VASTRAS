@@ -65,7 +65,7 @@ module.exports = {
       const userId = await user._id;
       const cartData = await cartDB.findOne({ userId: userId });
       console.log(cartData);
-      const price = await cartData.grandtotal;
+      const price = cartData.grandtotal;
       const discountPrice = req.body.grandtotal;
 
       let discount = 0;
@@ -95,11 +95,19 @@ module.exports = {
       //console.log(newOrderId);
 
       if (req.body["payment"] == "COD") {
+        const order = await orderDB.findOne({ _id: newOrderId });
+        const code = order.couponname;
+        if (code) {
+          const couponDecrese = await couponDB.findOneAndUpdate(
+            { CODE: code },
+            { $inc: { generateCount: -1 } }
+          );
+        }
         const remove = await cartDB.findOneAndRemove({ userId: userId });
         res.json({ cod: true, newOrderId });
       } else {
         const onlinePay = await instance.orders.create({
-          amount: price * 100,
+          amount: priceTotal * 100,
           currency: "INR",
           receipt: "" + order._id,
           notes: {
@@ -169,6 +177,14 @@ module.exports = {
           },
         }
       );
+      const order = await orderDB.findOne({ _id: cartId });
+      const code = order.couponname;
+      if (code) {
+        const couponDecrese = await couponDB.findOneAndUpdate(
+          { CODE: code },
+          { $inc: { generateCount: -1 } }
+        );
+      }
 
       const remove = await cartDB.findOneAndRemove({ userId: userId });
 
@@ -195,12 +211,12 @@ module.exports = {
   },
 
   applyCoupon: async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const code = req.body.code;
     const price = parseInt(req.body.total);
-    console.log(price);
+    // console.log(price);
     const data = await couponDB.findOne({ CODE: code });
-    console.log(data);
+    // console.log(data);
     let nowDate = moment().format("MM/DD/YYYY");
     console.log(nowDate);
     if (data) {
@@ -208,35 +224,39 @@ module.exports = {
       const min = data.minCartAmount;
       const max = data.maxRedeemAmount;
       const date = data.expireDate.toLocaleDateString();
-      console.log(type);
-      if (nowDate < date) {
-        if (min < price) {
-          if (type === "cash") {
-            const dataCash = data.cutOff;
-            console.log(dataCash);
-            const total = price - dataCash;
-            console.log(total);
-            res.json({ total });
-          } else {
-            const dataPer = data.cutOff;
-            let perOne = price / 100;
-            let newPer = perOne * dataPer;
-            let newTotal = null;
-            if (max < newPer) {
-              newTotal = price - max;
+      const couponCount = data.generateCount;
+      // console.log(type);
+      if (couponCount > 0) {
+        if (nowDate < date) {
+          if (min < price) {
+            if (type === "cash") {
+              const dataCash = data.cutOff;
+              // console.log(dataCash);
+              const total = price - dataCash;
+              // console.log(total);
+              res.json({ total });
             } else {
-              newTotal = price - newPer;
+              const dataPer = data.cutOff;
+              let perOne = price / 100;
+              let newPer = perOne * dataPer;
+              let newTotal = null;
+              if (max < newPer) {
+                newTotal = price - max;
+              } else {
+                newTotal = price - newPer;
+              }
+              res.json({ newTotal });
             }
-            res.json({ newTotal });
+          } else {
+            res.json({ price });
           }
         } else {
-          res.json({ price });
+          res.json({ date });
         }
       } else {
-        res.json({ date });
+        res.json({ status: false });
       }
-    } else {
-      res.json({ status: false });
+      res.json({ count });
     }
   },
 

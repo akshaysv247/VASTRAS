@@ -1,3 +1,4 @@
+const { date } = require("joi");
 const mongoose = require("mongoose");
 
 const order = new mongoose.Schema({
@@ -45,7 +46,13 @@ const order = new mongoose.Schema({
   productPrice: {
     type: Number,
   },
-});
+  time:{
+    type:Date,
+    default:Date.now()
+  }
+
+}
+);
 
 const addOrder = mongoose.model("orders", order);
 

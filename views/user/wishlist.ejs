@@ -157,7 +157,7 @@
     </section>
     <% } %>
 
-    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
 
@@ -167,8 +167,14 @@
           method: "get",
           success: (response) => {
             if (response.status) {
-
-             alert("your product added to cart")
+              Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'your product added to cart',
+  showConfirmButton: false,
+  timer: 1500
+})
+            
               let count = $("#cart").html();
               count = parseInt(count) + 1;
               $("#cart").html(count);

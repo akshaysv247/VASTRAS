@@ -3,6 +3,8 @@ const bannerDB = require("../models/banner");
 const productDB = require("../models/productSchema");
 const userHelper = require("../helpers/userHelper");
 const wishlistDB = require("../models/wishlistSchema");
+const orderDB = require("../models/orderSchema");
+const usersDB = require("../models/userSchema")
 
 module.exports = {
   admincategory: async (req, res) => {
@@ -85,4 +87,45 @@ module.exports = {
       next(err);
     }
   },
+
+  // totalincome : (async(req,res)=>{
+  //  const allData = await orderDB.find({})
+  //  let total = 0
+  //  allData.forEach(ele => {
+  //   total = total+ele.price
+  //  })
+  //  console.log(total);
+  // })()
+ 
+  //  totalincome : async(req,res)=>{
+  //       const allSales = await orderDB.aggregate([{$group:{
+  //         _id:null,
+  //         price:{$sum:"$price"}
+  //       }}])
+  //    console.log("allSales"+allSales);
+
+  //  },
+  //  totalOnlinePayments : async(req,res)=>{
+  //   const onlineTotal = await orderDB.aggregate([{$match:{payment:'Online'}},{$group:{
+  //     _id:null,
+  //     price:{$sum:"$price"}
+  //   }}])
+  //   console.log("onlineTotal"+onlineTotal);
+  //  },
+
+  //  totalOfflinePayments : async(req,res)=>{
+  //   const offlineTotal = await orderDB.aggregate([{$match:{payment:'COD'}},{$group:{
+  //     _id:null,
+  //     price:{$sum:"$price"}
+  //   }}])
+  //   console.log("offlineTotal"+offlineTotal);
+  //  },
+
+  //  totalProfit : async(req,res)=>{
+  //   const totalProfit = await orderDB.aggregate([{$match:{status:'DELIVERED'}},{$group:{
+  //     _id:null,
+  //     price:{$sum:"$price"}
+  //   }}])
+  //  },
+   
 };

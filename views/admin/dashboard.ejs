@@ -64,8 +64,8 @@
                       </div>
                     </div>
                   </div>
-                  <span class="fw-semibold d-block mb-1">Profit</span>
-                  <h3 class="card-title mb-2">$12,628</h3>
+                  <span class="fw-semibold d-block mb-1">Sales</span>
+                  <h3 class="card-title mb-2"><%= sales %> </h3>
                   <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
                 </div>
               </div>
@@ -98,8 +98,8 @@
                       </div>
                     </div>
                   </div>
-                  <span>Sales</span>
-                  <h3 class="card-title text-nowrap mb-1">$4,679</h3>
+                  <span>Profit</span>
+                  <h3 class="card-title text-nowrap mb-1"><%= profit %> </h3>
                   <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
                 </div>
               </div>
@@ -112,9 +112,11 @@
             <div class="row row-bordered g-0">
               <div class="col-md-8">
                 <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
-                <div id="totalRevenueChart" class="px-2"></div>
+                <!-- <div id="totalRevenueChart" class="px-2"></div> -->
+               <canvas id="saleRevenueChart"></canvas>
+
               </div>
-              <div class="col-md-4">
+              <div class="col-md-4" >
                 <div class="card-body">
                   <div class="text-center">
                     <div class="dropdown">
@@ -190,8 +192,8 @@
                       </div>
                     </div>
                   </div>
-                  <span class="d-block mb-1">Payments</span>
-                  <h3 class="card-title text-nowrap mb-2">$2,456</h3>
+                  <span class="d-block mb-1">OnlinePayments</span>
+                  <h3 class="card-title text-nowrap mb-2"><%= online %> </h3>
                   <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
                 </div>
               </div>
@@ -220,8 +222,8 @@
                       </div>
                     </div>
                   </div>
-                  <span class="fw-semibold d-block mb-1">Transactions</span>
-                  <h3 class="card-title mb-2">$14,857</h3>
+                  <span class="fw-semibold d-block mb-1">offlinePayment</span>
+                  <h3 class="card-title mb-2"><%= offline %> </h3>
                   <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.14%</small>
                 </div>
               </div>
@@ -561,5 +563,53 @@ class="btn btn-danger btn-buy-now"
 >Upgrade to Pro</a
 >
 </div> -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  
+  (function totalRevanue() {
+    let dataCount = null
+    $.ajax({
+      url:'/admin/revenue',
+      method:'get',
+      
+      success:(response)=>{
+        dataCount = response.counts
+       if(response.status){
+        console.log(response.counts)
+   
+        
+       }
+       
+      }
+      
+    })
+    const ctx = document.getElementById('saleRevenueChart');
+   console.log(dataCount);
+
+   new Chart(ctx,dataCount, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', ],
+      datasets: [{
+        label: '# of Votes',
+        data: dataCount,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  })
+  })()
+  
+ 
+  
+</script>
 
 <%- include('partials/adminfooter.ejs') %>

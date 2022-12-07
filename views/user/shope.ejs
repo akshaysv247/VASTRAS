@@ -377,6 +377,8 @@
       
     </div>
   </div>
+
+  <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
    <script>
     function addToClik(proId) {
          $.ajax({
@@ -384,6 +386,7 @@
           method:'get',
           success:(response)=>{
               if(response.status){
+
                 let count = $('#cart').html()
                 count=parseInt(count)+1
                 $('#cart').html(count)

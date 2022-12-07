@@ -208,6 +208,9 @@
           <div class="alert alert-danger" role="alert" style="display: none;" id="currect">
             Plese enter currect
           </div>
+          <div class="alert alert-danger" role="alert" style="display: none;" id="noCount">
+            Plese check the count 
+          </div>
         </div>
 
         
@@ -336,6 +339,9 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
   $("#chechout-form").submit((e) => {
    
@@ -349,8 +355,17 @@
         //alert(response.status);
         let ID = response.newOrderId
         if (response.cod) {
-          alert("cod");
-          location.href = "/order-conform/"+ID
+          Swal.fire({
+  title: 'Your COD order conformed',
+  showClass: {
+    popup: 'animate__animated animate__fadeInDown'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutUp'
+  }
+})
+       location.href = "/order-conform/"+ID
+         
         } else {
          
           razorPayPayment(response.onlinePay);
@@ -425,8 +440,7 @@ rzp1.on('payment.failed', function (response){
     let total = document.getElementById('carttotal').innerHTML
     document.getElementById('codeId').value = code
 
-    console.log(code);
-    console.log(total);
+   
     $.ajax({
       url:'/apply-coupon',
       data:{
@@ -445,7 +459,10 @@ rzp1.on('payment.failed', function (response){
           document.getElementById('errorDis').style.display = "block";
         }else if(response.date){
           document.getElementById('dateDis').style.display = "block";
-        }else{
+        }else if(response.count){
+          document.getElementById('noCount').style.display = "block";
+        }
+        else{
           document.getElementById('currect').style.display = "block";
         }
         
