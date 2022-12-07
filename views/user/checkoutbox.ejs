@@ -355,18 +355,27 @@
         //alert(response.status);
         let ID = response.newOrderId
         if (response.cod) {
-          Swal.fire({
-  title: 'Your COD order conformed',
-  showClass: {
-    popup: 'animate__animated animate__fadeInDown'
-  },
-  hideClass: {
-    popup: 'animate__animated animate__fadeOutUp'
+
+
+Swal.fire({
+  title: 'Do you want confirm the order?',
+  showDenyButton: true,
+ 
+  confirmButtonText: 'Yes',
+  denyButtonText: `No`,
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    location.href = "/order-conform/"+ID
+  } else if (result.isDenied) {
+    Swal.fire('Order cancelled', '', 'info')
+    location.href = "/showProducts"
   }
 })
-       location.href = "/order-conform/"+ID
+     
+        
          
-        } else {
+    } else {
          
           razorPayPayment(response.onlinePay);
         }

@@ -8,6 +8,7 @@ const userDB = require("../models/userSchema");
 const checkOutValidation = require("../validation/checkout");
 const couponDB = require("../models/coupon");
 const userHelper = require("../helpers/userHelper");
+const productDB = require("../models/productSchema")
 
 const instance = new Razorpay({
   key_id: "rzp_test_gVjE7EEMOSkshL",
@@ -64,7 +65,7 @@ module.exports = {
       const user = await req.session.user;
       const userId = await user._id;
       const cartData = await cartDB.findOne({ userId: userId });
-      console.log(cartData);
+     // console.log(cartData);
       const price = cartData.grandtotal;
       const discountPrice = req.body.grandtotal;
 
@@ -96,6 +97,11 @@ module.exports = {
 
       if (req.body["payment"] == "COD") {
         const order = await orderDB.findOne({ _id: newOrderId });
+       const findProductId = order.products
+       //console.log(findProductId);
+       findProductId.forEach(async(el) => {
+       let removeQuantity = await productDB.findOneAndUpdate({_id:el.productId},{$inc:{quantity:-el.quantity}})
+       });
         const code = order.couponname;
         if (code) {
           const couponDecrese = await couponDB.findOneAndUpdate(
@@ -178,6 +184,11 @@ module.exports = {
         }
       );
       const order = await orderDB.findOne({ _id: cartId });
+      const findProductId = order.products
+      //console.log(findProductId);
+      findProductId.forEach(async(el) => {
+      let removeQuantity = await productDB.findOneAndUpdate({_id:el.productId},{$inc:{quantity:-el.quantity}})
+      });
       const code = order.couponname;
       if (code) {
         const couponDecrese = await couponDB.findOneAndUpdate(

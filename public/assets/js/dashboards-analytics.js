@@ -4,9 +4,9 @@
 
 'use strict';
 
-(function () {
-  let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
+  (function () {
+  let cardColor, headingColor, axisColor, shadeColor, borderColor;
   cardColor = config.colors.white;
   headingColor = config.colors.headingColor;
   axisColor = config.colors.axisColor;
@@ -17,10 +17,10 @@
   const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
     totalRevenueChartOptions = {
        series: [
-      //   {
-      //     name: '2022',
-      //     data: [18, 7, 15, 29, 18, 12, 9]
-      //   },
+        // {
+        //   name: '2022',
+        //   data:  [-13, -18, -9, -14, -5, -17, -15]
+        // },
         // {
         //   name: '2020',
         //   data: [-13, -18, -9, -14, -5, -17, -15]
@@ -659,4 +659,4 @@
     const weeklyExpenses = new ApexCharts(weeklyExpensesEl, weeklyExpensesConfig);
     weeklyExpenses.render();
   }
-})();
+})()

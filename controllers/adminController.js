@@ -332,7 +332,7 @@ const orderStatus = async (req, res) => {
 
 const totalRevenue = async(req,res)=>{
   
-  const data = await orderDB.aggregate([{$group:{_id:{$month:'$time'},count:{$sum:1}}}])
+  const data = await orderDB.aggregate([{$group:{_id:{$month:'$time'},count:{$sum:1}}},{$sort:{_id:1}}])
   console.log(data);
   let counts = []
   
