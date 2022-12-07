@@ -37,6 +37,9 @@
               </div>
             </div>
           </div>
+          <div class="alert alert-danger" role="alert" style="display: none;" id="noCount">
+            Product is Out of stock
+          </div>
           <div class="row mb-5">
 
             <% for(var i=0; i < data.length; i++) { %>
@@ -390,6 +393,8 @@
                 let count = $('#cart').html()
                 count=parseInt(count)+1
                 $('#cart').html(count)
+              }else if(response.productQuantity){
+              document.getElementById('noCount').style.display = "block";
               }
           }
           

@@ -53,9 +53,8 @@ module.exports = {
       const user = await req.session.user;
       const userId = await user._id;
       const product = await productDB.findById(productId);
-      //    const name = await product.title
-      //    const price = await product.price
-      //console.log(product);
+      const productQuantity = product.quantity
+      if(productQuantity>1){
       const userCart = await cartDB.findOne({ userId: userId });
       //console.log(userCart);
       const price = product.price;
@@ -121,6 +120,9 @@ module.exports = {
         // res.redirect('/cart')
         res.json({ status: true });
       }
+    }else{
+      res.json({ productQuantity });
+    }
     } catch (err) {
       next(err);
     }
@@ -177,7 +179,7 @@ module.exports = {
       total = count * price;
       const find = await cartDB.findOne({ userId: userId });
       let grandtotal = find.grandtotal;
-
+       
       if (find) {
         if (count == -1 && quantity == 1) {
           const productD = await find.products.find((elm) => {
@@ -200,6 +202,11 @@ module.exports = {
 
           res.json({ removeProduct: true });
         } else {
+          const productFind = await productDB.findOne({_id:product})
+          const productQuantity = productFind.quantity
+          if(productQuantity>count){
+            res.json({ productQuantity })
+          }else{
           const addOne = await cartDB.findOneAndUpdate(
             { "products.productId": product },
             {
@@ -225,7 +232,7 @@ module.exports = {
           const ID = newData.productId;
           // console.log(newTotal);
 
-          res.json({ status: true, newTotal, newGrand, ID, quantity });
+          res.json({ status: true, newTotal, newGrand, ID, quantity })}
         }
       }
     } catch (err) {

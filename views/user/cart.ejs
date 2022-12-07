@@ -10,6 +10,9 @@
       <div class="row mb-5">
         <form class="col-md-12" method="post">
           <div class="site-blocks-table">
+            <div class="alert alert-danger" role="alert" style="display: none;" id="noCount">
+              Product is Out of stock
+            </div>
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -165,7 +168,10 @@
          if(response.removeProduct){
           // alert("Product Removed from cart")
           location.reload()
-         }else{
+         }else if(response.productQuantity){
+          document.getElementById('noCount').style.display = "block";
+         }
+         else{
           
           document.getElementById('quantity'+response.ID).value = response.quantity
           
