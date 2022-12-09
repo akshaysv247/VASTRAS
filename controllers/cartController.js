@@ -53,76 +53,76 @@ module.exports = {
       const user = await req.session.user;
       const userId = await user._id;
       const product = await productDB.findById(productId);
-      const productQuantity = product.quantity
-      if(productQuantity>1){
-      const userCart = await cartDB.findOne({ userId: userId });
-      //console.log(userCart);
-      const price = product.price;
-      const total = price * quantity;
+      const productQuantity = product.quantity;
+      if (productQuantity > 1) {
+        const userCart = await cartDB.findOne({ userId: userId });
+        //console.log(userCart);
+        const price = product.price;
+        const total = price * quantity;
 
-      let grandtotal = product.price;
-      // console.log(total);
-      const proD = await {
-        productId: productId,
-        quantity: quantity,
-        total: total,
-      };
-      const products = [];
-      products.push(proD);
+        let grandtotal = product.price;
+        // console.log(total);
+        const proD = await {
+          productId: productId,
+          quantity: quantity,
+          total: total,
+        };
+        const products = [];
+        products.push(proD);
 
-      Object.assign(
-        req.body,
-        { userId: userId },
-        { products: products },
-        { grandtotal: grandtotal }
-      );
-      //console.log(req.body);
-      const cartData = await req.body;
-      // console.log(cartData);
-      if (userCart) {
-        const proExist = await userCart.products.findIndex(
-          (product) => product.productId == productId
+        Object.assign(
+          req.body,
+          { userId: userId },
+          { products: products },
+          { grandtotal: grandtotal }
         );
-        //console.log(proExist);
-        if (proExist != -1) {
-          // const grand = await cartDB.findOneAndUpdate({userId:userId},{$inc:{grandtotal:grandtotal}},{ upsert: true })
-          // console.log(grand);
+        //console.log(req.body);
+        const cartData = await req.body;
+        // console.log(cartData);
+        if (userCart) {
+          const proExist = await userCart.products.findIndex(
+            (product) => product.productId == productId
+          );
+          //console.log(proExist);
+          if (proExist != -1) {
+            // const grand = await cartDB.findOneAndUpdate({userId:userId},{$inc:{grandtotal:grandtotal}},{ upsert: true })
+            // console.log(grand);
 
-          const add = await cartDB.findOneAndUpdate(
-            { "products.productId": productId },
-            {
-              $inc: {
-                "products.$.quantity": 1,
-                "products.$.total": price,
-                grandtotal: price,
+            const add = await cartDB.findOneAndUpdate(
+              { "products.productId": productId },
+              {
+                $inc: {
+                  "products.$.quantity": 1,
+                  "products.$.total": price,
+                  grandtotal: price,
+                },
               },
-            },
-            { upsert: true }
-          );
-          res.json({ status: true });
+              { upsert: true }
+            );
+            res.json({ status: true });
+          } else {
+            const cart = await cartDB.findOneAndUpdate(
+              { userId: userId },
+              { $push: { products: proD } },
+              { upsert: true }
+            );
+            const cartA = await cartDB.findOneAndUpdate(
+              { userId: userId },
+              { $inc: { grandtotal: price } },
+              { upsert: true }
+            );
+            // console.log(cart);
+            //res.redirect('/cart')
+            res.json({ status: true });
+          }
         } else {
-          const cart = await cartDB.findOneAndUpdate(
-            { userId: userId },
-            { $push: { products: proD } },
-            { upsert: true }
-          );
-          const cartA = await cartDB.findOneAndUpdate(
-            { userId: userId },
-            { $inc: { grandtotal: price } },
-            { upsert: true }
-          );
-          // console.log(cart);
-          //res.redirect('/cart')
+          const cart = await cartDB.create(cartData);
+          // res.redirect('/cart')
           res.json({ status: true });
         }
       } else {
-        const cart = await cartDB.create(cartData);
-        // res.redirect('/cart')
-        res.json({ status: true });
+        res.json({ productQuantity });
       }
-    }else{
-      res.json({ productQuantity });
-    }
     } catch (err) {
       next(err);
     }
@@ -179,7 +179,7 @@ module.exports = {
       total = count * price;
       const find = await cartDB.findOne({ userId: userId });
       let grandtotal = find.grandtotal;
-       
+
       if (find) {
         if (count == -1 && quantity == 1) {
           const productD = await find.products.find((elm) => {
@@ -202,37 +202,38 @@ module.exports = {
 
           res.json({ removeProduct: true });
         } else {
-          const productFind = await productDB.findOne({_id:product})
-          const productQuantity = productFind.quantity
-          if(productQuantity>count){
-            res.json({ productQuantity })
-          }else{
-          const addOne = await cartDB.findOneAndUpdate(
-            { "products.productId": product },
-            {
-              $inc: {
-                "products.$.quantity": count,
-                "products.$.total": total,
-                grandtotal: total,
+          const productFind = await productDB.findOne({ _id: product });
+          const productQuantity = productFind.quantity;
+          if (productQuantity < count) {
+            res.json({ productQuantity });
+          } else {
+            const addOne = await cartDB.findOneAndUpdate(
+              { "products.productId": product },
+              {
+                $inc: {
+                  "products.$.quantity": count,
+                  "products.$.total": total,
+                  grandtotal: total,
+                },
               },
-            },
-            { upsert: true }
-          );
+              { upsert: true }
+            );
 
-          const newfind = await cartDB.findOne({ userId: userId });
-          const newGrand = newfind.grandtotal;
-          //console.log( newGrand);
+            const newfind = await cartDB.findOne({ userId: userId });
+            const newGrand = newfind.grandtotal;
+            //console.log( newGrand);
 
-          const newData = await newfind.products.find((elm) => {
-            return elm.productId.toString() === product;
-          });
-          //console.log(newData);
-          const newTotal = newData.total;
-          const quantity = newData.quantity;
-          const ID = newData.productId;
-          // console.log(newTotal);
+            const newData = await newfind.products.find((elm) => {
+              return elm.productId.toString() === product;
+            });
+            //console.log(newData);
+            const newTotal = newData.total;
+            const quantity = newData.quantity;
+            const ID = newData.productId;
+            // console.log(newTotal);
 
-          res.json({ status: true, newTotal, newGrand, ID, quantity })}
+            res.json({ status: true, newTotal, newGrand, ID, quantity });
+          }
         }
       }
     } catch (err) {

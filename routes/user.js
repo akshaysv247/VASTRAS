@@ -42,7 +42,8 @@ router.post("/apply-coupon",orderController.applyCoupon);
 router.get("/order-cancel/:id",orderController.orderCancel);
 router.get("/order-list",userController.verifyLogin,orderController.orderListUserSide);
 router.post("/search-Products",userController.productSearch);
-
+router.get("/resend-otp",userController.otpResend);
+router.post("/user-profile-edit/:id",userController.userProfileEdit)
 
 
 module.exports = router;

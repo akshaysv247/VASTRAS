@@ -71,6 +71,13 @@
             </label>
           </div>
         </div> -->
+
+        <% if(error.length>0){ %>
+          <div class="alert alert-danger" role="alert">
+           <!-- Incorrect username or password ! -->
+           <%= error %></div>
+      <% } %>
+      
         <div class="col-12 pt-3">
           <button type="submit" class="btn btn-primary">SAVE</button>
         </div>

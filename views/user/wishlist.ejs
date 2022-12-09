@@ -1,5 +1,8 @@
 <%- include('partials/userheader.ejs') %>
 
+
+<% if(datas!=null){ %>
+
  <% if(datas.products.length!=0){ %>
 
 <div class="site-section">
@@ -156,6 +159,20 @@
       </div>
     </section>
     <% } %>
+
+    <% }else{ %>
+
+      <section class="container">
+        <h1>Wishlist Empty</h1>
+        <div>
+          <a href="/showProducts"
+            ><button type="button" class="w-100 btn btn-lg btn-outline-primary">
+              shope
+            </button></a
+          >
+        </div>
+      </section>
+      <% } %>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

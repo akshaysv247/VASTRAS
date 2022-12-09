@@ -14,12 +14,18 @@
 </section>
 
 <section class="container">
+  <% if(error.length>0){ %>
+    <div class="alert alert-danger" role="alert">
+     <!-- Incorrect username or password ! -->
+     <%= error %></div>
+<% } %>
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4 "><span class="text-muted fw-light">Personal Information</h4>
     
         <!-- Basic Layout & Basic with Icons -->
         <div class="row d-flex justify-content-between container">
           <!-- Basic Layout -->
+          
           <div class="col-xxl">
             <div class="card mb-4">
               <div class="card-header d-flex align-items-center justify-content-between">
@@ -27,11 +33,11 @@
                 <small class="text-muted float-end"></small>
               </div>
               <div class="card-body">
-                <form>
+                <form  action="/user-profile-edit/<%= user._id %>" method="post">
                   <div class="row mb-3">
                     <label class="col-sm-3 col-form-label" for="basic-default-name">Name </label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="basic-default-name" placeholder="" value="<%= user.Name %> " disabled/>
+                      <input type="text" class="form-control" id="basic-name" placeholder="" value="<%= user.Name %> " disabled name="Name"/>
                     </div>
                   </div>
                   
@@ -41,10 +47,10 @@
                       <div class="input-group input-group-merge">
                         <input
                           type="text"
-                          id="basic-default-email"
+                          id="basic-email"
                           value="<%= user.Email %> "
                           class="form-control"
-                          
+                          name="Email"
                           aria-label="john.doe"
                           aria-describedby="basic-default-email2"
                           disabled
@@ -57,9 +63,9 @@
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        id="basic-default-phone"
+                        id="basic-phone"
                         class="form-control phone-mask"
-                        
+                        name="PhoneNumber"
                         value="<%= user.PhoneNumber %> "
                         aria-describedby="basic-default-phone"
                         disabled
@@ -80,7 +86,9 @@
                   </div> -->
                    <div class="row justify-content-end">
                     <div class="col-sm-10">
-                      <button type="submit" class="btn btn-primary">Edit</button>
+                      <button type="button" class="btn btn-primary"  id="editButton" onclick="profileEditEnabel()">Edit</button>
+                      <button type="submit" class="btn btn-primary" style="display:none ;" id="updateButton" >Update</button>
+
                     </div>
                   </div>
                 </form>
@@ -127,7 +135,7 @@
                                   <li><%= address[i].pincode %></li>
                                   <li><%= address[i].phoneNumber %></li>
                                 </ul>
-                                <a href="/editaddress/<%= address[i]._id %> "><button type="button" class=" btn btn-lg btn-outline-primary">Edit</button></a> 
+                                <a href="/editaddress/<%= address[i]._id %> "><button type="button" class=" btn btn-lg btn-outline-primary" >Edit</button></a> 
                                 
                                 <a href="/deleteaddress/<%= address[i]._id %>"><button type="button" class=" btn btn-lg btn-outline-danger">Delete</button></a> 
 
@@ -284,5 +292,31 @@
 <section class="container">
     <a href="/addadress"><button type="button" class="btn btn-success">Add Address</button></a>
 </section>
+
+<script>
+  
+  function profileEditEnabel(){
+    document.getElementById('basic-name').removeAttribute("disabled");
+    document.getElementById('basic-phone').removeAttribute("disabled");
+    document.getElementById('basic-email').removeAttribute("disabled");
+    document.getElementById('editButton').style.display = "none";
+    document.getElementById('updateButton').style.display = "block";
+    
+  }
+
+  function profileEdit(id){
+   $.ajax({
+    url:'/user-profile-edit/'+id,
+    method:'post',
+    
+    success:(response)=>{
+     if(response.edit){
+      alert("your Profile successfully Edited")
+      location.reload()
+     }
+    }
+   })
+  }
+</script>
 
 <%- include('partials/userfooter.ejs') %>

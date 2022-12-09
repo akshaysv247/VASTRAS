@@ -8,7 +8,7 @@ const userDB = require("../models/userSchema");
 const checkOutValidation = require("../validation/checkout");
 const couponDB = require("../models/coupon");
 const userHelper = require("../helpers/userHelper");
-const productDB = require("../models/productSchema")
+const productDB = require("../models/productSchema");
 
 const instance = new Razorpay({
   key_id: "rzp_test_gVjE7EEMOSkshL",
@@ -65,7 +65,7 @@ module.exports = {
       const user = await req.session.user;
       const userId = await user._id;
       const cartData = await cartDB.findOne({ userId: userId });
-     // console.log(cartData);
+      // console.log(cartData);
       const price = cartData.grandtotal;
       const discountPrice = req.body.grandtotal;
 
@@ -97,11 +97,14 @@ module.exports = {
 
       if (req.body["payment"] == "COD") {
         const order = await orderDB.findOne({ _id: newOrderId });
-       const findProductId = order.products
-       //console.log(findProductId);
-       findProductId.forEach(async(el) => {
-       let removeQuantity = await productDB.findOneAndUpdate({_id:el.productId},{$inc:{quantity:-el.quantity}})
-       });
+        const findProductId = order.products;
+        //console.log(findProductId);
+        findProductId.forEach(async (el) => {
+          let removeQuantity = await productDB.findOneAndUpdate(
+            { _id: el.productId },
+            { $inc: { quantity: -el.quantity } }
+          );
+        });
         const code = order.couponname;
         if (code) {
           const couponDecrese = await couponDB.findOneAndUpdate(
@@ -125,10 +128,8 @@ module.exports = {
         res.json({ onlinePay });
       }
     } else {
-      let err = validate;
-      console.log(err);
-      req.flash("userErr", "Incorrect email ! ");
-      res.redirect("/checkout");
+      let error = validate;
+      res.json({error})
     }
   },
 
@@ -184,10 +185,13 @@ module.exports = {
         }
       );
       const order = await orderDB.findOne({ _id: cartId });
-      const findProductId = order.products
+      const findProductId = order.products;
       //console.log(findProductId);
-      findProductId.forEach(async(el) => {
-      let removeQuantity = await productDB.findOneAndUpdate({_id:el.productId},{$inc:{quantity:-el.quantity}})
+      findProductId.forEach(async (el) => {
+        let removeQuantity = await productDB.findOneAndUpdate(
+          { _id: el.productId },
+          { $inc: { quantity: -el.quantity } }
+        );
       });
       const code = order.couponname;
       if (code) {
@@ -222,12 +226,13 @@ module.exports = {
   },
 
   applyCoupon: async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     const code = req.body.code;
     const price = parseInt(req.body.total);
     // console.log(price);
+
     const data = await couponDB.findOne({ CODE: code });
-    // console.log(data);
+    console.log(data);
     let nowDate = moment().format("MM/DD/YYYY");
     console.log(nowDate);
     if (data) {
@@ -236,7 +241,7 @@ module.exports = {
       const max = data.maxRedeemAmount;
       const date = data.expireDate.toLocaleDateString();
       const couponCount = data.generateCount;
-      // console.log(type);
+      console.log(type);
       if (couponCount > 0) {
         if (nowDate < date) {
           if (min < price) {
@@ -265,9 +270,10 @@ module.exports = {
           res.json({ date });
         }
       } else {
-        res.json({ status: false });
+        res.json({ couponCount });
       }
-      res.json({ count });
+    } else {
+      res.json({ error });
     }
   },
 
@@ -293,7 +299,8 @@ module.exports = {
       res.locals.wishlistCount = wishlistCount;
     }
     let data = null;
-    data = await orderDB.find({ userId: userId });
+    data = await orderDB.find({ userId: userId }).sort({ time: -1 });
+    console.log(data);
     res.render("user/orderslist", { data, wishlistCount, cartCount, user });
   },
 };

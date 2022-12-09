@@ -1,29 +1,40 @@
-
 <%- include('partials/userheader.ejs') %>
 
 <div class="site-section">
-    <div class="container">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-9 order-2">
+        <div class="row">
+          <div class="col-md-12 mb-5">
+            <div class="float-md-left mb-4">
+              <h2 class="text-black h5">Shop All</h2>
+            </div>
+            <div class="d-flex">
+              <div class="dropdown mr-1 ml-md-auto">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm dropdown-toggle"
+                  id="dropdownMenuOffset"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Latest
+                </button>
 
-      <div class="row mb-5">
-        <div class="col-md-9 order-2">
-
-          <div class="row">
-            <div class="col-md-12 mb-5">
-              <div class="float-md-left mb-4"><h2 class="text-black h5">Shop All</h2></div>
-              <div class="d-flex">
-                <div class="dropdown mr-1 ml-md-auto">
-                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Latest
-                  </button>
-                 
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                    <% for(var i=0; i < cat.length; i++) { %>
-                    <li><a class="dropdown-item" href="/categoryproduct/<%= cat[i]._id %> "><%= cat[i].name %> </a></li>
-                    <% } %>
-                  </div>
-                  
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                  <% for(var i=0; i < cat.length; i++) { %>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="/categoryproduct/<%= cat[i]._id %> "
+                      ><%= cat[i].name %>
+                    </a>
+                  </li>
+                  <% } %>
                 </div>
-                <!-- <div class="btn-group">
+              </div>
+              <!-- <div class="btn-group">
                   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Reference</button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                     <a class="dropdown-item" href="#">Relevance</a>
@@ -34,409 +45,299 @@
                     <a class="dropdown-item" href="#">Price, high to low</a>
                   </div>
                 </div> -->
-              </div>
             </div>
           </div>
-          <div class="alert alert-danger" role="alert" style="display: none;" id="noCount">
-            Product is Out of stock
-          </div>
-          <div class="row mb-5">
+        </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          style="display: none"
+          id="noCount"
+        >
+          Product is Out of stock
+        </div>
+        <div class="row mb-5">
+          <% for(var i=0; i < data.length; i++) { %>
 
-            <% for(var i=0; i < data.length; i++) { %>
+          <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+            <div class="block-4 text-center border">
+              <figure class="block-4-image">
+                <a href="/product/<%= data[i]._id %> "
+                  ><img
+                    src="/images/<%= data[i].images[0] %>"
+                    alt="Image placeholder"
+                    style="height: 14rem; width: 11rem"
+                    class="img-fluid"
+                /></a>
+              </figure>
+              <div class="block-4-text p-4">
+                <h3><a href="/product"></a><%= data[i].title %></h3>
+                <!-- <p class="mb-0">Finding perfect t-shirt</p> -->
+                <p class="text-primary font-weight-bold">
+                  <%= data[i].price %>
+                </p>
+              </div>
 
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="/product/<%= data[i]._id %> "><img src="/images/<%= data[i].images[0] %>" alt="Image placeholder" style="height: 14rem; width: 11rem;" class="img-fluid" ></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="/product"></a><%= data[i].title %></h3>
-                  <!-- <p class="mb-0">Finding perfect t-shirt</p> -->
-                  <p class="text-primary font-weight-bold"><%= data[i].price %></p>
-                </div>
-
-                <!-- <div>
+              <!-- <div>
                    <form action="/addtocart" method="post">
                     <input type="hidden" value="<%= data[i]._id %> " name=" productId">
                     <button type="submit" class="btn btn-primary">Add to cart</button>
                    </form>
                 </div> -->
-       
-                <div class="mb-3">
 
-                   <% if (user) { %>
-                    
-                     
-                    <% if (wishlist!=null && wishlist.products.some(el => el.productId.equals(data[i]._id))) {  %>
-                        <button class="btn"  onclick="addToWhilst('<%= data[i]._id %>')" ><i><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" id="heart5<%= data[i]._id %>" style="color:red ;"  class="bi bi-heart-fill"  viewBox="0 0 16 16">
-                         
-                          <path id="heart3<%= data[i]._id %>"   fill-rule="evenodd"  d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                          <path id="heart4<%= data[i]._id %>" style="display: none;"  d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+              <div class="mb-3">
+                <% if (user) { %> <% if (wishlist!=null &&
+                wishlist.products.some(el => el.productId.equals(data[i]._id)))
+                { %>
+                <button class="btn" onclick="addToWhilst('<%= data[i]._id %>')">
+                  <i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      fill="currentColor"
+                      id="heart5<%= data[i]._id %>"
+                      style="color: red"
+                      class="bi bi-heart-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        id="heart3<%= data[i]._id %>"
+                        fill-rule="evenodd"
+                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+                      />
+                      <path
+                        id="heart4<%= data[i]._id %>"
+                        style="display: none"
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg
+                  ></i>
+                </button>
 
-                      </svg></i></button>
-                       
-                    <% }else{ %> 
-                   <button class="btn"  onclick="addToWhilst('<%= data[i]._id %>')" ><i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" id="heart<%= data[i]._id %>"  viewBox="0 0 16 16">
-                    <path id="heart1<%= data[i]._id %>" style="display: none;"  fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-
-                    <path id="heart2<%= data[i]._id %>"  d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                </svg></i></button>
-                     <% } %> 
-                    
                 <% }else{ %>
-                   <button class="btn" > <a href="/wishlist" ><i ><svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg></i></a></button>
-                <% } %> 
-                  
-                  <!-- <i class="fa fa-heart" style="font-size:24px;"></i> -->
-                  <!-- <a href="/addtocart/<%= data[i]._id %>"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a> -->
-                  <% if(user){ %> 
-                    <!-- <button type="button" onclick="addToWhilst('<%= data[i]._id %>')" class="btn fa fa-heart" style="font-size:24px;" name="productId"></button> -->
-                  <button type="button" class="btn btn-primary" onclick="addToClik('<%= data[i]._id %>')">Add to Cart</button>
-                  
-                  <% }else{ %> 
-                <a href="/login"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a>
+                <button class="btn" onclick="addToWhilst('<%= data[i]._id %>')">
+                  <i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      class="bi bi-heart"
+                      id="heart<%= data[i]._id %>"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        id="heart1<%= data[i]._id %>"
+                        style="display: none"
+                        fill-rule="evenodd"
+                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+                      />
 
-                <% } %> 
-                </div>
+                      <path
+                        id="heart2<%= data[i]._id %>"
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg
+                  ></i>
+                </button>
+                <% } %> <% }else{ %>
+                <button class="btn">
+                  <a href="/wishlist"
+                    ><i
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-heart"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                        /></svg></i
+                  ></a>
+                </button>
+                <% } %>
+
+                <!-- <i class="fa fa-heart" style="font-size:24px;"></i> -->
+                <!-- <a href="/addtocart/<%= data[i]._id %>"><button type="submit" class="btn btn-primary" name="productId">Add to cart</button></a> -->
+                <% if(user){ %>
+                <!-- <button type="button" onclick="addToWhilst('<%= data[i]._id %>')" class="btn fa fa-heart" style="font-size:24px;" name="productId"></button> -->
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="addToClik('<%= data[i]._id %>')"
+                >
+                  Add to Cart
+                </button>
+
+                <% }else{ %>
+                <a href="/login"
+                  ><button
+                    type="submit"
+                    class="btn btn-primary"
+                    name="productId"
+                  >
+                    Add to cart
+                  </button></a
+                >
+
+                <% } %>
               </div>
+            </div>
+          </div>
 
+          <% } %>
+
+         
+           
+
+           
+           
+           
+           
+         
+
+           
+           
+           
+
+            
+        </div>
+        
+      </div>
+
+      <div class="col-md-3 order-1 mb-5 mb-md-0">
+        <div class="border p-4 rounded mb-4">
+          <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+
+          <ul class="list-unstyled mb-0">
+            <% for(var i=0; i < cat.length; i++) { %>
+            <li class="mb-1">
+              <a href="/categoryproduct/<%= cat[i]._id %> " class="d-flex"
+                ><span><%= cat[i].name %></span>
+                <span class="text-black ml-auto"></span></a
+              >
+            </li>
+            <% } %>
+          </ul>
+        </div>
+
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="site-section site-blocks-2">
+          <div class="row justify-content-center text-center mb-5">
+            <div class="col-md-7 site-section-heading pt-4">
+              <h2>Categories</h2>
+            </div>
+          </div>
+          <div class="row">
+            <% for(var i=0; i < cat.length; i++) { %>
+            <div
+              class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0"
+              data-aos="fade"
+              data-aos-delay=""
+            >
+              <a class="block-2-item" href="#">
+                <figure class="image">
+                  <a href="/categoryproduct/<%= cat[i]._id %> "
+                    ><img
+                      src="/images/<%= cat[i].images[0] %>"
+                      alt=""
+                      class="img-fluid"
+                  /></a>
+                </figure>
+                <div class="text">
+                  <span class="text-uppercase">Collections</span>
+                  <h3><%= cat[i].name %></h3>
+                </div>
+              </a>
             </div>
 
             <% } %>
-
-
-            <!-- <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Corater</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Polo Shirt</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_3.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">T-Shirt Mockup</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Corater</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Tank Top</a></h3>
-                  <p class="mb-0">Finding perfect t-shirt</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Corater</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Polo Shirt</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_3.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">T-Shirt Mockup</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Corater</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Tank Top</a></h3>
-                  <p class="mb-0">Finding perfect t-shirt</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-              <div class="block-4 text-center border">
-                <figure class="block-4-image">
-                  <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid"></a>
-                </figure>
-                <div class="block-4-text p-4">
-                  <h3><a href="shop-single.html">Polo Shirt</a></h3>
-                  <p class="mb-0">Finding perfect products</p>
-                  <p class="text-primary font-weight-bold">$50</p>
-                </div>
-              </div>
-            </div> -->
-
-
-          </div>
-          <!-- <div class="row" data-aos="fade-up">
-            <div class="col-md-12 text-center">
-              <div class="site-block-27">
-                <ul>
-                  <li><a href="#">&lt;</a></li>
-                  <li class="active"><span>1</span></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">&gt;</a></li>
-                </ul>
-              </div>
-            </div>
-          </div> -->
-        </div>
-
-        <div class="col-md-3 order-1 mb-5 mb-md-0">
-          <div class="border p-4 rounded mb-4">
-            <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
-           
-            <ul class="list-unstyled mb-0">
-              <% for(var i=0; i < cat.length; i++) { %>
-              <li class="mb-1"><a href="/categoryproduct/<%= cat[i]._id %> " class="d-flex"><span><%= cat[i].name %></span> <span class="text-black ml-auto">(2,220)</span></a></li>
-              <% } %>
-            </ul>
-
-          </div>
-
-          <!-- <div class="border p-4 rounded mb-4">
-            <div class="mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Price</h3>
-              <div id="slider-range" class="border-primary"></div>
-              <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white" disabled="" />
-            </div>
-
-            <div class="mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Size</h3>
-              <label for="s_sm" class="d-flex">
-                <input type="checkbox" id="s_sm" class="mr-2 mt-1"> <span class="text-black">Small (2,319)</span>
-              </label>
-              <label for="s_md" class="d-flex">
-                <input type="checkbox" id="s_md" class="mr-2 mt-1"> <span class="text-black">Medium (1,282)</span>
-              </label>
-              <label for="s_lg" class="d-flex">
-                <input type="checkbox" id="s_lg" class="mr-2 mt-1"> <span class="text-black">Large (1,392)</span>
-              </label>
-            </div>
-
-            <div class="mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
-              <a href="#" class="d-flex color-item align-items-center" >
-                <span class="bg-danger color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Red (2,429)</span>
-              </a>
-              <a href="#" class="d-flex color-item align-items-center" >
-                <span class="bg-success color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Green (2,298)</span>
-              </a>
-              <a href="#" class="d-flex color-item align-items-center" >
-                <span class="bg-info color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Blue (1,075)</span>
-              </a>
-              <a href="#" class="d-flex color-item align-items-center" >
-                <span class="bg-primary color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Purple (1,075)</span>
-              </a>
-            </div>
-
-          </div> -->
-          
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <div class="site-section site-blocks-2">
-              <div class="row justify-content-center text-center mb-5">
-                <div class="col-md-7 site-section-heading pt-4">
-                  <h2>Categories</h2>
-                </div>
-              </div>
-              <div class="row">
-
-                <% for(var i=0; i < cat.length; i++) { %>
-                  <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                    <a class="block-2-item" href="#">
-                      <figure class="image">
-                        <a href="/categoryproduct/<%= cat[i]._id %> "><img src="/images/<%= cat[i].images[0] %>" alt="" class="img-fluid"></a>
-                      </figure>
-                      <div class="text">
-                        <span class="text-uppercase">Collections</span>
-                        <h3><%= cat[i].name %> </h3>
-                      </div>
-                    </a>
-                  </div>
-                  
-                  <% } %>
-                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                  <a class="block-2-item" href="#">
-                    <figure class="image">
-                      <img src="images/women.jpg" alt="" class="img-fluid">
-                    </figure>
-                    <div class="text">
-                      <span class="text-uppercase">Collections</span>
-                      <h3>Women</h3>
-                    </div>
-                  </a>
-                </div> -->
-                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                  <a class="block-2-item" href="#">
-                    <figure class="image">
-                      <img src="images/children.jpg" alt="" class="img-fluid">
-                    </figure>
-                    <div class="text">
-                      <span class="text-uppercase">Collections</span>
-                      <h3>Children</h3>
-                    </div>
-                  </a>
-                </div> -->
-                <!-- <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                  <a class="block-2-item" href="#">
-                    <figure class="image">
-                      <img src="images/men.jpg" alt="" class="img-fluid">
-                    </figure>
-                    <div class="text">
-                      <span class="text-uppercase">Collections</span>
-                      <h3>Men</h3>
-                    </div>
-                  </a>
-                </div> -->
-              </div>
             
+                </div> 
           </div>
         </div>
       </div>
-      
     </div>
   </div>
+</div>
 
-  <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-   <script>
-    function addToClik(proId) {
-         $.ajax({
-          url:'/addtocart/'+proId,
-          method:'get',
-          success:(response)=>{
-              if(response.status){
+ <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+<script>
+  function addToClik(proId) {
+    $.ajax({
+      url: "/addtocart/" + proId,
+      method: "get",
+      success: (response) => {
+        if (response.status) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
 
-                let count = $('#cart').html()
-                count=parseInt(count)+1
-                $('#cart').html(count)
-              }else if(response.productQuantity){
-              document.getElementById('noCount').style.display = "block";
-              }
-          }
-          
-         })
-    }
+          Toast.fire({
+            icon: "success",
+            title: "Successfully added ",
+          });
+          let count = $("#cart").html();
+          count = parseInt(count) + 1;
+          $("#cart").html(count);
+        } else if (response.productQuantity) {
+          document.getElementById("noCount").style.display = "block";
+        }
+      },
+    });
+  }
 
-
-    function addToWhilst(proId) {
-         $.ajax({
-          url:'/addwishlist/'+proId,
-          method:'get',
-          success:(response)=>{
-           console.log( response);
-            if(response.add){
-           
-              document.getElementById('heart1'+response.productId).style.display = "block";
-              document.getElementById('heart'+response.productId).style.color = "red"
-            }else{
-              alert("Product Removed from wishlist")
-              location.reload()
-             document.getElementById('heart3'+response.productId).style.display = "none"
-              document.getElementById('heart4'+response.productId).style.display = "block"
-              document.getElementById('heart5'+response.productId).removeAttribute("style");
-
-            }
-          }
-          
-         })
-    }
-    function deleteWhilstProduct(proId) {
-         $.ajax({
-          url:'/wishlistproductdelete/'+proId,
-          method:'get',
-          success:(response)=>{
-              if(response.status){
-                location.reload(true)
-              }
-          }
-          
-         })
-    }
-
-   </script>
+  function addToWhilst(proId) {
+    $.ajax({
+      url: "/addwishlist/" + proId,
+      method: "get",
+      success: (response) => {
+        console.log(response);
+        if (response.add) {
+          document.getElementById("heart1" + response.productId).style.display =
+            "block";
+          document.getElementById("heart" + response.productId).style.color =
+            "red";
+        } else {
+         
+        alert("your product remove from wishlist")
+          location.reload();
+          document.getElementById("heart3" + response.productId).style.display =
+            "none";
+          document.getElementById("heart4" + response.productId).style.display =
+            "block";
+          document
+            .getElementById("heart5" + response.productId)
+            .removeAttribute("style");
+        }
+      },
+    });
+  }
+  function deleteWhilstProduct(proId) {
+    $.ajax({
+      url: "/wishlistproductdelete/" + proId,
+      method: "get",
+      success: (response) => {
+        if (response.status) {
+          location.reload(true);
+        }
+      },
+    });
+  }
+</script>
 
 <%- include('partials/userfooter.ejs') %>

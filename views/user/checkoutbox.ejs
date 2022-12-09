@@ -185,11 +185,12 @@
                   />
                   <div class="input-group-append">
                     <button
+                    onclick="addCoupon()"
                       class="btn btn-primary btn-sm"
                       type="button"
                       id="button-addcoupon"
                      
-                      onclick="addCoupon()"
+                      
                     >
                       Apply
                     </button>
@@ -351,10 +352,15 @@
       method: "post",
       data: $("#chechout-form").serialize(),
       success: (response) => {
-        //console.log(response);
-        //alert(response.status);
         let ID = response.newOrderId
-        if (response.cod) {
+        if(response.error){
+          Swal.fire(
+  'Plese fill?',
+  'Your not full fill oder form ?',
+  'question'
+)
+        }
+        else if (response.cod) {
 
 
 Swal.fire({
@@ -458,6 +464,7 @@ rzp1.on('payment.failed', function (response){
       },
       method:'post',
       success:(response)=>{
+        console.log(response);
         if(response.total){
           document.getElementById('totalDis').innerHTML=response.total
           document.getElementById('discountTotal').value=response.total
@@ -468,7 +475,8 @@ rzp1.on('payment.failed', function (response){
           document.getElementById('errorDis').style.display = "block";
         }else if(response.date){
           document.getElementById('dateDis').style.display = "block";
-        }else if(response.count){
+        }else if(response.couponCount){
+          console.log(response.couponCount);
           document.getElementById('noCount').style.display = "block";
         }
         else{

@@ -22,6 +22,11 @@
 
         <div class="col-lg-6 mb-5 mb-lg-0">
           <div class="card">
+            <% if(error.length>0){ %>
+              <div class="alert alert-danger" role="alert">
+               <!-- Incorrect username or password ! -->
+               <%= error %></div>
+          <% } %>
             <div class="card-body py-5 px-md-5">
              
               <form action="/otplogin" method="post">
@@ -59,9 +64,12 @@
                
 
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4"> Submit </button> 
+                <button type="submit" class="btn btn-primary btn-block mb-4"> Verify </button> 
 
-               
+                <div class="row text-primary font-weight-bold justify-content-center" id="countdown"></div>
+
+                <button type="submit" onclick="resendButton()" id="resend" class="btn btn-primary btn-block mb-4" style="display: none;"> Resend </button> 
+
               </form>
 
               
@@ -75,5 +83,32 @@
   <!-- Jumbotron -->
 </section>
 <!-- Section: Design Block -->
+
+<script>
+   function resendButton(){
+     $.ajax({
+      url:'/resend-otp',
+      method:'get',
+      success:(response)=>{
+        if(response.status){
+          alert('success')
+        }
+      }
+     })
+  }
+
+  var timeleft =30;
+var downloadTimer = setInterval(function(){
+  if(timeleft <= 0){
+    clearInterval(downloadTimer);
+    document.getElementById("resend").style.display = "block";
+    document.getElementById("countdown").innerHTML =" Resend your Otp "
+  } else {
+    document.getElementById("countdown").innerHTML = timeleft + " seconds remaining";
+  }
+  timeleft -= 1;
+}, 1000);
+
+</script>
 
   <%- include('partials/userfooter.ejs') %>

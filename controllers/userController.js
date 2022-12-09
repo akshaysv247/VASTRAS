@@ -14,6 +14,9 @@ const bannerDB = require("../models/banner");
 const loginValidation = require("../validation/login");
 const url = require("url");
 const querystring = require("querystring");
+const otpValidations = require("../validation/otpcenter")
+const addressValidation = require("../validation/address")
+const userNewData = require("../validation/profileeidt")
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -105,11 +108,20 @@ const userLogin = async (req, res, next) => {
 
 const otpSend = (req, res) => {
   try {
-    res.render("user/otplogin");
+    res.render("user/otplogin",{ error: req.flash("userErr") });
   } catch (err) {
     next(err);
   }
 };
+
+const otpResend = async(req,res)=>{
+  Error.stackTraceLimit = Infinity
+  let data = req.session.temp
+  const number = data.PhoneNumber
+  console.log(number);
+  const resend = await Twilio.sendSMS(number)
+  res.json({status:true})
+}
 
 // const userOtp = async (req, res)=>{
 //   //const number = req.session.phone
@@ -125,6 +137,8 @@ const otpSend = (req, res) => {
 
 const postOTP = async (req, res, next) => {
   try {
+    let validate = await otpValidations(req)
+    if(validate===true){
     let data = req.session.temp;
     // console.log(data);
     const otp = req.body.otp;
@@ -148,7 +162,11 @@ const postOTP = async (req, res, next) => {
           res.redirect("/signup");
         }
       }
-    );
+    )
+    }else{
+      req.flash("userErr", "  please enter the otp");
+              res.redirect("/otplogin");
+    }
   } catch (err) {
     next(err);
   }
@@ -245,7 +263,7 @@ const viewProfile = async (req, res, next) => {
     if (addressData) {
       address = addressData.address;
     }
-    console.log(address);
+   // console.log(address);
 
     res.render("user/profile", {
       user,
@@ -253,21 +271,37 @@ const viewProfile = async (req, res, next) => {
       cartCount,
       wishlistCount,
       addressData,
+      error: req.flash("userErr") 
     });
   } catch (err) {
     next(err);
   }
 };
 
-const addAdress = (req, res, next) => {
+const addAdress = async(req, res, next) => {
   try {
-    res.render("user/adress");
+    const user = await req.session.user;
+    const userId = await user._id;
+    let cartCount = null;
+    let wishlistCount = null;
+    
+    if (user) {
+      // console.log(user);
+      cartCount = await userHelper.getCartCount(user._id);
+      res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
+    }
+    res.render("user/adress",{ error: req.flash("userErr"),user,cartCount,wishlistCount });
   } catch (err) {
     next(err);
   }
 };
 const saveAdress = async (req, res, next) => {
   try {
+    
+    let validate = await addressValidation(req);
+    if(validate===true){
     const user = req.session.user;
     const userId = user._id;
     const newAddress = req.body;
@@ -289,7 +323,11 @@ const saveAdress = async (req, res, next) => {
     } else {
       const save = await adressDB.create(data);
     }
-    res.redirect("/profile");
+    res.redirect("/profile")
+  }else{
+    req.flash("userErr", " Please full fill the form and please avoid space");
+      res.redirect("/addadress");
+  }
   } catch (err) {
     next(err);
   }
@@ -300,7 +338,17 @@ const editAddress = async (req, res, next) => {
     const user = req.session.user;
     const userId = user._id;
     const Id = req.params.id;
-    // console.log(Id);
+    
+    let cartCount = null;
+    let wishlistCount = null;
+    
+    if (user) {
+      // console.log(user);
+      cartCount = await userHelper.getCartCount(user._id);
+      res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
+    }
     const add = await adressDB.findOne({ userId: userId });
 
     // console.log(add);
@@ -312,7 +360,7 @@ const editAddress = async (req, res, next) => {
       // console.log(adressExist);
       const data = add.address[adressExist];
       //console.log(data)
-      res.render("user/editaddress", { data });
+      res.render("user/editaddress", { data,user,cartCount,wishlistCount,error: req.flash("userErr") });
     }
   } catch (err) {
     next(err);
@@ -338,6 +386,7 @@ const deleteAddress = async (req, res, next) => {
 
 const updateAddress = async (req, res, next) => {
   try {
+    
     const data = req.body;
     console.log(data);
     const ID = req.params.id;
@@ -370,6 +419,7 @@ const updateAddress = async (req, res, next) => {
     //console.log(data);
     //console.log(update);
     res.redirect("/profile");
+ 
   } catch (err) {
     next(err);
   }
@@ -434,6 +484,34 @@ const productSearch = async (req, res) => {
   });
 };
 
+const userProfileEdit = async(req,res)=>{
+// console.log(req.body);
+ let validation = userNewData(req).then(async(response)=>{
+  
+  if(response==true){
+  const userId = req.params.id
+  const Name = req.body.Name
+  const Email = req.body.Email
+  const PhoneNumber = req.body.PhoneNumber
+  const find = await userDB.findOne({_id:userId})
+  const edit = await userDB.findOneAndUpdate({_id:userId},{
+   $set:{
+     Name:req.body.Name,
+     Email:req.body.Email,
+     PhoneNumber:req.body.PhoneNumber
+    },new:true
+  },{ upsert: true })
+ 
+  res.redirect("/profile")
+ }else{
+
+   req.flash("userErr", " Please full fill the form");
+   res.redirect("/profile");
+ }
+ })
+
+}
+
 const contactView = (req, res) => {
   res.render("user/contact");
 };
@@ -466,4 +544,6 @@ module.exports = {
   updateAddress,
   singleProduct,
   productSearch,
+  otpResend,
+  userProfileEdit
 };

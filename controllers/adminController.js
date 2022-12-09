@@ -23,7 +23,7 @@ const adminSign = (req, res) => {
   adminHelper.adminId(req.body).then((response) => {
     if (response) {
       req.session.admin = true;
-      
+
       res.redirect("/admin/dashboards");
     } else {
       req.flash("adminErr", " Incorrect username or password ! ");
@@ -34,52 +34,73 @@ const adminSign = (req, res) => {
   //req.flash('adminErr', "Incorrect username or password ! "
 };
 
-const adminView = async(req, res,next) => {
+const adminView = async (req, res, next) => {
   if (req.session.admin) {
-    let sales = 0
-    let online = 0
-    let offline = 0
-    let profit = 0
-    let monthSalesCount = 0
-    const totalSales = await orderDB.aggregate([{$group:{
-      _id:null,
-      price:{$sum:"$price"}
-    }}])
-   if(totalSales.length>0){
-       sales = totalSales[0].price}
-  
-    const onlineTotal = await orderDB.aggregate([{$match:{payment:'Online'}},{$group:{
-      _id:null,
-      price:{$sum:"$price"}
-    }}])
-    if(onlineTotal.length>0){
-     online = onlineTotal[0].price}
-    const offlineTotal = await orderDB.aggregate([{$match:{payment:'COD'}},{$group:{
-      _id:null,
-      price:{$sum:"$price"}
-    }}])
-    if(offlineTotal.length>0){
-      offline = offlineTotal[0].price
+    let sales = 0;
+    let online = 0;
+    let offline = 0;
+    let profit = 0;
+    let monthSalesCount = 0;
+    const totalSales = await orderDB.aggregate([
+      {
+        $group: {
+          _id: null,
+          price: { $sum: "$price" },
+        },
+      },
+    ]);
+    if (totalSales.length > 0) {
+      sales = totalSales[0].price;
     }
-    const totalProfit = await orderDB.aggregate([{$match:{status:'DELIVERED'}},{$group:{
-      _id:null,
-      price:{$sum:"$price"}
-    }}])
-    if(totalProfit.length>0){
-     profit = totalProfit[0].price}
-   // let date = moment().format("MMMM Do YYYY") 
+
+    const onlineTotal = await orderDB.aggregate([
+      { $match: { payment: "Online" } },
+      {
+        $group: {
+          _id: null,
+          price: { $sum: "$price" },
+        },
+      },
+    ]);
+    if (onlineTotal.length > 0) {
+      online = onlineTotal[0].price;
+    }
+    const offlineTotal = await orderDB.aggregate([
+      { $match: { payment: "COD" } },
+      {
+        $group: {
+          _id: null,
+          price: { $sum: "$price" },
+        },
+      },
+    ]);
+    if (offlineTotal.length > 0) {
+      offline = offlineTotal[0].price;
+    }
+    const totalProfit = await orderDB.aggregate([
+      { $match: { status: "DELIVERED" } },
+      {
+        $group: {
+          _id: null,
+          price: { $sum: "$price" },
+        },
+      },
+    ]);
+    if (totalProfit.length > 0) {
+      profit = totalProfit[0].price;
+    }
+    // let date = moment().format("MMMM Do YYYY")
     //let month = data.get
     let date = new Date();
     let theFirst = new Date(date.getFullYear(), 0, 1);
     let theLast = new Date(date.getFullYear(), 11, 31);
-    let month = date.getUTCMonth()+1 
+    let month = date.getUTCMonth() + 1;
     let year = date.getFullYear();
     console.log(theFirst);
     console.log(theLast);
     console.log(year);
-   
-   
-    res.render("admin/dashboard",{sales,online,offline,profit});
+
+    res.render("admin/dashboard", { sales, online, offline, profit });
   } else {
     res.redirect("/admin");
   }
@@ -330,18 +351,19 @@ const orderStatus = async (req, res) => {
 
 // }
 
-const totalRevenue = async(req,res)=>{
-  
-  const data = await orderDB.aggregate([{$group:{_id:{$month:'$time'},count:{$sum:1}}},{$sort:{_id:1}}])
+const totalRevenue = async (req, res) => {
+  const data = await orderDB.aggregate([
+    { $group: { _id: { $month: "$time" }, count: { $sum: 1 } } },
+    { $sort: { _id: 1 } },
+  ]);
   console.log(data);
-  let counts = []
-  
-   data.forEach(ele=> { 
-   counts.push(ele.count)
-  
-   });
-  res.json({status:true,counts})
-}
+  let counts = [];
+
+  data.forEach((ele) => {
+    counts.push(ele.count);
+  });
+  res.json({ status: true, counts });
+};
 
 module.exports = {
   adminLogin,
@@ -369,6 +391,5 @@ module.exports = {
   deletecoupon,
   viewOrdersProduct,
   orderStatus,
-  totalRevenue
-  
+  totalRevenue,
 };

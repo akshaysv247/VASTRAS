@@ -4,7 +4,7 @@ const productDB = require("../models/productSchema");
 const userHelper = require("../helpers/userHelper");
 const wishlistDB = require("../models/wishlistSchema");
 const orderDB = require("../models/orderSchema");
-const usersDB = require("../models/userSchema")
+const usersDB = require("../models/userSchema");
 
 module.exports = {
   admincategory: async (req, res) => {
@@ -96,7 +96,7 @@ module.exports = {
   //  })
   //  console.log(total);
   // })()
- 
+
   //  totalincome : async(req,res)=>{
   //       const allSales = await orderDB.aggregate([{$group:{
   //         _id:null,
@@ -127,5 +127,4 @@ module.exports = {
   //     price:{$sum:"$price"}
   //   }}])
   //  },
-   
 };

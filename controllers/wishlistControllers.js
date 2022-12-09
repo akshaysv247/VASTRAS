@@ -1,8 +1,6 @@
 const wishlistDB = require("../models/wishlistSchema");
 const productDB = require("../models/productSchema");
 const userHelper = require("../helpers/userHelper");
-const { $_match } = require("../models/joiShcema");
-const { findOne } = require("../models/wishlistSchema");
 
 module.exports = {
   wishlistView: async (req, res, next) => {
@@ -11,6 +9,8 @@ module.exports = {
       const userId = await user._id;
       let cartCount = null;
       let wishlistCount = null;
+      let datas = null
+      let product = null
       if (user) {
         // console.log(user);
         cartCount = await userHelper.getCartCount(user._id);
@@ -18,12 +18,15 @@ module.exports = {
         wishlistCount = await userHelper.getWishListCount(user._id);
         res.locals.wishlistCount = wishlistCount;
       }
-      const datas = await wishlistDB
+       datas = await wishlistDB
         .findOne({ userId: userId })
         .populate("products.productId");
-      let product = datas.products;
+        if(datas!=null){ 
+          product = datas.products;
+        }
+       
 
-      //console.log(product);
+     // console.log(datas);
       //console.log(products[0].productId.title);
 
       res.render("user/wishlist", {
