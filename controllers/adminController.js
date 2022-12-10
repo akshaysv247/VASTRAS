@@ -9,6 +9,7 @@ const orderDB = require("../models/orderSchema");
 const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
+const { reject } = require("bcrypt/promises");
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -356,13 +357,124 @@ const totalRevenue = async (req, res) => {
     { $group: { _id: { $month: "$time" }, count: { $sum: 1 } } },
     { $sort: { _id: 1 } },
   ]);
-  console.log(data);
+  //console.log(data);
   let counts = [];
 
   data.forEach((ele) => {
     counts.push(ele.count);
   });
   res.json({ status: true, counts });
+};
+
+const categorySales = () => {
+  return new Promise(async (resolve, reject) => {
+    const men = await categoryDB.findOne({ name: "Men" });
+    const women = await categoryDB.findOne({ name: "Women" });
+    const child = await categoryDB.findOne({ name: "Children" });
+
+    const findCatMen = await productDB.aggregate([
+      { $match: { category: men._id } },
+    ]);
+    const findCatChild = await productDB.aggregate([
+      { $match: { category: child._id } },
+    ]);
+    const findCatWomen = await productDB.aggregate([
+      { $match: { category: women._id } },
+    ]);
+    //
+
+    //console.log(findCatWomen);
+    var salesPie = [];
+    const findW = () => {
+      let sum = 0;
+      return new Promise(async (resolve, reject) => {
+        for (let i = 0; i < findCatWomen.length; i++) {
+          var catWomenSales = await orderDB.aggregate([
+            { $unwind: "$products" },
+            { $match: { "products.productId": findCatWomen[i]._id } },
+            { $group: { _id: null, total: { $sum: "$products.total" } } },
+          ]);
+          for (let j = 0; j < catWomenSales.length; j++) {
+            sum = catWomenSales[j].total + sum;
+            //console.log(sum);
+          }
+        }
+        resolve(sum);
+      });
+    };
+    const findM = () => {
+      let sum = 0;
+      return new Promise(async (resolve, reject) => {
+        for (let i = 0; i < findCatMen.length; i++) {
+          var catMenSales = await orderDB.aggregate([
+            { $unwind: "$products" },
+            { $match: { "products.productId": findCatMen[i]._id } },
+            { $group: { _id: null, total: { $sum: "$products.total" } } },
+          ]);
+          for (let j = 0; j < catMenSales.length; j++) {
+            sum = catMenSales[j].total + sum;
+            //console.log(sum);
+          }
+        }
+        resolve(sum);
+      });
+    };
+    const findC = () => {
+      let sum = 0;
+      return new Promise(async (resolve, reject) => {
+        for (let i = 0; i < findCatChild.length; i++) {
+          var catChildSales = await orderDB.aggregate([
+            { $unwind: "$products" },
+            { $match: { "products.productId": findCatChild[i]._id } },
+            { $group: { _id: null, total: { $sum: "$products.total" } } },
+          ]);
+          for (let j = 0; j < catChildSales.length; j++) {
+            sum = catChildSales[j].total + sum;
+            //console.log(sum);
+          }
+        }
+        resolve(sum);
+      });
+    };
+    const newF = () => {
+      return new Promise((resolve, reject) => {
+        findW()
+          .then((sum) => {
+            //console.log(sum,);
+            salesPie.push(sum);
+          })
+          .then(() => {
+            findM()
+              .then((sum) => {
+                //console.log(sum,);
+                salesPie.push(sum);
+              })
+              .then(() => {
+                findC()
+                  .then((sum) => {
+                    //console.log(sum,);
+                    salesPie.push(sum);
+                  })
+                  .then(() => {
+                    resolve(salesPie);
+                  });
+              });
+          });
+      });
+    };
+
+    newF().then((data) => {
+      //console.log(data);
+      resolve(data);
+    });
+  });
+};
+
+const salesPieTotal = (req, res) => {
+  categorySales().then((result) => {
+    console.log(result);
+    res.json({ status: true, result });
+  });
 };
 
 module.exports = {
@@ -392,4 +504,5 @@ module.exports = {
   viewOrdersProduct,
   orderStatus,
   totalRevenue,
+  salesPieTotal,
 };

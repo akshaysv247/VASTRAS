@@ -46,4 +46,5 @@ router.get("/resend-otp",userController.otpResend);
 router.post("/user-profile-edit/:id",userController.userProfileEdit)
 
 
+
 module.exports = router;

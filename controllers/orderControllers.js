@@ -129,7 +129,7 @@ module.exports = {
       }
     } else {
       let error = validate;
-      res.json({error})
+      res.json({ error });
     }
   },
 

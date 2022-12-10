@@ -9,8 +9,8 @@ module.exports = {
       const userId = await user._id;
       let cartCount = null;
       let wishlistCount = null;
-      let datas = null
-      let product = null
+      let datas = null;
+      let product = null;
       if (user) {
         // console.log(user);
         cartCount = await userHelper.getCartCount(user._id);
@@ -18,15 +18,14 @@ module.exports = {
         wishlistCount = await userHelper.getWishListCount(user._id);
         res.locals.wishlistCount = wishlistCount;
       }
-       datas = await wishlistDB
+      datas = await wishlistDB
         .findOne({ userId: userId })
         .populate("products.productId");
-        if(datas!=null){ 
-          product = datas.products;
-        }
-       
+      if (datas != null) {
+        product = datas.products;
+      }
 
-     // console.log(datas);
+      // console.log(datas);
       //console.log(products[0].productId.title);
 
       res.render("user/wishlist", {
