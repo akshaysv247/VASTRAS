@@ -44,6 +44,12 @@ router.get("/order-list",userController.verifyLogin,orderController.orderListUse
 router.post("/search-Products",userController.productSearch);
 router.get("/resend-otp",userController.otpResend);
 router.post("/user-profile-edit/:id",userController.userProfileEdit)
+router.get("/fogot-password",userController.viewMobileEnter);
+router.post("/fogot-password",userController.getMobileEnter);
+router.post("/forgot-return",userController.returnData)
+router.get("/new-password",userController.viewEnterNewPass)
+router.post("/new-password",userController.getNewPass)
+
 
 
 

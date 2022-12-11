@@ -17,6 +17,8 @@ const querystring = require("querystring");
 const otpValidations = require("../validation/otpcenter");
 const addressValidation = require("../validation/address");
 const userNewData = require("../validation/profileeidt");
+const bcrypt = require("bcrypt");
+
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -522,6 +524,70 @@ const userProfileEdit = async (req, res) => {
   });
 };
 
+const viewMobileEnter = (req,res)=>{
+
+  res.render("user/forgotteNumber")
+}
+
+const getMobileEnter = async(req,res)=>{
+  
+    
+  const number = req.body.PhoneNumber;
+  
+ 
+  const findNumber = await userDB.find({PhoneNumber:number})
+ 
+  if(findNumber.length>0){
+    req.session.forgot = number
+    const send = await Twilio.sendSMS(number).then(()=>{
+      res.json({ status: true })
+    })
+   ;
+  }else{
+    res.json({ status: false })
+  }
+  
+  
+}
+
+const returnData = async(req,res)=>{
+  Error.stackTraceLimit = Infinity;
+  const number =  req.session.forgot
+  const otp = req.body.otp
+  console.log(req.body) 
+  const verifyForgot = await Twilio.verifySMS(number, otp).then(
+    (verification_check) => {
+      //console.log(response);
+      if (verification_check.status == "approved") {
+        
+         res.json({number})
+          }else{
+            res.json({otp})
+          }})
+
+}
+
+const viewEnterNewPass = (req,res)=>{
+  res.render('user/newpassword')
+}
+
+const getNewPass = async(req,res)=>{
+  console.log(req.body);
+  const Email = req.body.Email
+  const Password = req.body.Password
+  const user = await userDB.findOne({Email:Email})
+  if(user){
+   const  newPassword = await bcrypt.hash(Password, 10);
+    const update = await userDB.findOneAndUpdate({Email:Email},{$set:{
+      Password:newPassword
+    }, new: true},{ upsert: true })
+    res.json({status:true})
+  }else{
+    res.json({status:false})
+  }
+
+}
+
 const contactView = (req, res) => {
   res.render("user/contact");
 };
@@ -556,4 +622,9 @@ module.exports = {
   productSearch,
   otpResend,
   userProfileEdit,
+  viewMobileEnter,
+  getMobileEnter,
+  returnData,
+  viewEnterNewPass,
+  getNewPass
 };
