@@ -48,13 +48,13 @@
     <h3>Add Categories</h3>
     <form action="/admin/category" method="post" enctype="multipart/form-data" >
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput"  name="name">
+            <input type="text" class="form-control" id="floatingInput"  name="name" required>
             <label for="floatingInput">Category Name</label>
           </div>
            
           <div class="mb-3">
             <label for="formFileMultiple" class="form-label">Images</label>
-            <input class="form-control" type="file" id="myFile" name="myFile" multiple />
+            <input class="form-control" type="file" id="myFile" name="myFile" multiple required />
           </div>
 
 

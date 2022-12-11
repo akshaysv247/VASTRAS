@@ -351,7 +351,7 @@
       url: "/placeorder",
       method: "post",
       data: $("#chechout-form").serialize(),
-      success: (response) => {
+       success: (response) => {
         let ID = response.newOrderId
         if(response.error){
           Swal.fire(

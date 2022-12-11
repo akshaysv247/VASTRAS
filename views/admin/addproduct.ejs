@@ -20,14 +20,14 @@
               <div class="mb-3 row">
                 <label for="html5-text-input" class="col-md-2 col-form-label">Title</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="text"  id="html5-text-input" name="title" />
+                  <input class="form-control" type="text"  id="html5-text-input" name="title" required/>
                 </div>
               </div>
 
               <div class=" mb-3">
                 
                 <label for="largeSelect" class="form-label">Category</label>
-                <select id="largeSelect" class="form-select form-select-lg" name="category">
+                <select id="largeSelect" class="form-select form-select-lg" name="category" required>
                   <option>choose</option>
                   <% for(var i=0; i < data.length; i++) { %>
                   <option value="<%= data[i]._id %>"><%= data[i].name %></option>
@@ -51,28 +51,28 @@
               <div class="mb-3 row">
                 <label for="html5-number-input" class="col-md-2 col-form-label">Price</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="number"  id="html5-number-input" name="price" />
+                  <input class="form-control" type="number"  id="html5-number-input" name="price" required />
                 </div>
               </div>
 
               <div class="mb-3 row">
                 <label for="html5-text-input" class="col-md-2 col-form-label">size</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="text"  id="html5-text-input" name="size"/>
+                  <input class="form-control" type="text"  id="html5-text-input" name="size" required/>
                 </div>
               </div>
 
               <div class="mb-3 row">
                 <label for="html5-number-input" class="col-md-2 col-form-label">Quantity</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="number"  id="html5-number-input" name="quantity"/>
+                  <input class="form-control" type="number"  id="html5-number-input" name="quantity" required/>
                 </div>
               </div>
              
              
               <div class="mb-3">
                 <label for="formFileMultiple" class="form-label">Images</label>
-                <input class="form-control" type="file" id="myFile" name="myFile" multiple />
+                <input class="form-control" type="file" id="myFile" name="myFile" multiple required/>
               </div>
 <!-- 
               <div class="mb-3 row">
@@ -84,7 +84,7 @@
 
               <div>
                 <label for="exampleFormControlTextarea1" class="form-label">Discription</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description" itemid="description" ></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description" itemid="description" required ></textarea>
 
               </div>
 

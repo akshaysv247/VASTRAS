@@ -131,7 +131,7 @@
         <div class="card">
           <div class="row row-bordered g-0">
             <div class="col-md-12">
-              <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
+              <h5 class="card-header m-0 me-2 pb-3">Monthly sales</h5>
               <!-- <div id="totalRevenueChart" class="px-2"></div> -->
               <canvas id="saleRevenueChart"></canvas>
             </div>
@@ -272,30 +272,157 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 mb-4">
+          <div class="col-6 mb-4">
             <div class="card">
               <div class="card-body">
                 <div
-                  class="d-flex justify-content-between flex-sm-row flex-column gap-3"
+                  class="card-title d-flex align-items-start justify-content-between"
                 >
-                  <div
-                    class="d-flex flex-sm-column flex-row align-items-start justify-content-between"
-                  >
-                    <div class="card-title">
-                      <h5 class="text-nowrap mb-2">Profile Report</h5>
-                      <span class="badge bg-label-warning rounded-pill"
-                        >Year 2021</span
+                  <div class="avatar flex-shrink-0">
+                    <i class="fa-solid fa-users " style="font-size: 30px;"></i>
+                    
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn p-0"
+                      type="button"
+                      id="cardOpt4"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="cardOpt4"
+                    >
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >View More</a
                       >
-                    </div>
-                    <div class="mt-sm-auto">
-                      <small class="text-success text-nowrap fw-semibold"
-                        ><i class="bx bx-chevron-up"></i> 68.2%</small
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >Delete</a
                       >
-                      <h3 class="mb-0">$84,686k</h3>
                     </div>
                   </div>
-                  <div id="profileReportChart"></div>
                 </div>
+                <span class="d-block mb-1">All users</span>
+                <h3 class="card-title text-nowrap mb-2"><%= totalUsers %></h3>
+                <!-- <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="card-title d-flex align-items-start justify-content-between"
+                >
+                  <div class="avatar flex-shrink-0">
+                    <i class="fa-solid fa-user-lock" style="font-size: 30px;"></i>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn p-0"
+                      type="button"
+                      id="cardOpt1"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >View More</a
+                      >
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <span class="fw-semibold d-block mb-1">Blocked users</span>
+                <h3 class="card-title mb-2"><%= blockedUser %></h3>
+                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.14%</small> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="card-title d-flex align-items-start justify-content-between"
+                >
+                  <div class="avatar flex-shrink-0">
+                    <i class="fa-sharp fa-solid fa-boxes-stacked" style="font-size: 30px;"></i>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn p-0"
+                      type="button"
+                      id="cardOpt4"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="cardOpt4"
+                    >
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >View More</a
+                      >
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <span class="d-block mb-1">Total Orders</span>
+                <h3 class="card-title text-nowrap mb-2"><%= totalorders %></h3>
+                <!-- <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="card-title d-flex align-items-start justify-content-between"
+                >
+                  <div class="avatar flex-shrink-0">
+                    <i class="fa-sharp fa-solid fa-box" style="font-size: 30px;"></i>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn p-0"
+                      type="button"
+                      id="cardOpt1"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >View More</a
+                      >
+                      <a class="dropdown-item" href="javascript:void(0);"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <span class="fw-semibold d-block mb-1">Today orders</span>
+                <h3 class="card-title mb-2"><%= todayorders %></h3>
+                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.14%</small> -->
               </div>
             </div>
           </div>
@@ -307,11 +434,35 @@
       <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
         <div class="card">
           <div class="row row-bordered g-0">
-            <div class="col-md-12">
-              <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
-              <!-- <div id="totalRevenueChart" class="px-2"></div> -->
-              <canvas id="categorySalesChart"></canvas>
-            </div>
+            <h5 class="card-header m-0 me-2 pb-3">Latest sales</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">OderId</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for( var i = 0; i < orderList.length; i++ ) { %>
+                
+                <tr>
+                  <th scope="row"><%= i+1 %> </th>
+                  <td><%= orderList[i]._id %> </td>
+                  <td><%= orderList[i].status %> </td>
+                  <td><%= orderList[i].payment %> </td>
+                  <td><%= orderList[i].price %> </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+            <!-- <div class="col-md-8 w-50" >
+              <h5 class="card-header m-0 me-2 pb-3">Category Revenue</h5>
+              <div id="totalRevenueChart" class="px-2"></div>
+              <canvas id="categorySalesChart" ></canvas>
+            </div> -->
             <!-- <div class="col-md-4" >
                 <div class="card-body">
                   <div class="text-center">
@@ -559,7 +710,13 @@
       <!-- Transactions -->
       <div class="col-md-6 col-lg-4 order-2 mb-4">
         <div class="card h-100">
-          <div
+
+          <div  >
+            <h5 class="card-header m-0 me-2 pb-3">Category Revenue</h5>
+            <!-- <div id="totalRevenueChart" class="px-2"></div> -->
+            <canvas id="categorySalesChart" ></canvas>
+          </div>
+          <!-- <div
             class="card-header d-flex align-items-center justify-content-between"
           >
             <h5 class="card-title m-0 me-2">Transactions</h5>
@@ -589,8 +746,8 @@
                 >
               </div>
             </div>
-          </div>
-          <div class="card-body">
+          </div> -->
+          <!-- <div class="card-body">
             <ul class="p-0 m-0">
               <li class="d-flex mb-4 pb-1">
                 <div class="avatar flex-shrink-0 me-3">
@@ -719,7 +876,7 @@
                 </div>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
       <!--/ Transactions -->
@@ -855,13 +1012,7 @@ class="btn btn-danger btn-buy-now"
           },
         ],
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
+     
     });
   });
 

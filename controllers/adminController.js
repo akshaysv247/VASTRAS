@@ -9,7 +9,7 @@ const orderDB = require("../models/orderSchema");
 const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
-const { reject } = require("bcrypt/promises");
+const userDB = require("../models/userSchema")
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -90,18 +90,21 @@ const adminView = async (req, res, next) => {
     if (totalProfit.length > 0) {
       profit = totalProfit[0].price;
     }
-    // let date = moment().format("MMMM Do YYYY")
-    //let month = data.get
-    let date = new Date();
-    let theFirst = new Date(date.getFullYear(), 0, 1);
-    let theLast = new Date(date.getFullYear(), 11, 31);
-    let month = date.getUTCMonth() + 1;
-    let year = date.getFullYear();
-    console.log(theFirst);
-    console.log(theLast);
-    console.log(year);
 
-    res.render("admin/dashboard", { sales, online, offline, profit });
+    const orderList = await orderDB.find({}).sort({time:-1}).limit(9)
+    
+    const newDate = Date.now()
+    const totalUsers = await userDB.find({}).count()
+    console.log(totalUsers);
+    const blockedUser = await userDB.find({is_active:false}).count()
+    console.log(blockedUser);
+    const totalorders = await orderDB.find({}).count()
+    console.log(totalorders);
+    const todayorders = await orderDB.find({date:newDate}).count()
+    console.log(todayorders);
+   
+    console.log(orderList);
+    res.render("admin/dashboard", { sales, online, offline, profit,totalUsers,blockedUser,totalorders,todayorders,orderList });
   } else {
     res.redirect("/admin");
   }

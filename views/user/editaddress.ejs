@@ -6,20 +6,20 @@
     <form class="row g-3" method="post" action="/editaddress/<%= data._id %> "   >
         <div class="col-md-6">
           <label for="inputEmail4" class="form-label font-weight-bold">Name</label>
-          <input type="text" class="form-control" id="inputEmail4"  value="<%= data.name %> " name="name">
+          <input type="text" class="form-control" id="inputEmail4"  value="<%= data.name %> " name="name" required>
         </div>
         <div class="col-md-6">
           <label for="inputPassword4" class="form-label font-weight-bold">Moblie Number</label>
-          <input type="number" class="form-control" id="inputPassword4" name="phoneNumber" value="<%= data.phoneNumber %>">
+          <input type="number" class="form-control" id="inputPassword4" name="phoneNumber" value="<%= data.phoneNumber %>" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label font-weight-bold">Pincode</label>
-            <input type="number" class="form-control" id="inputEmail4" name="pincode" value="<%= data.pincode %>">
+            <input type="number" class="form-control" id="inputEmail4" name="pincode" value="<%= data.pincode %>" required>
         </div>
         <div class="col-md-6">
             <label for="inputPassword4" class="form-label font-weight-bold">Locality</label>
-            <input type="text" class="form-control" id="inputPassword4" name="locality" value="<%= data.locality %>">
+            <input type="text" class="form-control" id="inputPassword4" name="locality" value="<%= data.locality %>" required>
         </div>
 
         <!-- <div class="col-12">
@@ -29,7 +29,7 @@
 
         <div class="col-12 mb-3">
             <label for="exampleFormControlTextarea1" class="form-label font-weight-bold">Address</label>
-            <textarea class="form-control" id="adress" rows="3" placeholder="Area and street" name="adress" ><%= data.adress %></textarea>
+            <textarea class="form-control" id="adress" rows="3" placeholder="Area and street" name="adress" required ><%= data.adress %></textarea>
           </div>
         <!-- <div class="col-12">
           <label for="inputAddress2" class="form-label">Address 2</label>
@@ -37,7 +37,7 @@
         </div> -->
         <div class="col-md-6">
           <label for="inputCity" class="form-label font-weight-bold">City</label>
-          <input type="text" class="form-control" id="inputCity" name="city" value="<%= data.city %>">
+          <input type="text" class="form-control" id="inputCity" name="city" value="<%= data.city %>" required>
         </div>
         <div class="col-md-6">
             <label for="inputPassword4" class="form-label font-weight-bold">Landmark</label>
@@ -49,7 +49,7 @@
         </div>
         <div class="col-md-6 pt-5">
           <label for="inputState" class="form-label font-weight-bold">STATE</label>
-          <select id="inputState" class="form-select" style="width:20rem;" name="state" >
+          <select id="inputState" class="form-select" style="width:20rem;" name="state" required >
             <option selected ><%= data.state %></option>
             <option>kerala</option>
             <option value="">Tamil Nadu</option>
