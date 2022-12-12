@@ -1,6 +1,4 @@
-const { response } = require("../app");
 const userHelper = require("../helpers/userHelper");
-const { message } = require("../models/joiShcema");
 const userValidation = require("./joiControllers");
 const productHelper = require("../helpers/productHelpers");
 const productDB = require("../models/productSchema");
@@ -18,7 +16,6 @@ const otpValidations = require("../validation/otpcenter");
 const addressValidation = require("../validation/address");
 const userNewData = require("../validation/profileeidt");
 const bcrypt = require("bcrypt");
-
 
 //For Register Page
 const homeView = async (req, res, next) => {
@@ -116,13 +113,17 @@ const otpSend = (req, res) => {
   }
 };
 
-const otpResend = async (req, res) => {
-  Error.stackTraceLimit = Infinity;
-  let data = req.session.temp;
-  const number = data.PhoneNumber;
-  console.log(number);
-  const resend = await Twilio.sendSMS(number);
-  res.json({ status: true });
+const otpResend = async (req, res, next) => {
+  try {
+    Error.stackTraceLimit = Infinity;
+    let data = req.session.temp;
+    const number = data.PhoneNumber;
+    console.log(number);
+    const resend = await Twilio.sendSMS(number);
+    res.json({ status: true });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // const userOtp = async (req, res)=>{
@@ -143,6 +144,7 @@ const postOTP = async (req, res, next) => {
     if (validate === true) {
       let data = req.session.temp;
       // console.log(data);
+      Error.stackTraceLimit = Infinity;
       const otp = req.body.otp;
       const number = data.PhoneNumber;
       const getOtp = await Twilio.verifySMS(number, otp).then(
@@ -464,129 +466,156 @@ const singleProduct = async (req, res, next) => {
   }
 };
 
-const productSearch = async (req, res) => {
-  console.log(req.body);
-  const user = req.session.user;
-  const searchdata = req.body.data;
-  let qData = new RegExp(searchdata, "i");
-  let data = await productDB.find({ title: { $regex: qData } });
-  //console.log(data);
+const productSearch = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const user = req.session.user;
+    const searchdata = req.body.data;
+    let qData = new RegExp(searchdata, "i");
+    let data = await productDB.find({ title: { $regex: qData } });
+    //console.log(data);
 
-  let cartCount = null;
-  let wishlist = null;
-  let wishlistCount = null;
-  if (user) {
-    // console.log(user);
-    const userId = await user._id;
-    cartCount = await userHelper.getCartCount(userId);
-    res.locals.cartCount = cartCount;
-    wishlistCount = await userHelper.getWishListCount(user._id);
-    res.locals.wishlistCount = wishlistCount;
-    wishlist = await wishlistDB.findOne({ userId: userId });
+    let cartCount = null;
+    let wishlist = null;
+    let wishlistCount = null;
+    if (user) {
+      // console.log(user);
+      const userId = await user._id;
+      cartCount = await userHelper.getCartCount(userId);
+      res.locals.cartCount = cartCount;
+      wishlistCount = await userHelper.getWishListCount(user._id);
+      res.locals.wishlistCount = wishlistCount;
+      wishlist = await wishlistDB.findOne({ userId: userId });
+    }
+    const cat = await categoryDB.find({});
+    res.render("user/searchproduct", {
+      data,
+      user,
+      cartCount,
+      wishlistCount,
+      cat,
+    });
+  } catch (err) {
+    next(err);
   }
-  const cat = await categoryDB.find({});
-  res.render("user/searchproduct", {
-    data,
-    user,
-    cartCount,
-    wishlistCount,
-    cat,
-  });
 };
 
-const userProfileEdit = async (req, res) => {
-  // console.log(req.body);
-  let validation = userNewData(req).then(async (response) => {
-    if (response == true) {
-      const userId = req.params.id;
-      const Name = req.body.Name;
-      const Email = req.body.Email;
-      const PhoneNumber = req.body.PhoneNumber;
-      const find = await userDB.findOne({ _id: userId });
-      const edit = await userDB.findOneAndUpdate(
-        { _id: userId },
+const userProfileEdit = async (req, res, next) => {
+  try {
+    // console.log(req.body);
+    let validation = userNewData(req).then(async (response) => {
+      if (response == true) {
+        const userId = req.params.id;
+        const Name = req.body.Name;
+        const Email = req.body.Email;
+        const PhoneNumber = req.body.PhoneNumber;
+        const find = await userDB.findOne({ _id: userId });
+        const edit = await userDB.findOneAndUpdate(
+          { _id: userId },
+          {
+            $set: {
+              Name: req.body.Name,
+              Email: req.body.Email,
+              PhoneNumber: req.body.PhoneNumber,
+            },
+            new: true,
+          },
+          { upsert: true }
+        );
+
+        res.redirect("/profile");
+      } else {
+        req.flash("userErr", " Please full fill the form");
+        res.redirect("/profile");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const viewMobileEnter = (req, res, next) => {
+  try {
+    res.render("user/forgotteNumber");
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getMobileEnter = async (req, res, next) => {
+  try {
+    const number = req.body.PhoneNumber;
+
+    const findNumber = await userDB.find({ PhoneNumber: number });
+
+    if (findNumber.length > 0) {
+      req.session.forgot = number;
+      const send = await Twilio.sendSMS(number).then(() => {
+        res.json({ status: true });
+      });
+    } else {
+      res.json({ status: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const returnData = async (req, res, next) => {
+  try {
+    Error.stackTraceLimit = Infinity;
+    const number = req.session.forgot;
+    const otp = req.body.otp;
+    console.log(req.body);
+    const verifyForgot = await Twilio.verifySMS(number, otp).then(
+      (verification_check) => {
+        //console.log(response);
+        if (verification_check.status == "approved") {
+          res.json({ number });
+        } else {
+          res.json({ otp });
+        }
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+const viewEnterNewPass = (req, res, next) => {
+  try {
+    res.render("user/newpassword");
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getNewPass = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const Email = req.body.Email;
+    const Password = req.body.Password;
+    const user = await userDB.findOne({ Email: Email });
+    if (user) {
+      const newPassword = await bcrypt.hash(Password, 10);
+      const update = await userDB.findOneAndUpdate(
+        { Email: Email },
         {
           $set: {
-            Name: req.body.Name,
-            Email: req.body.Email,
-            PhoneNumber: req.body.PhoneNumber,
+            Password: newPassword,
           },
           new: true,
         },
         { upsert: true }
       );
-
-      res.redirect("/profile");
+      res.json({ status: true });
     } else {
-      req.flash("userErr", " Please full fill the form");
-      res.redirect("/profile");
+      res.json({ status: false });
     }
-  });
+  } catch (err) {
+    next(err);
+  }
 };
-
-const viewMobileEnter = (req,res)=>{
-
-  res.render("user/forgotteNumber")
-}
-
-const getMobileEnter = async(req,res)=>{
-  
-    
-  const number = req.body.PhoneNumber;
-  
- 
-  const findNumber = await userDB.find({PhoneNumber:number})
- 
-  if(findNumber.length>0){
-    req.session.forgot = number
-    const send = await Twilio.sendSMS(number).then(()=>{
-      res.json({ status: true })
-    })
-   ;
-  }else{
-    res.json({ status: false })
-  }
-  
-  
-}
-
-const returnData = async(req,res)=>{
-  Error.stackTraceLimit = Infinity;
-  const number =  req.session.forgot
-  const otp = req.body.otp
-  console.log(req.body) 
-  const verifyForgot = await Twilio.verifySMS(number, otp).then(
-    (verification_check) => {
-      //console.log(response);
-      if (verification_check.status == "approved") {
-        
-         res.json({number})
-          }else{
-            res.json({otp})
-          }})
-
-}
-
-const viewEnterNewPass = (req,res)=>{
-  res.render('user/newpassword')
-}
-
-const getNewPass = async(req,res)=>{
-  console.log(req.body);
-  const Email = req.body.Email
-  const Password = req.body.Password
-  const user = await userDB.findOne({Email:Email})
-  if(user){
-   const  newPassword = await bcrypt.hash(Password, 10);
-    const update = await userDB.findOneAndUpdate({Email:Email},{$set:{
-      Password:newPassword
-    }, new: true},{ upsert: true })
-    res.json({status:true})
-  }else{
-    res.json({status:false})
-  }
-
-}
 
 const contactView = (req, res) => {
   res.render("user/contact");
@@ -626,5 +655,5 @@ module.exports = {
   getMobileEnter,
   returnData,
   viewEnterNewPass,
-  getNewPass
+  getNewPass,
 };

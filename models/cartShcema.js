@@ -20,7 +20,8 @@ const cart = new mongoose.Schema({
   grandtotal: {
     type: Number,
   },
-});
+},{ timestamps: true }
+);
 
 const addCart = mongoose.model("addCart", cart);
 

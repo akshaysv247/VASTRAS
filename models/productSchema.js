@@ -33,7 +33,8 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-});
+},{ timestamps: true }
+)
 
 const productData = mongoose.model("productData", productSchema);
 

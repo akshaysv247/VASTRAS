@@ -51,7 +51,7 @@ const order = new mongoose.Schema({
     default:Date.now()
   }
 
-}
+},{ timestamps: true }
 );
 
 const addOrder = mongoose.model("orders", order);

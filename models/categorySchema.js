@@ -16,7 +16,8 @@ const productCategory = new mongoose.Schema({
   discription: {
     type: String,
   },
-});
+},{ timestamps: true }
+);
 
 const category = mongoose.model("productCategory", productCategory);
 

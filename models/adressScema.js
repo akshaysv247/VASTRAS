@@ -37,7 +37,8 @@ const adress = new mongoose.Schema({
       },
     },
   ],
-});
+},{ timestamps: true }
+);
 
 const addAdress = mongoose.model("userAdress", adress);
 

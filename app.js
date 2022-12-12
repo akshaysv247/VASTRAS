@@ -11,14 +11,45 @@ require("dotenv").config();
 
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
-
+const bcrypt = require("bcrypt")
+const admin = require("./models/adminShema")
 const app = express();
 
-mongoose.connect(process.env.local_DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  //useCreateIndex: true
-});
+
+(async function (req,res,next) {
+
+try {
+   mongoose.connect(process.env.local_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    // useCreateIndex: true
+    // serverApi: ServerApiVersion.v1
+    
+  });
+} catch (err) {
+  next(err)
+}
+})()
+ 
+
+
+
+// (async function add(req,res,next) {
+//   try{
+// let password = "123456789"
+// let salt = await bcrypt.genSalt(10)
+// let pass = await bcrypt.hash(password, salt)
+// let email = "admin@gmail.com"
+//  await admin.insertMany({
+//     Email:email,
+//     Password:pass,
+//     Name:"shoppersAdmin"
+//   })
+// }catch(err){
+//   next(err)
+// }
+// })()
+
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -140,11 +171,26 @@ app.use((req, res, next) => {
   next();
 });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
+(async function (req,res,next) {
+  try{
+  const db =  mongoose.connection;
+ 
+  db.on("error", console.error.bind(console, "connection error: "));
+  db.once("open", function () {
   console.log("Connected successfully");
-});
+  // db.close()
+})}
+catch(err){
+  next(err)
+}
+})()
+
+ // client.connect(err => {
+  //   const collection = client.db("test").collection("devices");
+  //   // perform actions on the collection object
+  //   client.close();
+  // });
+
 //console.log(mongoose.connection.readyState);
 
 //app.use(expressLayouts);
@@ -158,10 +204,10 @@ db.once("open", function () {
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
-// app.use((err, req, res, next) => {
-//   console.error(err.stack)
-//   res.status(500).render("error")
-// })
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).render("error")
+})
 
 const PORT = process.env.PORT;
 app.listen(PORT, console.log("Server has started at port " + PORT));
