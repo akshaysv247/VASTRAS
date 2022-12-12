@@ -7,7 +7,7 @@ const checkout = joi.object({
 });
 
 const userCheckOutData = async (req) => {
-  console.log(req.body);
+  //console.log(req.body);
   const data = {
     userId: req.body.userId,
     addressId: req.body.addressId,

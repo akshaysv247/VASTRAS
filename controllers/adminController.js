@@ -9,6 +9,7 @@ const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
 const userDB = require("../models/userSchema");
+const addProVali = require("../validation/adminValidation")
 
 const adminLogin = (req, res, next) => {
   try {
@@ -144,7 +145,7 @@ const adminProduct = (req, res, next) => {
 const addProduct = async (req, res, next) => {
   try {
     const data = await category.find();
-    res.render("admin/addproduct", { data });
+    res.render("admin/addproduct", { data, message: req.flash("adminErr")  });
   } catch (err) {
     next(err);
   }
@@ -152,24 +153,33 @@ const addProduct = async (req, res, next) => {
 
 const addProductAdd = async (req, res) => {
   try {
-    //console.log(req.body);
-    if (req.files.length === 0) {
-      productHelper.addproduct(req.body).then((response) => {
-        // console.log(response);
-        res.redirect("/admin/products");
-      });
-    } else {
-      const img = [];
-      req.files.forEach((element) => {
-        img.push(element.filename);
-      });
-      Object.assign(req.body, { images: img });
-      // console.log(req.body)
-      productHelper.addproduct(req.body).then((response) => {
-        // console.log(response);
-        res.redirect("/admin/products");
-      });
-    }
+     let validation = addProVali(req).then((result)=>{
+      console.log(result);
+      if(result==true){
+        //console.log(req.body);
+        if (req.files.length === 0) {
+          productHelper.addproduct(req.body).then((response) => {
+            // console.log(response);
+            res.redirect("/admin/products");
+          });
+        } else {
+          const img = [];
+          req.files.forEach((element) => {
+            img.push(element.filename);
+          });
+          Object.assign(req.body, { images: img });
+          // console.log(req.body)
+          productHelper.addproduct(req.body).then((response) => {
+            // console.log(response);
+            res.redirect("/admin/products");
+          });
+        }
+      }else{
+        req.flash("adminErr", " please full fill the form ! ");
+        res.redirect("/admin/addproduct");
+      }
+     })
+    
   } catch (err) {
     next(err);
   }

@@ -7,7 +7,11 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Add Products</h4>
-
+        <% if(message.length>0){ %>
+          <div class="alert alert-danger" role="alert">
+           <!-- Incorrect username or password ! -->
+           <%= message %></div>
+      <% } %>
        <div >
          
         
@@ -15,12 +19,13 @@
           <!-- HTML5 Inputs -->
           <div class="card mb-4">
             <h5 class="card-header">Products Details</h5>
+           
           <div class="card-body">
             <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
               <div class="mb-3 row">
                 <label for="html5-text-input" class="col-md-2 col-form-label">Title</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="text"  id="html5-text-input" name="title" required/>
+                  <input class="form-control" type="text"  id="html5-text-input" name="title" />
                 </div>
               </div>
 
@@ -87,7 +92,7 @@
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description" itemid="description" required ></textarea>
 
               </div>
-
+             
               <div class=" mt-2">
 
                 <button type="submit" class="btn btn-primary">submit</button>

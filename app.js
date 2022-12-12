@@ -178,7 +178,7 @@ app.use((req, res, next) => {
   db.on("error", console.error.bind(console, "connection error: "));
   db.once("open", function () {
   console.log("Connected successfully");
-  // db.close()
+   //db.close()
 })}
 catch(err){
   next(err)
