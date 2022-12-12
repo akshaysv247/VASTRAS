@@ -38,7 +38,7 @@ module.exports = {
     // console.log(product);
     //console.log(productData);
     coupon = await couponDB.find({ active: true });
-    console.log(coupon);
+    //console.log(coupon);
     const addressData = await addressDB.findOne({ userId: userId });
     if (addressData) {
       address = addressData.address;

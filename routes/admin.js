@@ -38,6 +38,7 @@ router.get("/view-product/:id",adminControllers.viewOrdersProduct);
 router.post("/update-order",adminControllers.orderStatus);
 router.get("/revenue",adminControllers.totalRevenue);
 router.get("/cahrt",adminControllers.salesPieTotal);
+router.get("/sales-report",adminControllers.salesReport)
 
 
 module.exports = router;

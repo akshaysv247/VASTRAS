@@ -9,7 +9,9 @@ const orderDB = require("../models/orderSchema");
 const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
-const userDB = require("../models/userSchema")
+const userDB = require("../models/userSchema");
+const { object } = require("joi");
+const { reject } = require("bcrypt/promises");
 
 const adminLogin = (req, res) => {
   if (!req.session.admin) {
@@ -91,20 +93,30 @@ const adminView = async (req, res, next) => {
       profit = totalProfit[0].price;
     }
 
-    const orderList = await orderDB.find({}).sort({time:-1}).limit(9)
-    
-    const newDate = Date.now()
-    const totalUsers = await userDB.find({}).count()
+    const orderList = await orderDB.find({}).sort({ time: -1 }).limit(9);
+
+    const newDate = Date.now();
+    const totalUsers = await userDB.find({}).count();
     console.log(totalUsers);
-    const blockedUser = await userDB.find({is_active:false}).count()
+    const blockedUser = await userDB.find({ is_active: false }).count();
     console.log(blockedUser);
-    const totalorders = await orderDB.find({}).count()
+    const totalorders = await orderDB.find({}).count();
     console.log(totalorders);
-    const todayorders = await orderDB.find({date:newDate}).count()
+    const todayorders = await orderDB.find({ date: newDate }).count();
     console.log(todayorders);
-   
-    console.log(orderList);
-    res.render("admin/dashboard", { sales, online, offline, profit,totalUsers,blockedUser,totalorders,todayorders,orderList });
+
+    // console.log(orderList);
+    res.render("admin/dashboard", {
+      sales,
+      online,
+      offline,
+      profit,
+      totalUsers,
+      blockedUser,
+      totalorders,
+      todayorders,
+      orderList,
+    });
   } else {
     res.redirect("/admin");
   }
@@ -480,6 +492,23 @@ const salesPieTotal = (req, res) => {
   });
 };
 
+const salesReport = async (req, res, next) => {
+  let data = await orderDB
+    .aggregate([
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: "$products.productId",
+          totalPrice: { $sum: "$products.total" },
+          count: { $sum: "$products.quantity" },
+        },
+      },
+    ])
+    .sort({ count: -1 });
+  //console.log(data);
+  res.render("admin/salesreport", { data });
+};
+
 module.exports = {
   adminLogin,
   adminSign,
@@ -508,4 +537,5 @@ module.exports = {
   orderStatus,
   totalRevenue,
   salesPieTotal,
+  salesReport,
 };
