@@ -273,18 +273,19 @@ module.exports = {
         res.json({ couponCount });
       }
     } else {
-      res.json({ error });
+      res.json({ status:false });
     }
   },
 
   orderCancel: async (req, res) => {
+     console.log(req.params.id);
     const orderId = req.params.id;
     const find = await orderDB.findOneAndUpdate(
       { _id: orderId },
       { $set: { status: "canceled" } }
     );
     console.log(find);
-    res.json({ status: true });
+    res.redirect("/order-list")
   },
 
   orderListUserSide: async (req, res) => {
@@ -300,7 +301,7 @@ module.exports = {
     }
     let data = null;
     data = await orderDB.find({ userId: userId }).sort({ time: -1 });
-    console.log(data);
+   // console.log(data);
     res.render("user/orderslist", { data, wishlistCount, cartCount, user });
   },
 };
