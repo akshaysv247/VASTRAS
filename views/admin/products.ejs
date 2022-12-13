@@ -1,6 +1,17 @@
 
 <%- include('partials/adminheader.ejs') %>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
+
+ <!-- <link rel="stylesheet" type="text/css" href="/DataTables/datatables.css"> -->
+ 
+<!-- <script type="text/javascript" charset="utf8" src="/DataTables/datatables.js"></script>  -->
+
+
+
  <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Products</h4>
 
@@ -12,7 +23,7 @@
     <div class="card mt-2">
       <h5 class="card-header"></h5>
       <div class="table-responsive text-nowrap">
-        <table class="table">
+        <table class="table display" id="tableid">
           <thead>
             <tr>
               <th>Image</th>
@@ -148,6 +159,12 @@ if (willDelete) {
 }
 });
   }
+
+  $(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
+
 </script>
 
  <%- include('partials/adminfooter.ejs') %>
