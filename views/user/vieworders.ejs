@@ -108,7 +108,7 @@
                   </div>
                  
 
-                  <% if (order.status!="canceled") { %>
+                  <% if (order.status!="canceled" && order.status!="DELIVERED") { %>
               <div>
                 <button type="button" class="btn btn-warning" onclick="alertMsg('<%= order._id %>')" >Order cancel</button>
 
