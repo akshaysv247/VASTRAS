@@ -99,13 +99,14 @@ const adminView = async (req, res, next) => {
       }
 
       const orderList = await orderDB.find({}).sort({ time: -1 }).limit(9);
-
-      let newDate =  moment().format("MMMM Do YYYY") 
+      // let newDate = Date.now()
+      let newDate =  moment().format("MMMM Do YYYY")
+      //console.log(newDate);
       const totalUsers = await userDB.find({}).count();
       const blockedUser = await userDB.find({ is_active: false }).count();
       const totalorders = await orderDB.find({}).count();
       const todayorders = await orderDB.find({date:newDate}).count()
-      console.log(todayorders);
+      //console.log(todayorders);
 
       // console.log(orderList);
       res.render("admin/dashboard", {
@@ -614,6 +615,7 @@ const salesReport = async (req, res, next) => {
     let data = await orderDB
       .aggregate([{$match:{status:"DELIVERED"}},
         { $unwind: "$products" },
+        
         {
           $group: {
             _id: "$products.productId",
@@ -621,15 +623,29 @@ const salesReport = async (req, res, next) => {
             count: { $sum: "$products.quantity" },
           },
         },
+        
       ])
-      .sort({ count: -1 });
 
-    //console.log(data);
+      //console.log(data);
+    
     res.render("admin/salesreport", { data });
   } catch (err) {
     next(err);
   }
 };
+
+// (async function () {
+//   let find = await orderDB.aggregate([{$match:{status:"DELIVERED"}},{ $unwind: "$products" }, {
+//     $lookup:
+//       {
+//         from: "productdatas",
+//         localField: "products.productId",
+//         foreignField: "_id",
+//         as: "data"
+//       }
+//  }])
+   
+// })()
 
 module.exports = {
   adminLogin,
