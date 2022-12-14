@@ -1,8 +1,10 @@
 
 <%- include('partials/adminheader.ejs') %>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <section class="container">
-<div>
+<div id="invoice">
 
     <table class="table">
         <thead>
@@ -27,7 +29,26 @@
 
         </tbody>
       </table>
+
 </div>
+<button type="button" id="download-button" class="btn btn-primary" >Download report</button>
 </section>
+
+<script>
+
+const button = document.getElementById('download-button');
+
+
+function generatePDF() {
+  // Choose the element that your content will be rendered to.
+  const element = document.getElementById('invoice');
+  // Choose the element and save the PDF for your user.
+  html2pdf().from(element).save();
+}
+
+button.addEventListener('click', generatePDF);
+
+
+</script>
 
 <%- include('partials/adminfooter.ejs') %>

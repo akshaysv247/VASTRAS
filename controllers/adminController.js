@@ -105,6 +105,7 @@ const adminView = async (req, res, next) => {
       const blockedUser = await userDB.find({ is_active: false }).count();
       const totalorders = await orderDB.find({}).count();
       const todayorders = await orderDB.find({date:newDate}).count()
+      console.log(todayorders);
 
       // console.log(orderList);
       res.render("admin/dashboard", {
