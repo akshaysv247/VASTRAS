@@ -615,7 +615,7 @@ const salesPieTotal = (req, res, next) => {
 const salesReport = async (req, res, next) => {
   try {
     let data = await orderDB
-      .aggregate([
+      .aggregate([{$match:{status:"DELIVERED"}},
         { $unwind: "$products" },
         {
           $group: {
