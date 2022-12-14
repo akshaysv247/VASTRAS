@@ -82,7 +82,7 @@ module.exports = {
       return new Promise((resolve, reject) => {
         dbProduct
           .find()
-          .populate("category")
+          .populate("category").sort({createdAt:-1})
           .then((result) => {
             resolve(result);
           });

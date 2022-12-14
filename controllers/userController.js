@@ -494,6 +494,7 @@ const productSearch = async (req, res, next) => {
       user,
       cartCount,
       wishlistCount,
+      wishlist,
       cat,
     });
   } catch (err) {

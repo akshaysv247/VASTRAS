@@ -138,8 +138,14 @@
                               <% }else{ %> 
                                 <%= coupon[i].cutOff %> %
                                 <% } %>  offer
+
+                                <!-- <p  class="btn fa-regular fa-copy pl-5" onclick="copyFunction()" id="myCoupon" value="<%= coupon[i].CODE %>"></p> -->
+                              <!-- <button type="button" class="btn fa-regular fa-copy pl-5" onclick="copyFunction()" id="myCoupon" value="<%= coupon[i].CODE %>"></button> -->
+
+                              
+                                
                             </h5>
-        
+                            
                           </button>
                        
                       </div>
@@ -487,6 +493,18 @@ rzp1.on('payment.failed', function (response){
     })
     
   }
+
+  function copyFunction() {
+  var copyText = document.getElementById("myCoupon")
+
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  navigator.clipboard.writeText(copyText.value);
+
+  alert("Copied the text: " + copyText.value);
+}
+
 </script>
 
 <%- include('partials/userfooter.ejs') %>

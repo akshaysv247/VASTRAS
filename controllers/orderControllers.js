@@ -159,7 +159,7 @@ module.exports = {
       if (order) {
         const data = await orderDB
           .findOne({ _id: orderId })
-          .populate("products.productId");
+          .populate("products.productId")
         product = data.products;
         // console.log(product);
         const address = await addressDB.findOne({ userId: user });
