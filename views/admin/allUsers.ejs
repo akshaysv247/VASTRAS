@@ -10,7 +10,7 @@
    <div class="card mt-2">
      <h5 class="card-header"></h5>
      <div class="table-responsive text-nowrap">
-       <table class="table">
+       <table class="table display" id="tableid">
          <thead>
            <tr>
              <th>Name</th>
@@ -53,5 +53,13 @@
    <!--/ Basic Bootstrap Table -->
 
 </div>
+
+<script>
+
+$(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
+</script>
 
 <%- include('partials/adminfooter.ejs') %>

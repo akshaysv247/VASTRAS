@@ -5,7 +5,7 @@
 
 <div class="container">
     <div>
-        <table class="table">
+        <table class="table display" id="tableid">
             <thead>
               <tr>
                 <th scope="col">No</th>
@@ -90,6 +90,11 @@
   }
   });
     }
+
+    $(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
   </script>
   
 

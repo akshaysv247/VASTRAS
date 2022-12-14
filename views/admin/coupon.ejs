@@ -9,7 +9,7 @@
 
        <h5 class="card-header">Coupon Details</h5>
     <div>
-      <table class="table">
+      <table class="table display" id="tableid">
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -108,6 +108,11 @@ if (willDelete) {
 }
 });
   }
+
+  $(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
 
 
 </script>

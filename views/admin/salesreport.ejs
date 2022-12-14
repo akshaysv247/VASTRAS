@@ -3,10 +3,23 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css"> -->
+  
+<!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script> -->
+
+<!-- <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script> -->
+<!-- <script src="assets/resource/tiny_mce.js"></script> -->
+
+
+
+
+
 <section class="container">
 <div id="invoice">
 
-    <table class="table">
+    <table class="table display" id="table_id" >
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -19,22 +32,43 @@
             <% for( let i = 0; i < data.length; i++ ) { %>
           <tr>
          
-            <th scope="row"><%= i+1 %> </th>
+            <td scope="row"><%= i+1 %> </td>
             <td><%= data[i]._id %> </td>
-            <td><%= data[i].count %></td>
-            <td><%= data[i].totalPrice %></td>
+            <td class="count"><%= data[i].count %></td>
+            <td class="price"><%= data[i].totalPrice %></td>
             
           </tr>
           <% } %>
 
+          
+          <tfoot>
+            <tr  >
+              <td>GrandTotal</td>
+              <td></td>
+              <td id="countTotal"></td>
+              <td id="grandtotal"></td>
+            </tr>
+          </tfoot>
+         
         </tbody>
       </table>
+
+      
 
 </div>
 <button type="button" id="download-button" class="btn btn-primary" >Download report</button>
 </section>
 
+
+
 <script>
+
+$(document).ready( function () {
+      
+  
+    $('#table_id').DataTable()
+
+} );
 
 const button = document.getElementById('download-button');
 
@@ -47,6 +81,22 @@ function generatePDF() {
 }
 
 button.addEventListener('click', generatePDF);
+
+let arr = document.getElementsByClassName('price')
+
+let sum = 0
+ for(let i = 0; i < arr.length; i++){
+  sum += parseInt(arr[i].innerText)}
+
+   document.getElementById('grandtotal').innerText=sum
+
+   let count = document.getElementsByClassName('count')
+
+let sumCount = 0
+ for(let i = 0; i < count.length; i++){
+  sumCount += parseInt(count[i].innerText)}
+
+   document.getElementById('countTotal').innerText=sumCount
 
 
 </script>

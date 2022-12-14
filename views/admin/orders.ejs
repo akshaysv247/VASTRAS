@@ -1,6 +1,8 @@
 
 <%- include('partials/adminheader.ejs') %>
 
+
+
 <div class="container-xxl flex-grow-1 container-p-y">
    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">All Orders</h4>
 
@@ -10,7 +12,7 @@
    <div class="card mt-2">
      <h5 class="card-header"></h5>
      <div class="table-responsive text-nowrap">
-       <table class="table">
+       <table class="table display" id="tableid">
          <thead>
            <tr>
               <th>order ID</th>
@@ -211,34 +213,13 @@
       text: 'You  can try again later',
     });
   }
-</script>
 
-<!-- <script>
-  function viewProduct(ID) {
-    $.ajax({
-      url:'/admin/view-product/'+ID,
-      method:'get',
-      success:(response)=>{
-        ;
-        if(response.order){
-       let order = response.order
-       console.log(order);
-       let table_data = '';
-      $.each(order, function (index, value) {
-        console.log(value)
-        table_data += '<tr class="text-gray-700 dark:text-gray-400">';
-        table_data += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
-        table_data += '<td class="px-4 py-3 text-sm">' + value.productId.title + '</td>';
-        table_data += '<td class="px-4 py-3 text-sm">' + value.quantity + '</td>';
-        table_data += '<td class="px-4 py-3 text-sm">₹' + value.total + '</td>';
-        table_data += '</tr>';
-      });
-      $('#table_body13').html(table_data);
-        }
-      }
-    })
-  }
-</script> -->
+  $(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
+
+</script>
 
 
 
