@@ -31,9 +31,10 @@ const homeView = async (req, res, next) => {
       wishlistCount = await userHelper.getWishListCount(user._id);
       res.locals.wishlistCount = wishlistCount;
     }
-    const banner = await bannerDB.find({});
+    const banner = await bannerDB.findOne({});
+    console.log(banner);
     const cat = await categoryDB.find({});
-    const product = await productDB.find({}).populate("category");
+    const product = await productDB.find({}).populate("category").limit(5)
     //console.log(product);
 
     //console.log(banner);
