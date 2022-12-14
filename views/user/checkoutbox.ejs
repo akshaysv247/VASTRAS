@@ -132,19 +132,20 @@
                             aria-controls="collapseOne<%= coupon[i]._id %>"
                             id="coupon<%= coupon[i]._id %>"
                           >
-                            <h5 >
+
+                
+                            <h5 class="d-block" >
                              <%= i+1 %>. <% if(coupon[i].couponType==="cash"){ %> 
                               Rs <%= coupon[i].cutOff %> 
                               <% }else{ %> 
                                 <%= coupon[i].cutOff %> %
                                 <% } %>  offer
+                                 <!-- <a class="btn fa-regular fa-copy " onclick="copyFunction()" id="myCoupon" data-id="<%= coupon[i].CODE %>" ></a> -->
+                                <!-- <button type="button" class="btn fa-regular fa-copy " onclick="copyFunction()" id="myCoupon<%= coupon[i]._id %>" value="<%= coupon[i].CODE %>"></button> -->
 
-                                <!-- <p  class="btn fa-regular fa-copy pl-5" onclick="copyFunction()" id="myCoupon" value="<%= coupon[i].CODE %>"></p> -->
-                              <!-- <button type="button" class="btn fa-regular fa-copy pl-5" onclick="copyFunction()" id="myCoupon" value="<%= coupon[i].CODE %>"></button> -->
-
-                              
-                                
                             </h5>
+
+
                             
                           </button>
                        
@@ -455,7 +456,7 @@ rzp1.on('payment.failed', function (response){
       }
      })
   }
-
+  var ID ;
   function addCoupon() {
     let code = document.getElementById('couponcode').value
     let total = document.getElementById('carttotal').innerHTML
@@ -470,6 +471,7 @@ rzp1.on('payment.failed', function (response){
       },
       method:'post',
       success:(response)=>{
+        
         console.log(response);
         if(response.total){
           document.getElementById('totalDis').innerHTML=response.total
@@ -493,17 +495,19 @@ rzp1.on('payment.failed', function (response){
     })
     
   }
-
+   
   function copyFunction() {
   var copyText = document.getElementById("myCoupon")
+  console.log(copyText);
 
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); // For mobile devices
+ // For mobile devices
 
   navigator.clipboard.writeText(copyText.value);
 
   alert("Copied the text: " + copyText.value);
 }
+
+
 
 </script>
 

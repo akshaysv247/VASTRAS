@@ -253,6 +253,7 @@ module.exports = {
       // console.log(price);
 
       const data = await couponDB.findOne({ CODE: code });
+      
       console.log(data);
       let nowDate = moment().format("MM/DD/YYYY");
       console.log(nowDate);
