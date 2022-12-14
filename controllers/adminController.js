@@ -100,15 +100,11 @@ const adminView = async (req, res, next) => {
 
       const orderList = await orderDB.find({}).sort({ time: -1 }).limit(9);
 
-      const newDate = Date.now();
+      let newDate =  moment().format("MMMM Do YYYY") 
       const totalUsers = await userDB.find({}).count();
-      console.log(totalUsers);
       const blockedUser = await userDB.find({ is_active: false }).count();
-      console.log(blockedUser);
       const totalorders = await orderDB.find({}).count();
-      console.log(totalorders);
-      const todayorders = await orderDB.find({ date: newDate }).count();
-      console.log(todayorders);
+      const todayorders = await orderDB.find({date:newDate}).count()
 
       // console.log(orderList);
       res.render("admin/dashboard", {
