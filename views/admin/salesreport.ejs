@@ -24,7 +24,7 @@
           <tr>
             <th scope="col">No</th>
             <th scope="col">Product ID</th>
-           
+            <th scope="col">Product Name</th>
             <th scope="col">Count</th>
             <th scope="col">Total</th>
           </tr>
@@ -37,6 +37,7 @@
          
             <td scope="row"><%= i+1 %> </td>
             <td><%= data[i]._id %> </td>
+            <td><%= data[i].find[0].title %> </td>
             <td class="count"><%= data[i].count %></td>
             <td class="price"><%= data[i].totalPrice %></td>
             
@@ -48,6 +49,7 @@
           <tfoot>
             <tr  >
               <td>GrandTotal</td>
+              <td></td>
               <td></td>
               <td id="countTotal"></td>
               <td id="grandtotal"></td>

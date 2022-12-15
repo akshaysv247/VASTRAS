@@ -9,7 +9,7 @@ const bannerDB = require("../models/banner");
 const couponDB = require("../models/coupon");
 const moment = require("moment");
 const userDB = require("../models/userSchema");
-const addProVali = require("../validation/adminValidation")
+const addProVali = require("../validation/adminValidation");
 
 const adminLogin = (req, res, next) => {
   try {
@@ -100,12 +100,12 @@ const adminView = async (req, res, next) => {
 
       const orderList = await orderDB.find({}).sort({ time: -1 }).limit(9);
       // let newDate = Date.now()
-      let newDate =  moment().format("MMMM Do YYYY")
+      let newDate = moment().format("MMMM Do YYYY");
       //console.log(newDate);
       const totalUsers = await userDB.find({}).count();
       const blockedUser = await userDB.find({ is_active: false }).count();
       const totalorders = await orderDB.find({}).count();
-      const todayorders = await orderDB.find({date:newDate}).count()
+      const todayorders = await orderDB.find({ date: newDate }).count();
       //console.log(todayorders);
 
       // console.log(orderList);
@@ -143,7 +143,7 @@ const adminProduct = (req, res, next) => {
 const addProduct = async (req, res, next) => {
   try {
     const data = await category.find();
-    res.render("admin/addproduct", { data, message: req.flash("adminErr")  });
+    res.render("admin/addproduct", { data, message: req.flash("adminErr") });
   } catch (err) {
     next(err);
   }
@@ -151,9 +151,9 @@ const addProduct = async (req, res, next) => {
 
 const addProductAdd = async (req, res) => {
   try {
-     let validation = addProVali(req).then((result)=>{
+    let validation = addProVali(req).then((result) => {
       console.log(result);
-      if(result==true){
+      if (result == true) {
         //console.log(req.body);
         if (req.files.length === 0) {
           productHelper.addproduct(req.body).then((response) => {
@@ -172,12 +172,11 @@ const addProductAdd = async (req, res) => {
             res.redirect("/admin/products");
           });
         }
-      }else{
+      } else {
         req.flash("adminErr", " please full fill the form ! ");
         res.redirect("/admin/addproduct");
       }
-     })
-    
+    });
   } catch (err) {
     next(err);
   }
@@ -298,7 +297,7 @@ const productActive = async (req, res, next) => {
 const orderDetails = async (req, res, next) => {
   try {
     //const data = await orderDB.find()
-    const data = await orderDB.find().populate("userId").sort({time:-1})
+    const data = await orderDB.find().populate("userId").sort({ time: -1 });
     // let products = await orderDB.findOne().populate("products.productId");
     // console.log(data);
     // console.log(products);
@@ -612,40 +611,35 @@ const salesPieTotal = (req, res, next) => {
 
 const salesReport = async (req, res, next) => {
   try {
-    let data = await orderDB
-      .aggregate([{$match:{status:"DELIVERED"}},
-        { $unwind: "$products" },
-        
-        {
-          $group: {
-            _id: "$products.productId",
-            totalPrice: { $sum: "$products.total" },
-            count: { $sum: "$products.quantity" },
-          },
-        },
-        
-      ])
+    let data = await orderDB.aggregate([
+      { $match: { status: "DELIVERED" } },
+      { $unwind: "$products" },
 
-      //console.log(data);
-    
+      {
+        $group: {
+          _id: "$products.productId",
+          totalPrice: { $sum: "$products.total" },
+          count: { $sum: "$products.quantity" },
+          // Id:{$addToSet:"$_id"}
+        },
+      },
+      {
+        $lookup: {
+          from: "productdatas",
+          localField: "_id",
+          foreignField: "_id",
+          as: "find",
+        },
+      },
+    ]);
+
+    // console.log(data);
+
     res.render("admin/salesreport", { data });
   } catch (err) {
     next(err);
   }
 };
-
-// (async function () {
-//   let find = await orderDB.aggregate([{$match:{status:"DELIVERED"}},{ $unwind: "$products" }, {
-//     $lookup:
-//       {
-//         from: "productdatas",
-//         localField: "products.productId",
-//         foreignField: "_id",
-//         as: "data"
-//       }
-//  }])
-   
-// })()
 
 module.exports = {
   adminLogin,
