@@ -59,7 +59,7 @@
     <div class="row">
       <% for(var i=0; i < cat.length; i++) { %>
       <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-        <a class="block-2-item" href="#">
+        <a class="block-2-item" href="#" class="disabled-link">
           <figure class="image">
             <a href="/categoryproduct/<%= cat[i]._id %> "><img src="/images/<%= cat[i].images[0] %>" alt="" class="img-fluid"></a>
           </figure>
@@ -94,7 +94,7 @@
                
               </figure>
               <div class="block-4-text p-4">
-                <h3><a href="#"><%= product[i].category.name %> </a></h3>
+                <h3><a href="#" class="disabled-link"><%= product[i].category.name %> </a></h3>
                 <p class="mb-0"><%= product[i].name %></p>
                 <p class="text-primary font-weight-bold"><%= product[i].price %> </p>
               </div>
@@ -117,13 +117,13 @@
     </div>
     <div class="row align-items-center">
       <div class="col-md-12 col-lg-7 mb-5">
-        <a href="#"><img src="/images/<%= banner.images[1] %>" alt="Image placeholder" class="img-fluid rounded"></a>
+        <a href="#" class="disabled-link"><img src="/images/<%= banner.images[1] %>" alt="Image placeholder" class="img-fluid rounded"></a>
       </div>
       <div class="col-md-12 col-lg-5 text-center pl-md-5">
-        <h2><a href="#">50% less in all items</a></h2>
+        <h2><a href="#" class="disabled-link">50% less in all items</a></h2>
         <p class="post-meta mb-4">By <a href="#">Carl Smith</a> <span class="block-8-sep">&bullet;</span> September 3, 2018</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis ipsum animi deleniti fugiat. Ex, veniam?</p>
-        <p><a href="#" class="btn btn-primary btn-sm">Shop Now</a></p>
+        <p><a href="/showProducts" class="btn btn-primary btn-sm">Shop Now</a></p>
       </div>
     </div>
    

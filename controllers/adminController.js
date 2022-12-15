@@ -641,6 +641,18 @@ const salesReport = async (req, res, next) => {
   }
 };
 
+const verifyLoginAdmin = (req, res, next) => {
+  try {
+    if (req.session.admin) {
+      next();
+    } else {
+      res.redirect("/admin");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   adminLogin,
   adminSign,
@@ -670,4 +682,5 @@ module.exports = {
   totalRevenue,
   salesPieTotal,
   salesReport,
+  verifyLoginAdmin
 };
