@@ -2,7 +2,7 @@ const joi = require("joi");
 const errorFunction = require("../utils/errorFunction");
 
 const validation = joi.object({
-  Name: joi.string().alphanum().min(3).max(25).trim(true).required(),
+  Name: joi.string().alphanum().min(3).max(25).uppercase().trim(true).required(),
   Email: joi.string().email().trim(true).required(),
   Password: joi.string().min(8).trim(true).required(),
   PhoneNumber: joi
