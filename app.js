@@ -12,7 +12,7 @@ require("dotenv").config();
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 const bcrypt = require("bcrypt")
-const admin = require("./models/adminShema")
+const adminDB = require("./models/adminShema")
 const app = express();
 
 
@@ -34,13 +34,13 @@ try {
 
 
 
-// (async function add(req,res,next) {
+// const addadmin =  async(next) => {
 //   try{
 // let password = "123456789"
 // let salt = await bcrypt.genSalt(10)
 // let pass = await bcrypt.hash(password, salt)
-// let email = "admin@gmail.com"
-//  await admin.insertMany({
+// let email = "adminvastras@gmail.com"
+//  await adminDB.insertMany({
 //     Email:email,
 //     Password:pass,
 //     Name:"shoppersAdmin"
@@ -48,7 +48,8 @@ try {
 // }catch(err){
 //   next(err)
 // }
-// })()
+// }
+//addadmin()
 
 
 app.use(logger("dev"));
