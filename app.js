@@ -36,10 +36,10 @@ try {
 
 // const addadmin =  async(next) => {
 //   try{
-// let password = "123456789"
+// let password = ""
 // let salt = await bcrypt.genSalt(10)
 // let pass = await bcrypt.hash(password, salt)
-// let email = "adminvastras@gmail.com"
+// let email = ""
 //  await adminDB.insertMany({
 //     Email:email,
 //     Password:pass,

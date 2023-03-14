@@ -297,7 +297,7 @@ const productActive = async (req, res, next) => {
 const orderDetails = async (req, res, next) => {
   try {
     //const data = await orderDB.find()
-    const data = await orderDB.find().populate("userId").sort({ time: -1 });
+    const data = await orderDB.find().populate("userId").sort({time : -1 });
     // let products = await orderDB.findOne().populate("products.productId");
     // console.log(data);
     // console.log(products);
